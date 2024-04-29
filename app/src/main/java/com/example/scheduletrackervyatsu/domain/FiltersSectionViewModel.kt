@@ -1,15 +1,24 @@
 package com.example.scheduletrackervyatsu.domain
 
-import android.icu.util.DateInterval
+import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
+import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
+import kotlinx.coroutines.launch
 
-class FiltersSectionViewModel(): ViewModel() {
+class FiltersSectionViewModel(
+    application: Application,
+): AndroidViewModel(application) {
+
+
+    private var repository = ScheduleTrackerRepository(
+            ScheduleTrackerDatabase.getDatabase(getApplication<Application>()).getScheduleTrackerDao())
+
 
     var departments = mutableListOf<String>(
         "Dep1",
@@ -53,6 +62,9 @@ class FiltersSectionViewModel(): ViewModel() {
     fun changeCurrentDepartment(department: String) {
         _department.value = department
         Log.d("value", department)
+        viewModelScope.launch {
+            repository.insertLesson("Test")
+        }
     }
 
     fun changeCurrentTeacher(teacher: String) {

@@ -33,6 +33,8 @@ fun Section(
     title: String,
     filtersViewModel: FiltersSectionViewModel = viewModel()
 ) {
+
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
