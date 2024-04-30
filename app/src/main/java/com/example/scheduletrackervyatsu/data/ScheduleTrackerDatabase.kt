@@ -1,18 +1,28 @@
 package com.example.scheduletrackervyatsu.data
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.scheduletrackervyatsu.DATABASE_NAME
 import com.example.scheduletrackervyatsu.data.dao.ScheduleTrackerDao
+import com.example.scheduletrackervyatsu.data.entities.ChangeStatusEntity
+import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import com.example.scheduletrackervyatsu.data.entities.ScheduleChangeEntity
+import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
+import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
 
 @Database(
     version = 1,
     entities = [
+        ChangeStatusEntity::class,
+        DepartmentEntity::class,
         LessonEntity::class,
+        ScheduleChangeEntity::class,
+        TeacherEntity::class,
+        TeachersDepartmentCrossRef::class
     ]
 )
 abstract class ScheduleTrackerDatabase: RoomDatabase() {
@@ -34,15 +44,13 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                 _instance = Room.databaseBuilder(
                     context.applicationContext
                     , ScheduleTrackerDatabase::class.java
-                    , "scheduleTracker.db")
+                    , DATABASE_NAME)
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            // Populate the database with initial data
-                            // For example:
                             val scheduleTrackerDao = _instance?.getScheduleTrackerDao()
-                            //scheduleTrackerDao?.insert(User("John Doe"))
-                            //scheduleTrackerDao?.insert(User("Jane Smith"))Log.d("db", "Типо заполнили департмаентами")
+
+                            //todo Заполенине кафедр из файла
                         }
                     }).build()
 

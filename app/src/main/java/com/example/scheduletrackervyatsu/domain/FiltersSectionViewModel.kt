@@ -63,7 +63,7 @@ class FiltersSectionViewModel(
         _department.value = department
         Log.d("value", department)
         viewModelScope.launch {
-            repository.insertLesson("Test")
+            repository.getAll()
         }
     }
 
