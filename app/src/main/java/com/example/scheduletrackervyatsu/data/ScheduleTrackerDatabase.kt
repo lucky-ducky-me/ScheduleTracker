@@ -52,7 +52,9 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
                             //todo Заполенине кафедр из файла
                         }
-                    }).build()
+                    })
+                    .createFromAsset("scheduleTracker.db")
+                    .build()
 
                 return _instance as ScheduleTrackerDatabase
             }
