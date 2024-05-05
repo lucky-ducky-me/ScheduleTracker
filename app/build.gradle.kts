@@ -69,6 +69,8 @@ dependencies {
     // To use Kotlin Symbol Processing (KSP)
     //ksp("androidx.room:room-compiler:$room_version")
 
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
     val lifecycle_version = "2.7.0"
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
