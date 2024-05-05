@@ -50,7 +50,7 @@ class SectionViewModel(
 
     private var _teacher = mutableStateOf(teachers[0])
 
-    private var _dateIntervals = mutableStateOf(dateIntervals[0])
+    private var _datetimeInterval = mutableStateOf(dateIntervals[0])
 
     val department
         get() = _department
@@ -59,6 +59,9 @@ class SectionViewModel(
 
     val teacher
         get() = _teacher
+
+    val datetimeInterval
+        get() = _datetimeInterval
 
     init {
 //        viewModelScope.launch {
@@ -78,7 +81,6 @@ class SectionViewModel(
 
     fun changeCurrentDepartment(department: String) {
         _department.value = department
-        Log.d("value", department)
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAll()
         }
@@ -86,15 +88,9 @@ class SectionViewModel(
 
     fun changeCurrentTeacher(teacher: String) {
         _teacher.value = teacher
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getAll()
-        }
     }
 
     fun changeDateInterval(dateInterval: String) {
-        _dateIntervals.value = dateInterval
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getAll()
-        }
+        _datetimeInterval.value = dateInterval
     }
 }

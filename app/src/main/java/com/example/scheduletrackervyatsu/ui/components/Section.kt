@@ -19,6 +19,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -26,7 +27,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
+import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,92 +45,95 @@ fun Section(
 
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val navController = rememberNavController()
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
 
-    val array = filtersViewModel.departments.collectAsState().value
+
+    val departments = filtersViewModel.departments.collectAsState().value
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
-            Row(
-                modifier = Modifier.fillMaxWidth().height(30.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "Расписание",
-                    modifier = Modifier.weight(1f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    "Изменения",
-                    modifier = Modifier.weight(1f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    "Настройки",
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
-                )
-            }
-           /* CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(
-                        title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { *//* do something *//* }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
+            TabRow(
+                onTabClick = {
+                    when (it) {
+                        TabRowDirection.Schedule -> navController.navigateSingleTopTo("Schedule")
+                        TabRowDirection.Changes -> navController.navigateSingleTopTo("Changes")
+                        TabRowDirection.Settings -> navController.navigateSingleTopTo("Settings")
                     }
-                },
-                scrollBehavior = scrollBehavior,
-            )*/
+                }
+            )
         },
     ) { innerPadding ->
-        LazyColumn (
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            userScrollEnabled = true
+        NavHost(
+            navController = navController,
+            startDestination = "Schedule",
+            modifier = Modifier.padding(innerPadding)
         ) {
-            item {
-                FiltersSection(
-                    modifier = Modifier,
-                    selectedDepartment = filtersViewModel.department.value,
-                    selectedTeacher = filtersViewModel.teacher.value,
-                    onSelectedDepartmentChange = {
-                        newValue -> filtersViewModel.changeCurrentDepartment(newValue)
-                    },
-                    onSelectedTeacherChange = {
-                            newValue -> filtersViewModel.changeCurrentTeacher(newValue)
-                    },
-                    onSelectedDateIntervalChange = {
-                            newValue -> filtersViewModel.changeDateInterval(newValue)
-                    },
-                    departments = filtersViewModel.departments.value.toTypedArray() ?: emptyArray(),
-                    teachers  = filtersViewModel.teachers.toTypedArray(),
-                    datesIntervals = filtersViewModel.dateIntervals
+            composable(route = "Schedule") {
+                ScheduleSection(
+                    filtersSectionData = FiltersSectionData(
+                        department = filtersViewModel.department.value,
+                        teacher = filtersViewModel.teacher.value,
+                        datetimeInterval = filtersViewModel.datetimeInterval.value,
+                        onSelectedDepartmentChange = { newValue ->
+                            filtersViewModel.changeCurrentDepartment(
+                                newValue
+                            )
+                        },
+                        onSelectedTeacherChange = { newValue ->
+                            filtersViewModel.changeCurrentTeacher(
+                                newValue
+                            )
+                        },
+                        onSelectedDateTimeIntervalChange = { newValue ->
+                            filtersViewModel.changeDateInterval(
+                                newValue
+                            )
+                        },
+                        departments = departments,
+                        teachers = filtersViewModel.teachers,
+                        datetimeIntervals = filtersViewModel.dateIntervals.toList()
+
+                    )
                 )
             }
-            item {
-                Day(Modifier, "Понедельник")
+            composable(route = "Changes") {
+                ChangesSection(
+                    filtersSectionData = FiltersSectionData(
+                        department = filtersViewModel.department.value,
+                        teacher = filtersViewModel.teacher.value,
+                        datetimeInterval = filtersViewModel.datetimeInterval.value,
+                        onSelectedDepartmentChange = { newValue ->
+                            filtersViewModel.changeCurrentDepartment(
+                                newValue
+                            )
+                        },
+                        onSelectedTeacherChange = { newValue ->
+                            filtersViewModel.changeCurrentTeacher(
+                                newValue
+                            )
+                        },
+                        onSelectedDateTimeIntervalChange = { newValue ->
+                            filtersViewModel.changeDateInterval(
+                                newValue
+                            )
+                        },
+                        departments = departments,
+                        teachers = filtersViewModel.teachers,
+                        datetimeIntervals = filtersViewModel.dateIntervals.toList()
+
+                    )
+                )
+            }
+            composable(route = "Settings") {
+                SettingsSection()
             }
         }
     }
 }
+
+fun NavHostController.navigateSingleTopTo(route: String) =
+    this.navigate(route) { launchSingleTop = true }

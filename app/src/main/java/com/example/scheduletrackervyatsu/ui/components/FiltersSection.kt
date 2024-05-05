@@ -30,6 +30,7 @@ fun FiltersSection(
     modifier: Modifier = Modifier,
     selectedDepartment: String = "",
     selectedTeacher: String = "",
+    selectedDateTimeInterval: String = "",
     onSelectedDepartmentChange: (String) -> Unit,
     onSelectedTeacherChange: (String) -> Unit,
     onSelectedDateIntervalChange: (String) -> Unit,
@@ -138,7 +139,7 @@ fun FiltersSection(
             modifier = Modifier,
         ) {
             TextField(
-                value = datesIntervals[0],
+                value = selectedDateTimeInterval,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
