@@ -11,6 +11,7 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.ScheduleChangeEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherWithDepartments
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScheduleTrackerDao {
@@ -36,7 +37,7 @@ interface ScheduleTrackerDao {
     fun getAllChangeStatus(): List<ChangeStatusEntity>
 
     @Query("SELECT * FROM department")
-    fun getAllDepartments(): List<DepartmentEntity>
+    fun getAllDepartments(): Flow<List<DepartmentEntity>>
 
     @Query("SELECT * FROM lesson")
     fun getAllLessons(): List<LessonEntity>

@@ -12,16 +12,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerVyatsuTheme
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
-import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
-import com.example.scheduletrackervyatsu.domain.FiltersSectionViewModel
 import com.example.scheduletrackervyatsu.ui.components.MyApp
 import java.util.Calendar
 

@@ -64,8 +64,15 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-ktx:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
     // To use Kotlin Symbol Processing (KSP)
     //ksp("androidx.room:room-compiler:$room_version")
+
+    val lifecycle_version = "2.7.0"
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")

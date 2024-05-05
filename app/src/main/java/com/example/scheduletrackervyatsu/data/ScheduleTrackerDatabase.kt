@@ -45,14 +45,6 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                     context.applicationContext
                     , ScheduleTrackerDatabase::class.java
                     , DATABASE_NAME)
-                    .addCallback(object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                            val scheduleTrackerDao = _instance?.getScheduleTrackerDao()
-
-                            //todo Заполенине кафедр из файла
-                        }
-                    })
                     .createFromAsset("scheduleTracker.db")
                     .build()
 
