@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
+    //id("org.jetbrains.kotlinx.dataframe") version "0.13.1"
 }
 
 android {
@@ -11,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.scheduletrackervyatsu"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -36,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -56,7 +57,13 @@ android {
 }
 
 dependencies {
+    //implementation("org.jetbrains.kotlinx:dataframe:0.13.1")
+
+    implementation("org.apache.poi:poi:5.2.0")
+    implementation("org.apache.poi:poi-ooxml:5.2.0")
+
     implementation("androidx.media3:media3-common:1.3.1")
+    implementation("com.google.android.libraries.places:places:3.4.0")
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -70,6 +77,8 @@ dependencies {
     //ksp("androidx.room:room-compiler:$room_version")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    implementation("org.jsoup:jsoup:1.13.1")
 
     val lifecycle_version = "2.7.0"
 
