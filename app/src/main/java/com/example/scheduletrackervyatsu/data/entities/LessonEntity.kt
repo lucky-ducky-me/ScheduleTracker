@@ -17,6 +17,13 @@ import java.util.UUID
             childColumns = ["teacherId"],
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = DepartmentEntity::class,
+            parentColumns = ["departmentId"],
+            childColumns = ["departmentId"],
+            onUpdate = ForeignKey.CASCADE,
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
@@ -26,10 +33,13 @@ class LessonEntity(
     val lessonId: String = UUID.randomUUID().toString(),
 
     @ColumnInfo(name = "dateTime")
-    val dateTime: String?,
+    val dateTime: String,
 
     @ColumnInfo(name = "teacherId")
-    val teacherId: String?,
+    val teacherId: String,
+
+    @ColumnInfo(name = "departmentId")
+    val departmentId: String
 )
 
 data class TeacherWithLessons(
@@ -37,6 +47,15 @@ data class TeacherWithLessons(
     @Relation(
         parentColumn = "teacherId",
         entityColumn = "teacherId"
+    )
+    val lessons: List<LessonEntity>
+)
+
+data class DepartmentWithLessons(
+    @Embedded val teacher: DepartmentEntity?,
+    @Relation(
+        parentColumn = "departmentId",
+        entityColumn = "departmentId"
     )
     val lessons: List<LessonEntity>
 )

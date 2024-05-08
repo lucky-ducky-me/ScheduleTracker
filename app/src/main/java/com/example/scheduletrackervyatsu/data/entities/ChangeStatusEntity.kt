@@ -13,5 +13,5 @@ data class ChangeStatusEntity(
     @ColumnInfo(name = "changeStatusId")
     val changeStatusId: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo(name = "name") val name: String?,
+    @ColumnInfo(name = "name") val name: String,
 )

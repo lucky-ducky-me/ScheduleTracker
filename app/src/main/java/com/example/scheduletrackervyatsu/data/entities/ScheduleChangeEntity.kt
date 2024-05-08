@@ -32,19 +32,19 @@ data class ScheduleChangeEntity(
     val scheduleChangeId: String = UUID.randomUUID().toString(),
 
     @ColumnInfo(name = "modifiedOn")
-    val modifiedOn: String?,
+    val modifiedOn: String,
 
     @ColumnInfo(name = "dateTime")
-    val dateTime: String?,
+    val dateTime: String,
 
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "lessonId")
-    val lessonId: String?,
+    val lessonId: String,
 
     @ColumnInfo(name = "changeStatusId")
-    val changeStatusId: String?
+    val changeStatusId: String
 )
 
 data class LessonWithScheduleChanges(
