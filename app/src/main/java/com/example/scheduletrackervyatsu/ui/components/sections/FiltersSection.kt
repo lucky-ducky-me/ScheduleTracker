@@ -1,4 +1,4 @@
-package com.example.scheduletrackervyatsu.ui.components
+package com.example.scheduletrackervyatsu.ui.components.sections
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement

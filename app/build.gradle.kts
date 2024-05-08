@@ -80,6 +80,8 @@ dependencies {
 
     implementation("org.jsoup:jsoup:1.13.1")
 
+    implementation("androidx.compose.material:material-icons-extended:1.6.7")
+
     val lifecycle_version = "2.7.0"
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")

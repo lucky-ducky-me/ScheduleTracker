@@ -1,13 +1,16 @@
 package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
+import com.example.scheduletrackervyatsu.data.dao.ScheduleReceiver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filter
@@ -90,7 +93,11 @@ class SectionViewModel(
         _teacher.value = teacher
     }
 
+    //@RequiresApi(Build.VERSION_CODES.O)
     fun changeDateInterval(dateInterval: String) {
         _datetimeInterval.value = dateInterval
+        viewModelScope.launch (Dispatchers.IO) {
+            //ScheduleReceiver().getActualSchedule()
+        }
     }
 }

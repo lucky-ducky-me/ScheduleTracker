@@ -46,6 +46,7 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                     , ScheduleTrackerDatabase::class.java
                     , DATABASE_NAME)
                     .createFromAsset("scheduleTracker.db")
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 return _instance as ScheduleTrackerDatabase
