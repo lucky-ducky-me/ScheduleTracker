@@ -11,9 +11,10 @@ import java.time.format.DateTimeFormatter
 import org.jsoup.nodes.Element
 import java.time.LocalDateTime
 
-class ScheduleReceiver(
+class VyatsuParser(
     val baseUrl: String = "https://www.vyatsu.ru/",
     val scheduleUrl: String = "studentu-1/spravochnaya-informatsiya/teacher.html",
+    val teachersUrl: String = "studentu-1/kto-est-kto-v-vyatgu.html"
 ) {
     /**
      * Получить актуальное расписание.
@@ -49,6 +50,40 @@ class ScheduleReceiver(
         return ScheduleParserData(
             lessons = lessons, LocalDateTime.now()
         )
+    }
+
+    fun getDepartments(): List<String> {
+        val doc = Jsoup.connect(baseUrl + scheduleUrl).get()
+
+        val departmentsNodes = doc.select("div .kafPeriod")
+
+        return departmentsNodes.map {
+            it.text()
+        }
+    }
+
+    fun getTeachers(): List<String> {
+        val doc = Jsoup.connect("https://www.vyatsu.ru/php/sotr_prepod_list/ajax_prepod.php").get()
+
+        var teachersItems = doc.select("div .prepod_item")
+
+        var list = mutableListOf<String>()
+
+        teachersItems.forEach {
+            var first = it.children().find {
+                it.text().contains("ФИО")
+            }
+
+            var ffdsfio = first?.text()?.split(" ")
+
+            var fio = ffdsfio?.subList(1, ffdsfio?.size ?: 3)?.joinToString(" ")
+
+            if (fio != null) {
+                list.add(fio)
+            }
+        }
+
+        return list.toList()
     }
 
     /**
