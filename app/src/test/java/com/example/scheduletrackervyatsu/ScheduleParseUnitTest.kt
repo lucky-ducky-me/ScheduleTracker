@@ -1,13 +1,10 @@
 package com.example.scheduletrackervyatsu
 
-import com.example.scheduletrackervyatsu.data.dao.ScheduleReceiver
+import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -17,9 +14,9 @@ import java.time.format.DateTimeFormatter
 class ScheduleParseUnitTest {
     @Test
     fun parsingHtmlLinkText_isCorrect() {
-        var scheduleReceiver = ScheduleReceiver()
+        var vyatsuParser = VyatsuParser()
 
-        var dates = scheduleReceiver.parseHtmlLinkText("c 06 05 2024 по 19 05 2024")
+        var dates = vyatsuParser.parseHtmlLinkText("c 06 05 2024 по 19 05 2024")
 
         assertEquals(dates[0], "06-05-2024")
         assertEquals(dates[1], "19-05-2024")
@@ -27,9 +24,9 @@ class ScheduleParseUnitTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun parsingHtmlLinkText_invalidData() {
-        var scheduleReceiver = ScheduleReceiver()
+        var vyatsuParser = VyatsuParser()
 
-        scheduleReceiver.parseHtmlLinkText("c 06 052024 по 19 05 2024")
+        vyatsuParser.parseHtmlLinkText("c 06 052024 по 19 05 2024")
     }
 
     @Test

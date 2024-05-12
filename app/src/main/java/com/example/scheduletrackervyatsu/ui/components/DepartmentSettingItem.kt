@@ -23,11 +23,11 @@ import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 
 @Composable
-fun Department(
+fun DepartmentSettingItem(
     modifier: Modifier = Modifier,
     setting: Pair<TeacherEntity, List<DepartmentEntity>>,
     onAddButtonClick: (String) -> Unit,
-    onDeleteButtonClick: () -> Unit
+    onDeleteButtonClick: (String) -> Unit
 ) {
     Column(
         modifier  = Modifier
@@ -42,7 +42,6 @@ fun Department(
         ) {
             Text(modifier  = Modifier, text = "Кафедры")
             IconButton(onClick = {
-                // todo
                 onAddButtonClick(setting.first.teacherId)
             }) {
                 Icon(
@@ -62,7 +61,7 @@ fun Department(
                 IconButton(
                     modifier = Modifier.weight(0.1f),
                     onClick = {
-                        onDeleteButtonClick()
+                        onDeleteButtonClick(it.departmentId)
                     }) {
                     Icon(
                         imageVector = Icons.Default.Delete,

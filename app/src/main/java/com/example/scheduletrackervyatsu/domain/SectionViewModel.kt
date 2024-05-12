@@ -1,16 +1,13 @@
 package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
-import com.example.scheduletrackervyatsu.data.dao.ScheduleReceiver
+import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filter
@@ -66,22 +63,6 @@ class SectionViewModel(
     val datetimeInterval
         get() = _datetimeInterval
 
-    init {
-//        viewModelScope.launch {
-//            var list = repository.departments.map {
-//                it.map {
-//                        entity -> entity.name ?: "null"
-//                }
-//            }
-//
-//            list.collect {
-//                entity -> _departments.value = entity
-//        }
-//
-//
-//        }
-    }
-
     fun changeCurrentDepartment(department: String) {
         _department.value = department
         viewModelScope.launch(Dispatchers.IO) {
@@ -97,7 +78,8 @@ class SectionViewModel(
     fun changeDateInterval(dateInterval: String) {
         _datetimeInterval.value = dateInterval
         viewModelScope.launch (Dispatchers.IO) {
-            //ScheduleReceiver().getActualSchedule()
+            VyatsuParser().getTeachers()
+            //repository.getAll()
         }
     }
 }

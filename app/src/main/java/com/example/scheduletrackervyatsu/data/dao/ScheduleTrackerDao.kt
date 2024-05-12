@@ -1,6 +1,7 @@
 package com.example.scheduletrackervyatsu.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -34,6 +35,12 @@ interface ScheduleTrackerDao {
     @Insert
     fun insert(entity: TeachersDepartmentCrossRef)
 
+    @Delete
+    fun delete(entity: TeacherEntity)
+
+    @Delete
+    fun delete(entity: TeachersDepartmentCrossRef)
+
     @Query("SELECT * FROM teacher WHERE teacher.teacherId = :teacherId")
     fun getTeacher(teacherId: String): TeacherEntity
 
@@ -41,7 +48,7 @@ interface ScheduleTrackerDao {
     fun getDepartment(departmentId: String): DepartmentEntity
 
     @Query("SELECT * FROM teacher")
-    fun getAllTeachers(): List<TeacherEntity>
+    fun getAllTeachers(): Flow<List<TeacherEntity>>
 
     @Query("SELECT * FROM changeStatus")
     fun getAllChangeStatus(): List<ChangeStatusEntity>
@@ -64,8 +71,8 @@ interface ScheduleTrackerDao {
     fun getDepartmentWithTeachers(): List<DepartmentWithTeachers>
 
     @Query("SELECT * FROM teacher " +
-            "LEFT JOIN teachersDepartmentCrossRef ON teacher.teacherId = teachersDepartmentCrossRef.teacherId " +
-            "LEFT JOIN department ON teachersDepartmentCrossRef.departmentId = department.departmentId")
-    fun getSettings(): Flow<Map<TeacherEntity, List<DepartmentEntity>>>
+            "INNER JOIN teachersDepartmentCrossRef ON teacher.teacherId = teachersDepartmentCrossRef.teacherId " +
+            "INNER JOIN department ON teachersDepartmentCrossRef.departmentId = department.departmentId")
+    fun getTrackedTeachersDepartments(): Flow<Map<TeacherEntity, List<DepartmentEntity>>>
 
 }

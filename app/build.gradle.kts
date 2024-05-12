@@ -64,6 +64,8 @@ dependencies {
 
     implementation("androidx.media3:media3-common:1.3.1")
     implementation("com.google.android.libraries.places:places:3.4.0")
+    implementation("androidx.compose.material3:material3-android:1.2.1")
+
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -96,7 +98,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     testImplementation("junit:junit:4.13.2")
