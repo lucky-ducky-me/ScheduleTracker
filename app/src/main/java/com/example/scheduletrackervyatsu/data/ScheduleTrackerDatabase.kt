@@ -66,10 +66,10 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                                     val array = it.split(" ")
 
                                     if (array.size == 3) {
-                                        TeacherEntity(name = array[0], surname = array[1], patronymic = array[2])
+                                        TeacherEntity(name = array[1], surname = array[0], patronymic = array[2])
                                     }
                                     else {
-                                        TeacherEntity(name = array[0], surname = array[1], patronymic = null)
+                                        TeacherEntity(name = array[1], surname = array[0], patronymic = null)
                                     }
                                 }
 

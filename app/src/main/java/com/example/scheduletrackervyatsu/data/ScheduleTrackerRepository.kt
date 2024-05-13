@@ -18,6 +18,10 @@ class ScheduleTrackerRepository(private val scheduleTrackerDao: ScheduleTrackerD
     val trackedTeachersDepartments: Flow<Map<TeacherEntity, List<DepartmentEntity>>> =
         scheduleTrackerDao.getTrackedTeachersDepartments()
 
+    val trackingTeachers: Flow<List<TeacherEntity>> = scheduleTrackerDao.getTrackingTeachers()
+
+
+
     fun insertTeacher(name: String, surname: String, patronymic: String? = null) {
         scheduleTrackerDao.insert(TeacherEntity(
             name = name,
@@ -62,5 +66,9 @@ class ScheduleTrackerRepository(private val scheduleTrackerDao: ScheduleTrackerD
         scheduleTrackerDao.getDepartmentWithTeachers()
         scheduleTrackerDao.getTeacherWithDepartments()
 
+    }
+
+    fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>> {
+        return scheduleTrackerDao.getTrackingTeacherDepartments(teacherId)
     }
 }

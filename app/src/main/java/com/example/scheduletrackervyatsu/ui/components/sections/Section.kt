@@ -28,15 +28,42 @@ fun Section(
     title: String,
     filtersViewModel: SectionViewModel = viewModel()
 ) {
-
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStack?.destination
+    var currentDestination = currentBackStack?.destination
 
+    val trackingTeachers = filtersViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
+    val trackingTeacherDepartments = filtersViewModel.trackingTeacherDepartments.collectAsState(initial = emptyList()).value
 
-    val departments = filtersViewModel.departments.collectAsState().value
+    val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
+    val department = filtersViewModel.department.collectAsState(initial = null).value
+
+    val filtersSectionData = FiltersSectionData(
+        department = department,
+        teacher = teacher,
+        datetimeInterval = filtersViewModel.datetimeInterval.value,
+        onSelectedDepartmentChange = { newValue ->
+            filtersViewModel.changeCurrentDepartment(
+                newValue
+            )
+        },
+        onSelectedTeacherChange = { newValue ->
+            filtersViewModel.changeCurrentTeacher(
+                newValue
+            )
+        },
+        onSelectedDateTimeIntervalChange = { newValue ->
+            filtersViewModel.changeDateInterval(
+                newValue
+            )
+        },
+        departments = trackingTeacherDepartments,
+        teachers = trackingTeachers,
+        datetimeIntervals = filtersViewModel.dateIntervals.toList(),
+        trackingTeachers = trackingTeachers
+    )
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -60,58 +87,12 @@ fun Section(
         ) {
             composable(route = "Schedule") {
                 ScheduleSection(
-                    filtersSectionData = FiltersSectionData(
-                        department = filtersViewModel.department.value,
-                        teacher = filtersViewModel.teacher.value,
-                        datetimeInterval = filtersViewModel.datetimeInterval.value,
-                        onSelectedDepartmentChange = { newValue ->
-                            filtersViewModel.changeCurrentDepartment(
-                                newValue
-                            )
-                        },
-                        onSelectedTeacherChange = { newValue ->
-                            filtersViewModel.changeCurrentTeacher(
-                                newValue
-                            )
-                        },
-                        onSelectedDateTimeIntervalChange = { newValue ->
-                            filtersViewModel.changeDateInterval(
-                                newValue
-                            )
-                        },
-                        departments = departments,
-                        teachers = filtersViewModel.teachers,
-                        datetimeIntervals = filtersViewModel.dateIntervals.toList()
-
-                    )
+                    filtersSectionData = filtersSectionData
                 )
             }
             composable(route = "Changes") {
                 ChangesSection(
-                    filtersSectionData = FiltersSectionData(
-                        department = filtersViewModel.department.value,
-                        teacher = filtersViewModel.teacher.value,
-                        datetimeInterval = filtersViewModel.datetimeInterval.value,
-                        onSelectedDepartmentChange = { newValue ->
-                            filtersViewModel.changeCurrentDepartment(
-                                newValue
-                            )
-                        },
-                        onSelectedTeacherChange = { newValue ->
-                            filtersViewModel.changeCurrentTeacher(
-                                newValue
-                            )
-                        },
-                        onSelectedDateTimeIntervalChange = { newValue ->
-                            filtersViewModel.changeDateInterval(
-                                newValue
-                            )
-                        },
-                        departments = departments,
-                        teachers = filtersViewModel.teachers,
-                        datetimeIntervals = filtersViewModel.dateIntervals.toList()
-
-                    )
+                    filtersSectionData = filtersSectionData
                 )
             }
             composable(route = "Settings") {

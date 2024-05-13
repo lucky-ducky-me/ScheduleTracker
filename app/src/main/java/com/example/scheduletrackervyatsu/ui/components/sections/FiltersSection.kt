@@ -1,5 +1,6 @@
 package com.example.scheduletrackervyatsu.ui.components.sections
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,20 +23,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
+import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersSection(
     modifier: Modifier = Modifier,
-    selectedDepartment: String = "",
-    selectedTeacher: String = "",
+    selectedDepartment: DepartmentEntity?,
+    selectedTeacher: TeacherEntity?,
     selectedDateTimeInterval: String = "",
     onSelectedDepartmentChange: (String) -> Unit,
     onSelectedTeacherChange: (String) -> Unit,
     onSelectedDateIntervalChange: (String) -> Unit,
-    departments: Array<String>,
-    teachers: Array<String>,
+    departments: List<DepartmentEntity>,
+    teachers: List<TeacherEntity>,
     datesIntervals: Array<String>
 ) {
     val context = LocalContext.current
@@ -44,8 +47,22 @@ fun FiltersSection(
     var expandedTeacher by remember { mutableStateOf(false) }
     var expandedDepartment by remember { mutableStateOf(false) }
 
-    var selectedTeacherState by rememberSaveable {
-        mutableStateOf(selectedTeacher)
+    var selectedTeacherState by remember {
+        mutableStateOf(selectedTeacher?.fio ?: "")
+    }
+
+    if (selectedTeacher != null) {
+        selectedTeacherState = selectedTeacher.fio
+    }
+
+    val teachersFIO = teachers.map { it.fio }
+
+    var selectedDepartmentNameState by remember {
+        mutableStateOf(selectedDepartment?.name ?: "")
+    }
+
+    if (selectedDepartment != null) {
+        selectedDepartmentNameState = selectedDepartment.name
     }
 
     Column(
@@ -73,7 +90,7 @@ fun FiltersSection(
 
             )
 
-            val filteredOptions = teachers.filter { it.contains(selectedTeacherState, ignoreCase = true) }
+            val filteredOptions = teachersFIO.filter { it.contains(selectedTeacherState, ignoreCase = true) }
 
             if (filteredOptions.isNotEmpty()) {
                 ExposedDropdownMenu(
@@ -87,7 +104,8 @@ fun FiltersSection(
                                 selectedTeacherState = item
                                 expandedTeacher = false
                                 Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                                onSelectedTeacherChange(selectedTeacherState)
+                                onSelectedTeacherChange(teachers.find {
+                                    it.fio.contains(selectedTeacherState) }?.teacherId ?: "")
                             }
                         )
                     }
@@ -102,7 +120,7 @@ fun FiltersSection(
             modifier = Modifier,
         ) {
             TextField(
-                value = selectedDepartment,
+                value = selectedDepartmentNameState,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
@@ -119,13 +137,15 @@ fun FiltersSection(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = item,
+                                text = item.name,
                             )
                         },
                         onClick = {
                             expandedDepartment = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                            onSelectedDepartmentChange(item)
+                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+                            //todo убрать потом колбек надо
+                            onSelectedDepartmentChange(departments.find {
+                                it.name.contains(selectedTeacherState) }?.departmentId ?: "")
                         }
                     )
                 }
@@ -176,28 +196,4 @@ fun FiltersSection(
             Text("Применить")
         }
     }
-}
-
-@Preview
-@Composable
-fun FiltersSectionPrev(
-    filtersViewModel: SectionViewModel = viewModel()
-) {
-    FiltersSection(
-        modifier = Modifier,
-        selectedDepartment = filtersViewModel.department.value,
-        selectedTeacher = filtersViewModel.teacher.value,
-        onSelectedDepartmentChange = {
-                newValue -> filtersViewModel.changeCurrentDepartment(newValue)
-        },
-        onSelectedTeacherChange = {
-                newValue -> filtersViewModel.changeCurrentTeacher(newValue)
-        },
-        onSelectedDateIntervalChange = {
-                newValue -> filtersViewModel.changeDateInterval(newValue)
-        },
-        departments = filtersViewModel.departments.value?.toTypedArray() ?: emptyArray(),
-        teachers  = filtersViewModel.teachers.toTypedArray(),
-        datesIntervals = filtersViewModel.dateIntervals
-    )
 }

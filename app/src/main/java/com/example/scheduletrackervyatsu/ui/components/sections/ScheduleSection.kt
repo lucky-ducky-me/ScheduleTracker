@@ -31,8 +31,8 @@ fun ScheduleSection(
                 onSelectedDepartmentChange = filtersSectionData.onSelectedDepartmentChange,
                 onSelectedTeacherChange = filtersSectionData.onSelectedTeacherChange,
                 onSelectedDateIntervalChange = filtersSectionData.onSelectedDateTimeIntervalChange,
-                departments = filtersSectionData.departments.toTypedArray(),
-                teachers  = filtersSectionData.teachers.toTypedArray(),
+                departments = filtersSectionData.departments,
+                teachers  = filtersSectionData.trackingTeachers,
                 datesIntervals = filtersSectionData.datetimeIntervals.toTypedArray(),
             )
         }

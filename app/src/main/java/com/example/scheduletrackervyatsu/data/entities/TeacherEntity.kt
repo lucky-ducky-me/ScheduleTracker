@@ -9,12 +9,12 @@ import java.util.UUID
 data class TeacherEntity(
     @PrimaryKey()
     @ColumnInfo(name = "teacherId")
-    val teacherId: String = UUID.randomUUID().toString(),
+    var teacherId: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "surname") val surname: String,
-    @ColumnInfo(name = "patronymic") val patronymic: String?,
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "surname") var surname: String,
+    @ColumnInfo(name = "patronymic") var patronymic: String?,
 
     @ColumnInfo(name = "fio")
-    val fio: String = surname + " " + surname + if (patronymic != null) " $patronymic" else "",
+    var fio: String = surname + " " + name + if (patronymic != null) " $patronymic" else "",
 )

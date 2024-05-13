@@ -30,8 +30,8 @@ fun ChangesSection(
                 onSelectedDepartmentChange = filtersSectionData.onSelectedDepartmentChange,
                 onSelectedTeacherChange = filtersSectionData.onSelectedTeacherChange,
                 onSelectedDateIntervalChange = filtersSectionData.onSelectedDateTimeIntervalChange,
-                departments = filtersSectionData.departments.toTypedArray(),
-                teachers  = filtersSectionData.teachers.toTypedArray(),
+                departments = filtersSectionData.departments,
+                teachers  = filtersSectionData.teachers,
                 datesIntervals = filtersSectionData.datetimeIntervals.toTypedArray(),
             )
         }
