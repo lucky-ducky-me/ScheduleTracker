@@ -91,7 +91,10 @@ fun Section(
         ) {
             composable(route = "Schedule") {
                 ScheduleSection(
-                    filtersSectionData = filtersSectionData
+                    filtersSectionData = filtersSectionData,
+                    onAcceptButtonClick = {
+                        filtersViewModel.parseFullSchedule()
+                    }
                 )
             }
             composable(route = "Changes") {

@@ -3,6 +3,7 @@ package com.example.scheduletrackervyatsu.data.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.scheduletrackervyatsu.data.entities.ChangeStatusEntity
@@ -26,7 +27,7 @@ interface ScheduleTrackerDao {
     @Insert
     fun insert(entity: DepartmentEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: LessonEntity)
 
     @Insert
@@ -87,6 +88,13 @@ interface ScheduleTrackerDao {
             "   ON department.departmentId = teachersDepartmentCrossRef.departmentId " +
             "   AND teachersDepartmentCrossRef.teacherId = :teacherId")
     fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>>
+
+    @Query("SELECT * FROM teacher " +
+            "INNER JOIN teachersDepartmentCrossRef " +
+            "   ON teacher.teacherId = teachersDepartmentCrossRef.teacherId " +
+            "INNER JOIN department " +
+            "   ON teachersDepartmentCrossRef.departmentId = department.departmentId")
+    fun getTrackedTeachersDepartmentsNowFlow(): Map<TeacherEntity, List<DepartmentEntity>>
 
 
 }

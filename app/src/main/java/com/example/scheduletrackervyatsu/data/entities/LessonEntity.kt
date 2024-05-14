@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.util.UUID
@@ -25,6 +26,9 @@ import java.util.UUID
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["dateTime"], unique = true)
     ]
 )
 class LessonEntity(
@@ -39,7 +43,10 @@ class LessonEntity(
     val teacherId: String,
 
     @ColumnInfo(name = "departmentId")
-    val departmentId: String
+    val departmentId: String,
+
+    @ColumnInfo(name = "name")
+    val name: String
 )
 
 data class TeacherWithLessons(

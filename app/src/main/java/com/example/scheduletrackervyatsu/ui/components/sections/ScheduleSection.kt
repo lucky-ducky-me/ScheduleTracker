@@ -3,6 +3,8 @@ package com.example.scheduletrackervyatsu.ui.components.sections
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +15,9 @@ import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 @Composable
 fun ScheduleSection(
     modifier: Modifier = Modifier,
-    filtersSectionData: FiltersSectionData
+    filtersSectionData: FiltersSectionData,
+    onAcceptButtonClick: () -> Unit
+
 ) {
     LazyColumn (
         modifier = modifier
@@ -37,28 +41,11 @@ fun ScheduleSection(
             )
         }
         item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
-        }
-        item {
-            Day(Modifier, "Понедельник")
+            Button(onClick = {
+                onAcceptButtonClick()
+            }) {
+                Text("Выполнить парсинг")
+            }
         }
     }
 }

@@ -15,3 +15,7 @@ val DateIntervalsStringValues = mapOf(
     DateIntervals.CurrentWeek to "Текущая неделя",
     DateIntervals.CurrentAndNextWeeks to "Текущая и следующая недели",
 )
+
+fun <T> concatenate(vararg lists: List<T>): List<T> {
+    return listOf(*lists).flatten()
+}

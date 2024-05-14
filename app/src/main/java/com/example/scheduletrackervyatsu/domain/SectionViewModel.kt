@@ -8,6 +8,7 @@ import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.DateIntervalsStringValues
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
+import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class SectionViewModel(
     application: Application,
@@ -79,7 +81,8 @@ class SectionViewModel(
     init {
         viewModelScope.launch (Dispatchers.IO){
             _trackingTeachers.collect { teachers ->
-                if (teachers.isNotEmpty() && _teacher.value == null) {
+                if (teachers.isNotEmpty() && (_teacher.value == null
+                            || !teachers.contains(_teacher.value))) {
                     _teacher.update { teachers[0] }
                 }
             }
@@ -116,6 +119,14 @@ class SectionViewModel(
         viewModelScope.launch (Dispatchers.IO) {
             //VyatsuParser().getTeachers()
             //repository.getAll()
+        }
+    }
+
+    fun parseFullSchedule() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            repository.saveSchedule()
+
         }
     }
 

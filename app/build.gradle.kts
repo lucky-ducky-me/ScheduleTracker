@@ -28,6 +28,13 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xdebug")
+            }
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

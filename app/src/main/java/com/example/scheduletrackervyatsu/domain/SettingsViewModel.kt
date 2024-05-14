@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
+import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import kotlinx.coroutines.Dispatchers

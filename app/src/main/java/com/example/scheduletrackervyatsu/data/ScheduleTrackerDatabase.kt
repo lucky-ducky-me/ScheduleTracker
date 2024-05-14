@@ -90,21 +90,11 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
                         }
                      })
-                    .fallbackToDestructiveMigration()
                     .build()
 
 
                 return _instance as ScheduleTrackerDatabase
             }
         }
-    }
-}
-
-class AppDatabaseCallback(private val context: Context) : RoomDatabase.Callback() {
-    override fun onCreate(db: SupportSQLiteDatabase) {
-        super.onCreate(db)
-
-
-
     }
 }

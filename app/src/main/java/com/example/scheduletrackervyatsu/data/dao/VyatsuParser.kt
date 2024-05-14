@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class VyatsuParser(
     val baseUrl: String = "https://www.vyatsu.ru/",
     val scheduleUrl: String = "studentu-1/spravochnaya-informatsiya/teacher.html",
-    val teachersUrl: String = "studentu-1/kto-est-kto-v-vyatgu.html"
+    val teachersUrl: String = "php/sotr_prepod_list/ajax_prepod.php"
 ) {
     /**
      * Получить актуальное расписание.
