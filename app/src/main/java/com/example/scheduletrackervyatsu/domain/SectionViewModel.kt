@@ -2,30 +2,23 @@ package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scheduletrackervyatsu.DateIntervals
+import com.example.scheduletrackervyatsu.DateIntervalsStringValues
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
-import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SectionViewModel(
     application: Application,
@@ -36,14 +29,6 @@ class SectionViewModel(
      */
     private var repository = ScheduleTrackerRepository(
             ScheduleTrackerDatabase.getDatabase(getApplication<Application>()).getScheduleTrackerDao())
-
-    var dateIntervals = arrayOf<String>(
-        "Текущая неделя",
-        "Текущая и следующие недели",
-        "1 неделя",
-        "2 недели")
-
-    private var _datetimeInterval = mutableStateOf(dateIntervals[0])
 
     /**
      * Отслеживаемые преподаватели.
@@ -64,7 +49,7 @@ class SectionViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private var _trackingTeacherDepartments = _teacher.flatMapLatest {
         repository.getTrackingTeacherDepartments(it?.teacherId ?: "")
-    } .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     /**
      * Отслеживаемые преподаватели.
@@ -83,8 +68,13 @@ class SectionViewModel(
     val department
         get() = _department.asStateFlow()
 
-    val datetimeInterval
-        get() = _datetimeInterval
+
+    var dateIntervals = DateIntervalsStringValues
+
+    private var _dateInterval = mutableStateOf(DateIntervals.Week)
+
+    val dateInterval
+        get() = _dateInterval
 
     init {
         viewModelScope.launch (Dispatchers.IO){
@@ -98,7 +88,7 @@ class SectionViewModel(
 
         viewModelScope.launch (Dispatchers.IO){
             _trackingTeacherDepartments.collect { departments ->
-                if (departments.isNotEmpty() && _department.value == null) {
+                if (departments.isNotEmpty()) {
                     _department.update {
                         departments[0]
                     }
@@ -121,8 +111,8 @@ class SectionViewModel(
         }
     }
 
-    fun changeDateInterval(dateInterval: String) {
-        _datetimeInterval.value = dateInterval
+    fun changeDateInterval(dateInterval: DateIntervals) {
+        _dateInterval.value = dateInterval
         viewModelScope.launch (Dispatchers.IO) {
             //VyatsuParser().getTeachers()
             //repository.getAll()

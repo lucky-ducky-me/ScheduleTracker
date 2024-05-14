@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
@@ -33,13 +34,13 @@ fun FiltersSection(
     modifier: Modifier = Modifier,
     selectedDepartment: DepartmentEntity?,
     selectedTeacher: TeacherEntity?,
-    selectedDateTimeInterval: String = "",
+    selectedDateTimeInterval: DateIntervals,
     onSelectedDepartmentChange: (String) -> Unit,
     onSelectedTeacherChange: (String) -> Unit,
     onSelectedDateIntervalChange: (String) -> Unit,
     departments: List<DepartmentEntity>,
     teachers: List<TeacherEntity>,
-    datesIntervals: Array<String>
+    datesIntervals: Map<DateIntervals, String>
 ) {
     val context = LocalContext.current
 
@@ -47,23 +48,17 @@ fun FiltersSection(
     var expandedTeacher by remember { mutableStateOf(false) }
     var expandedDepartment by remember { mutableStateOf(false) }
 
-    var selectedTeacherState by remember {
+    var selectedTeacherState by rememberSaveable {
         mutableStateOf(selectedTeacher?.fio ?: "")
     }
 
-    if (selectedTeacher != null) {
-        selectedTeacherState = selectedTeacher.fio
-    }
+     val teachersFIO = teachers.map { it.fio }
 
-    val teachersFIO = teachers.map { it.fio }
+    var dateIntervalName by remember {
+       mutableStateOf(datesIntervals[selectedDateTimeInterval] ?: "")
+   }
 
-    var selectedDepartmentNameState by remember {
-        mutableStateOf(selectedDepartment?.name ?: "")
-    }
-
-    if (selectedDepartment != null) {
-        selectedDepartmentNameState = selectedDepartment.name
-    }
+    dateIntervalName = datesIntervals[selectedDateTimeInterval] ?: ""
 
     Column(
         modifier = Modifier.wrapContentHeight(),
@@ -78,7 +73,7 @@ fun FiltersSection(
             }
         ) {
             TextField(
-                value = selectedTeacherState,
+                value = selectedTeacher?.fio ?: "",
                 onValueChange = {
                     selectedTeacherState = it
                 },
@@ -90,7 +85,7 @@ fun FiltersSection(
 
             )
 
-            val filteredOptions = teachersFIO.filter { it.contains(selectedTeacherState, ignoreCase = true) }
+            val filteredOptions = teachersFIO.filter { selectedTeacherState.contains(selectedTeacherState, ignoreCase = true) }
 
             if (filteredOptions.isNotEmpty()) {
                 ExposedDropdownMenu(
@@ -120,7 +115,7 @@ fun FiltersSection(
             modifier = Modifier,
         ) {
             TextField(
-                value = selectedDepartmentNameState,
+                value = selectedDepartment?.name ?: "",
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
@@ -144,8 +139,7 @@ fun FiltersSection(
                             expandedDepartment = false
                             Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                             //todo убрать потом колбек надо
-                            onSelectedDepartmentChange(departments.find {
-                                it.name.contains(selectedTeacherState) }?.departmentId ?: "")
+                            onSelectedDepartmentChange(item.departmentId)
                         }
                     )
                 }
@@ -159,7 +153,7 @@ fun FiltersSection(
             modifier = Modifier,
         ) {
             TextField(
-                value = selectedDateTimeInterval,
+                value = dateIntervalName,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -172,17 +166,18 @@ fun FiltersSection(
                 expanded = expandedDateInterval,
                 onDismissRequest = { expandedDateInterval = false }
             ) {
-                datesIntervals.forEachIndexed { index, item ->
+                datesIntervals.forEach { (key, value) ->
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = item,
+                                text = value,
                             )
                         },
                         onClick = {
                             expandedDateInterval = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                            onSelectedDateIntervalChange(item)
+                            dateIntervalName = value
+                            Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
+                            onSelectedDateIntervalChange(dateIntervalName)
                         }
                     )
                 }

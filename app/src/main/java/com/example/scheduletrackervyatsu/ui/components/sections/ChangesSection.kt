@@ -32,7 +32,7 @@ fun ChangesSection(
                 onSelectedDateIntervalChange = filtersSectionData.onSelectedDateTimeIntervalChange,
                 departments = filtersSectionData.departments,
                 teachers  = filtersSectionData.teachers,
-                datesIntervals = filtersSectionData.datetimeIntervals.toTypedArray(),
+                datesIntervals = filtersSectionData.datetimeIntervals,
             )
         }
 
