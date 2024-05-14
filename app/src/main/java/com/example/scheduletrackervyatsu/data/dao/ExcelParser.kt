@@ -68,7 +68,7 @@ class ExcelParser {
                 val cellValue = when (row.getCell(j.second).cellType) {
                     CellType.STRING ->
                          if (row.getCell(j.second).stringCellValue.isNotEmpty())
-                            row.getCell(j.second).stringCellValue.trim().split(" ")[1].trim()
+                            row.getCell(j.second).stringCellValue.trim()
                          else
                              ""
                     else -> {

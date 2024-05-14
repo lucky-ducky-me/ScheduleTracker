@@ -63,7 +63,7 @@ class VyatsuParser(
     }
 
     fun getTeachers(): List<String> {
-        val doc = Jsoup.connect("https://www.vyatsu.ru/php/sotr_prepod_list/ajax_prepod.php").get()
+        val doc = Jsoup.connect(baseUrl + teachersUrl).get()
 
         var teachersItems = doc.select("div .prepod_item")
 
@@ -115,7 +115,7 @@ class VyatsuParser(
                     val (teacher, lessons) = pair
 
                     if (!parsedData.contains(teacher)) {
-                        parsedData[teacher] = listOf()
+                        parsedData[teacher] = emptyList()
                     }
 
                     for (element in lessons) {
@@ -146,8 +146,14 @@ class VyatsuParser(
 
             val excelLinks = htmlLinks.filter { link ->
                 val dates = parseHtmlLinkText(link.text())
-                LocalDate.parse(dates[0], formatter) >= startDate
-                        &&  LocalDate.parse(dates[1], formatter) <= endDate
+                var start = LocalDate.parse(dates[0], formatter)
+                var end =  LocalDate.parse(dates[1], formatter)
+
+                var cond = end >= startDate && startDate >= start
+                        ||  end >= endDate && endDate >= start
+
+                end >= startDate && startDate >= start
+                        ||  end >= endDate && endDate >= start
             }
 
             resultList = resultList.plus(excelLinks.mapNotNull {
