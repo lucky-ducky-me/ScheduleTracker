@@ -1,32 +1,31 @@
 package com.example.scheduletrackervyatsu.ui.components.sections
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
-import com.example.scheduletrackervyatsu.domain.SectionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,62 +48,58 @@ fun FiltersSection(
     var expandedTeacher by remember { mutableStateOf(false) }
     var expandedDepartment by remember { mutableStateOf(false) }
 
-    var selectedTeacherState by rememberSaveable {
-        mutableStateOf(selectedTeacher?.fio ?: "")
-    }
-
-     val teachersFIO = teachers.map { it.fio }
-
     var dateIntervalName by remember {
        mutableStateOf(datesIntervals[selectedDateTimeInterval] ?: "")
-   }
+    }
 
     dateIntervalName = datesIntervals[selectedDateTimeInterval] ?: ""
 
     Column(
         modifier = Modifier.wrapContentHeight(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
 
         ) {
+
         // Выпадающий список с преподавателями
         ExposedDropdownMenuBox(
             expanded = expandedTeacher,
-            onExpandedChange = {
-                expandedTeacher = !expandedTeacher
-            }
+            onExpandedChange = { expandedTeacher = !expandedTeacher },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
                 value = selectedTeacher?.fio ?: "",
-                onValueChange = {
-                    selectedTeacherState = it
-                },
-                label = { Text(text = "Выберите преподавателя") },
+                onValueChange = {},
+                readOnly = true,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTeacher)
-               },
-                modifier = Modifier.menuAnchor(),
-
+                },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
             )
 
-            val filteredOptions = teachersFIO.filter { selectedTeacherState.contains(selectedTeacherState, ignoreCase = true) }
-
-            if (filteredOptions.isNotEmpty()) {
-                ExposedDropdownMenu(
-                    expanded = expandedTeacher,
-                    onDismissRequest = {}
-                ) {
-                    filteredOptions.forEach { item ->
-                        DropdownMenuItem(
-                            text = { Text(text = item) },
-                            onClick = {
-                                selectedTeacherState = item
-                                expandedTeacher = false
-                                Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                                onSelectedTeacherChange(teachers.find {
-                                    it.fio.contains(selectedTeacherState) }?.teacherId ?: "")
-                            }
-                        )
-                    }
+            ExposedDropdownMenu(
+                expanded = expandedTeacher,
+                onDismissRequest = {
+                    expandedTeacher = false
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                teachers.forEachIndexed { index, item ->
+                    DropdownMenuItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = {
+                            Text(
+                                text = item.fio,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        },
+                        onClick = {
+                            expandedTeacher = false
+                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+                            onSelectedTeacherChange(item.teacherId)
+                        }
+                    )
                 }
             }
         }
@@ -113,24 +108,26 @@ fun FiltersSection(
         ExposedDropdownMenuBox(
             expanded = expandedDepartment,
             onExpandedChange = { expandedDepartment = !expandedDepartment },
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
                 value = selectedDepartment?.name ?: "",
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor().fillMaxWidth()
             )
 
             ExposedDropdownMenu(
                 expanded = expandedDepartment,
                 onDismissRequest = {
                     expandedDepartment = false
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 departments.forEachIndexed { index, item ->
                     DropdownMenuItem(
+                        modifier = Modifier.fillMaxWidth(),
                         text = {
                             Text(
                                 text = item.name,
@@ -150,7 +147,7 @@ fun FiltersSection(
         ExposedDropdownMenuBox(
             expanded = expandedDateInterval,
             onExpandedChange = { expandedDateInterval = !expandedDateInterval },
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
                 value = dateIntervalName,
@@ -159,12 +156,13 @@ fun FiltersSection(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDateInterval)
                 },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor().fillMaxWidth()
             )
 
             ExposedDropdownMenu(
                 expanded = expandedDateInterval,
-                onDismissRequest = { expandedDateInterval = false }
+                onDismissRequest = { expandedDateInterval = false },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 datesIntervals.forEach { (key, value) ->
                     DropdownMenuItem(
@@ -185,9 +183,19 @@ fun FiltersSection(
         }
 
 
-        Button(onClick = {
-            onAcceptButtonClick()
-        }) {
+        Button(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            colors = ButtonColors(
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+            onClick = {
+                onAcceptButtonClick()
+            }
+        ) {
             Text("Применить")
         }
     }

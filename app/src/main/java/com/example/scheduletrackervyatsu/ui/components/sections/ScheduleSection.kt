@@ -1,11 +1,10 @@
 package com.example.scheduletrackervyatsu.ui.components.sections
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,14 +12,12 @@ import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.ui.components.Day
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
-import java.time.LocalDate
 
 @Composable
 fun ScheduleSection(
     modifier: Modifier = Modifier,
     filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit,
-    onTestButtonClick: () -> Unit,
     lessons: List<LessonEntity>
 ) {
     var splitList = lessons.map {it.dateTime.split("T")[0]}.toSet()
@@ -43,7 +40,8 @@ fun ScheduleSection(
 
     LazyColumn (
         modifier = modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         userScrollEnabled = true
@@ -64,13 +62,6 @@ fun ScheduleSection(
                     onAcceptButtonClick()
                 }
             )
-        }
-        item {
-            Button(onClick = {
-                onTestButtonClick()
-            }) {
-                Text("Выполнить парсинг")
-            }
         }
 
         items(temp) {

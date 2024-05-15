@@ -1,9 +1,11 @@
 package com.example.scheduletrackervyatsu.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +20,8 @@ fun TabRow(
     onTabClick: (TabRowDirection) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(30.dp),
+        modifier = modifier.fillMaxWidth().height(50.dp)
+            .background(MaterialTheme.colorScheme.primaryContainer),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -29,6 +32,7 @@ fun TabRow(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimary
         )
         Text(
             "Изменения",
@@ -37,7 +41,8 @@ fun TabRow(
             },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimary
         )
         Text(
             "Настройки",
@@ -46,7 +51,8 @@ fun TabRow(
                 onTabClick(TabRowDirection.Settings)
             },
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

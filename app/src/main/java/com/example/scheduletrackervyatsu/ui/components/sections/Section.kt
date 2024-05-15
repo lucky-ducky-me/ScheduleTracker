@@ -1,7 +1,9 @@
 package com.example.scheduletrackervyatsu.ui.components.sections
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -10,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -88,7 +91,10 @@ fun Section(
         NavHost(
             navController = navController,
             startDestination = "Schedule",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(10.dp)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             composable(route = "Schedule") {
                 ScheduleSection(
@@ -96,9 +102,6 @@ fun Section(
                     lessons = lessons,
                     onAcceptButtonClick = {
                         filtersViewModel.getLessons()
-                    },
-                    onTestButtonClick = {
-                        filtersViewModel.parseFullSchedule()
                     }
                 )
             }

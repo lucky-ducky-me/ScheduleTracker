@@ -66,7 +66,7 @@ fun SettingsSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
                 Row(
