@@ -79,8 +79,9 @@ interface ScheduleTrackerDao {
     fun getTrackedTeachersDepartments(): Flow<Map<TeacherEntity, List<DepartmentEntity>>>
 
     @Query("SELECT * FROM teacher " +
-            "INNER JOIN teachersDepartmentCrossRef ON teacher.teacherId = teachersDepartmentCrossRef.teacherId " +
-            "GROUP BY teacher.teacherId")
+            "INNER JOIN teachersDepartmentCrossRef " +
+            "   ON teacher.teacherId = teachersDepartmentCrossRef.teacherId " +
+            "   GROUP BY teacher.teacherId")
     fun getTrackingTeachers(): Flow<List<TeacherEntity>>
 
     @Query("SELECT * FROM department " +
@@ -95,6 +96,12 @@ interface ScheduleTrackerDao {
             "INNER JOIN department " +
             "   ON teachersDepartmentCrossRef.departmentId = department.departmentId")
     fun getTrackedTeachersDepartmentsNowFlow(): Map<TeacherEntity, List<DepartmentEntity>>
+
+    @Query("SELECT * FROM lesson " +
+            "WHERE lesson.departmentId = :departmentId " +
+            "   AND lesson.teacherId = :teacherId " +
+            "ORDER BY lesson.dateTime")
+    fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>
 
 
 }

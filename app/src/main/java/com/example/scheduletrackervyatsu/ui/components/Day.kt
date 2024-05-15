@@ -14,36 +14,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import java.time.LocalDate
 import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerVyatsuTheme
+import java.time.DayOfWeek
 
 @Composable
 fun Day(
     modifier: Modifier = Modifier,
     name:String,
-    lessonsList: List<String> = List(7) {"$it lesson"}) {
-    val intervals: List<String> = List(7) {"$it"}
+    lessonsList: List<LessonEntity>) {
+
+    var date = lessonsList[0].dateTime.split("T")[0]
 
     Column(
         modifier = modifier
             .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
     ) {
-        Text(text = name, modifier = modifier
+        Text(
+            text = date,
+            modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
             , textAlign = TextAlign.Center)
-        intervals.indices.forEach { index ->
+
+        lessonsList.forEach { lesson ->
             Row(modifier = modifier.padding(8.dp).fillMaxWidth()) {
-                Text(text = intervals[index], modifier.fillMaxWidth(0.2f))
-                Text(text = lessonsList[index], modifier.fillMaxWidth())
+                Text(text = lesson.dateTime.split("T")[1]
+                    , modifier.fillMaxWidth(0.2f))
+                Text(text = lesson.name, modifier.fillMaxWidth())
             }
         }
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun DayPreview() {
-    ScheduleTrackerVyatsuTheme {
-        Day(Modifier, "Понедельник")
     }
 }

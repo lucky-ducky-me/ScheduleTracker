@@ -12,7 +12,8 @@ import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 @Composable
 fun ChangesSection(
     modifier: Modifier = Modifier,
-    filtersSectionData: FiltersSectionData
+    filtersSectionData: FiltersSectionData,
+    onAcceptButtonClick: () -> Unit
 ) {
     LazyColumn (
         modifier = modifier
@@ -33,6 +34,9 @@ fun ChangesSection(
                 departments = filtersSectionData.departments,
                 teachers  = filtersSectionData.teachers,
                 datesIntervals = filtersSectionData.datetimeIntervals,
+                onAcceptButtonClick = {
+                    onAcceptButtonClick()
+                }
             )
         }
 

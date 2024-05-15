@@ -40,7 +40,8 @@ fun FiltersSection(
     onSelectedDateIntervalChange: (String) -> Unit,
     departments: List<DepartmentEntity>,
     teachers: List<TeacherEntity>,
-    datesIntervals: Map<DateIntervals, String>
+    datesIntervals: Map<DateIntervals, String>,
+    onAcceptButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -186,7 +187,7 @@ fun FiltersSection(
 
 
         Button(onClick = {
-            //TODO
+            onAcceptButtonClick()
         }) {
             Text("Применить")
         }

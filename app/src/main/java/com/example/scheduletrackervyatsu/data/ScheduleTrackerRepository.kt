@@ -18,29 +18,35 @@ import java.time.LocalDateTime
 
 class ScheduleTrackerRepository(
     private val scheduleTrackerDao: ScheduleTrackerDao,
-    private val parser:VyatsuParser = VyatsuParser()) {
-    suspend fun insert(name: String): Unit {
-        scheduleTrackerDao.insert(DepartmentEntity(name = name))
-    }
-
+    private val parser:VyatsuParser = VyatsuParser())
+{
+    /**
+     * Список всех кафедр.
+     */
     val departments: Flow<List<DepartmentEntity>> = scheduleTrackerDao.getAllDepartments()
 
+    /**
+     * Список всех преподавателей.
+     */
     val teachers: Flow<List<TeacherEntity>> = scheduleTrackerDao.getAllTeachers()
 
+    /**
+     * Список кафедр отслеживаемых преподавателей.
+     */
     val trackedTeachersDepartments: Flow<Map<TeacherEntity, List<DepartmentEntity>>> =
         scheduleTrackerDao.getTrackedTeachersDepartments()
 
+    /**
+     * Список отслеживаемых преподавателей.
+     */
     val trackingTeachers: Flow<List<TeacherEntity>> = scheduleTrackerDao.getTrackingTeachers()
 
-
-    suspend fun insertTeacher(name: String, surname: String, patronymic: String? = null) {
-        scheduleTrackerDao.insert(TeacherEntity(
-            name = name,
-            surname = surname,
-            patronymic = patronymic))
-    }
-
-    suspend fun insertTrackingForTeacher(teacherId: String, departmentId: String) {
+    /**
+     * Установить отслеживание для преподавателя.
+     * @param teacherId идентификатор преподавателя.
+     * @param departmentId идентификатор кафедры.
+     */
+    fun insertTrackingForTeacher(teacherId: String, departmentId: String) {
         val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
             ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
 
@@ -52,13 +58,12 @@ class ScheduleTrackerRepository(
             departmentId = departmentId))
     }
 
-    suspend fun deleteTeacher(teacherId: String) {
-        scheduleTrackerDao.delete(
-            TeacherEntity(teacherId = teacherId, name = "", surname = "", patronymic = null)
-        )
-    }
-
-    suspend fun deleteTrackingForTeacher(teacherId: String, departmentId: String) {
+    /**
+     * Удалить отслеживание для преподавателя для конкретной кафедры.
+     * @param teacherId идентификатор преподавателя.
+     * @param departmentId идентификатор кафедры.
+     */
+    fun deleteTrackingForTeacher(teacherId: String, departmentId: String) {
         val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
             ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
 
@@ -68,7 +73,8 @@ class ScheduleTrackerRepository(
         scheduleTrackerDao.delete(TeachersDepartmentCrossRef(teacherId, departmentId))
     }
 
-    suspend fun getAll() {
+    //TODO DELETE
+    fun getAll() {
         scheduleTrackerDao.getAllScheduleChanges()
         scheduleTrackerDao.getAllDepartments()
         scheduleTrackerDao.getAllLessons()
@@ -79,14 +85,22 @@ class ScheduleTrackerRepository(
 
     }
 
-    suspend fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>> {
+    /**
+     * Получить кафедры у отслеживаемого преподавателя.
+     * @param teacherId идентификатор преподавателя.
+     */
+    fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>> {
         return scheduleTrackerDao.getTrackingTeacherDepartments(teacherId)
+    }
+
+    fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>{
+        return scheduleTrackerDao.getLessons(teacherId, departmentId)
     }
 
 
     //region Парсинг
 
-    suspend fun saveSchedule() {
+    fun saveSchedule() {
 
         val lastValue = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
 
@@ -181,5 +195,7 @@ class ScheduleTrackerRepository(
         }
 
     }
+
+
 
 }

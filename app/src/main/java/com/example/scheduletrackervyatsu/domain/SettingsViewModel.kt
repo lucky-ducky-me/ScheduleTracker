@@ -39,7 +39,7 @@ class SettingsViewModel(
     var openAddingDialogState = _openAddingDialogState
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AddingDepartmentDialogState())
 
-    var settings: Flow<List<Pair<TeacherEntity, List<DepartmentEntity>>>> = repository.trackedTeachersDepartments
+    var settings = repository.trackedTeachersDepartments
         .map {
             it.map {
                     entity -> Pair(entity.key, entity.value)
@@ -66,7 +66,8 @@ class SettingsViewModel(
 
     fun deleteTeacher(teacherId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteTeacher(teacherId)
+            //todo исправить на удаление отслеживания для всех кафедр :) а то спарсил а потом удалил бз БД гений
+            //repository.deleteTeacher(teacherId)
         }
     }
 
