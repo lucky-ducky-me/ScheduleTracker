@@ -73,6 +73,17 @@ class ScheduleTrackerRepository(
         scheduleTrackerDao.delete(TeachersDepartmentCrossRef(teacherId, departmentId))
     }
 
+    /**
+     * Удалить отслеживание для преподавателя.
+     * @param teacherId идентификатор преподавателя.
+     */
+    fun deleteTrackingForTeacher(teacherId: String) {
+        val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
+            ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
+
+        scheduleTrackerDao.deleteAllTrackingForTeacher(teacherId)
+    }
+
     //TODO DELETE
     fun getAll() {
         scheduleTrackerDao.getAllScheduleChanges()

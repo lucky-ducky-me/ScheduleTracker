@@ -66,8 +66,7 @@ class SettingsViewModel(
 
     fun deleteTeacher(teacherId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            //todo исправить на удаление отслеживания для всех кафедр :) а то спарсил а потом удалил бз БД гений
-            //repository.deleteTeacher(teacherId)
+            repository.deleteTrackingForTeacher(teacherId)
         }
     }
 

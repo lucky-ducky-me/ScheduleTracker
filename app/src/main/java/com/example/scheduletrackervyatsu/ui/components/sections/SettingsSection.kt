@@ -32,7 +32,9 @@ import com.example.scheduletrackervyatsu.ui.components.AddingDepartmentDialog
 import com.example.scheduletrackervyatsu.ui.components.AddingTeacherDialog
 import com.example.scheduletrackervyatsu.ui.components.TeacherSettingItem
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Раздел с настройками.
+ */
 @Composable
 fun SettingsSection(
     modifier: Modifier = Modifier,

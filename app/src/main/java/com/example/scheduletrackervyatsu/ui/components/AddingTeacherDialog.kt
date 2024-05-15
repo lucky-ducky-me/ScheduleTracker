@@ -77,39 +77,15 @@ fun AddingTeacherDialog(
     ) {
         AlertDialog(
             icon = {
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip() {
-                            Text(
-                                text = "Введите ФИО через пробел или фамилию и инициалы с точкой.",)
-                        }
-                    },
-                    state = myTooltipState,
-                ) {
-                }
-                IconButton(
-                    onClick = {
-                        if (!myTooltipState.isVisible) {
-                            scope.launch {
-                                myTooltipState.show()
-                            }
-
-                        } else {
-                            scope.launch {
-                                myTooltipState.dismiss()
-                            }
-                        }
-                    }
-                ) {
-                    Icon(Icons.Default.Info, contentDescription = "Example Icon")
-                }
             },
             title = {
                 Text(text = dialogTitle)
             },
             text = {
-                Column {
+                Column(
+                    modifier = Modifier,
+                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                ){
                     ExposedDropdownMenuBox(
                         expanded = expanded,
                         onExpandedChange = {

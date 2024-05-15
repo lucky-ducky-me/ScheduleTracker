@@ -139,7 +139,6 @@ fun FiltersSection(
                         onClick = {
                             expandedDepartment = false
                             Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-                            //todo убрать потом колбек надо
                             onSelectedDepartmentChange(item.departmentId)
                         }
                     )

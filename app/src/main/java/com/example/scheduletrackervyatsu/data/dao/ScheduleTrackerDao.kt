@@ -103,5 +103,8 @@ interface ScheduleTrackerDao {
             "ORDER BY lesson.dateTime")
     fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>
 
+    @Query("DELETE FROM teachersDepartmentCrossRef WHERE teacherId = :teacherId")
+    fun deleteAllTrackingForTeacher(teacherId: String)
+
 
 }
