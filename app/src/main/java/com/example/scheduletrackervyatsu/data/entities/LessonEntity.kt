@@ -16,19 +16,17 @@ import java.util.UUID
             entity = TeacherEntity::class,
             parentColumns = ["teacherId"],
             childColumns = ["teacherId"],
-            onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = DepartmentEntity::class,
             parentColumns = ["departmentId"],
             childColumns = ["departmentId"],
-            onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
-        Index(value = ["dateTime"], unique = true)
+        Index(value = ["dateTime", "departmentId", "teacherId"], unique = true)
     ]
 )
 class LessonEntity(

@@ -6,19 +6,15 @@ import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
+import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntity
+import com.example.scheduletrackervyatsu.data.helpers.getInitials
 import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class ScheduleTrackerRepository(
     private val scheduleTrackerDao: ScheduleTrackerDao,
-    private val parser:VyatsuParser = VyatsuParser())
+    private val parser: VyatsuParser = VyatsuParser())
 {
     /**
      * Список всех кафедр.
@@ -48,10 +44,8 @@ class ScheduleTrackerRepository(
      */
     fun insertTrackingForTeacher(teacherId: String, departmentId: String) {
         val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
-            ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
 
         val department: DepartmentEntity = scheduleTrackerDao.getDepartment(departmentId)
-            ?: throw IllegalArgumentException("Кафедры с id $departmentId не существует.")
 
         scheduleTrackerDao.insert(TeachersDepartmentCrossRef(
             teacherId = teacherId,
@@ -64,12 +58,6 @@ class ScheduleTrackerRepository(
      * @param departmentId идентификатор кафедры.
      */
     fun deleteTrackingForTeacher(teacherId: String, departmentId: String) {
-        val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
-            ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
-
-        val department: DepartmentEntity = scheduleTrackerDao.getDepartment(departmentId)
-            ?: throw IllegalArgumentException("Кафедры с id $departmentId не существует.")
-
         scheduleTrackerDao.delete(TeachersDepartmentCrossRef(teacherId, departmentId))
     }
 
@@ -78,9 +66,6 @@ class ScheduleTrackerRepository(
      * @param teacherId идентификатор преподавателя.
      */
     fun deleteTrackingForTeacher(teacherId: String) {
-        val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
-            ?: throw IllegalArgumentException("Преподавателя с id $teacherId не существует.")
-
         scheduleTrackerDao.deleteAllTrackingForTeacher(teacherId)
     }
 
@@ -99,11 +84,18 @@ class ScheduleTrackerRepository(
     /**
      * Получить кафедры у отслеживаемого преподавателя.
      * @param teacherId идентификатор преподавателя.
+     * @return поток списка занятий.
      */
     fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>> {
         return scheduleTrackerDao.getTrackingTeacherDepartments(teacherId)
     }
 
+    /**
+     * Получить занятия.
+     * @param teacherId идентификатор преподавателя.
+     * @param departmentId идентификатор кафедры.
+     * @return список занятий.
+     */
     fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>{
         return scheduleTrackerDao.getLessons(teacherId, departmentId)
     }
@@ -111,52 +103,49 @@ class ScheduleTrackerRepository(
 
     //region Парсинг
 
+    /**
+     * Получить и сохранить расписание для всех отлеживаемых преподавателей.
+     */
     fun saveSchedule() {
+        val trackedTeachersDepartments = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
 
-        val lastValue = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
+        val teachers = trackedTeachersDepartments.keys
 
-        var teachers = lastValue.keys
+        val departments = mutableSetOf<DepartmentEntity>()
 
-        var departments = mutableSetOf<DepartmentEntity>()
-
-        lastValue.values.forEach {
+        trackedTeachersDepartments.values.forEach {
             departments.addAll(it)
         }
 
-        var teacherNameForParsing = {
+        val teacherNameForParsing = {
                 teacher: TeacherEntity ->
-            (teacher.surname + " "+
-                    "${teacher.name[0]}."+
-                    if (teacher.patronymic != null)
-                        "${teacher.patronymic!![0]}."
-                    else ""
-                    ).trim()
+            getInitials(teacher.name, teacher.surname, teacher.patronymic)
         }
 
-        var teacherShortcuts =
+        val teacherShortcuts =
             teachers.associate { Pair(it.fio, teacherNameForParsing(it)) }
 
-        var actualSchedule = parser.getActualSchedule(
+        val actualSchedule = parser.getActualSchedule(
             teachers = teachers.map { teacherNameForParsing(it) },
             departments = departments.map { it.name },
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusDays(14),
         )
 
-        var schedule = teachers.map {
+        val schedule = teachers.map {
             Pair(it.teacherId,
                 actualSchedule.lessons.getOrDefault(teacherShortcuts[it.fio], emptyList()))
         }
 
-        var lessonEntities = schedule.map {
-            fromLessonParsingModelsToEntities(it.second, departments, it.first)
+        val lessonEntities = schedule.map {
+            fromLessonParsingModelsToEntities(it.second, departments.toList(), it.first)
         }
             .flatten().filter {
                 val teacher = teachers.find {
                         teacher -> teacher.teacherId == it.teacherId }
 
                 if (teacher != null) {
-                    val trackingDepartments = lastValue[teacher]
+                    val trackingDepartments = trackedTeachersDepartments[teacher]
 
                     if (trackingDepartments != null) {
                         trackingDepartments.find {
@@ -178,9 +167,45 @@ class ScheduleTrackerRepository(
 
     }
 
+    /**
+     * Получить и сохранить расписание для всех отлеживаемых преподавателей.
+     * @param teacherId идентификатор преподавателя.
+     * @param departmentId идентификатор кафедры.
+     */
+    fun saveSchedule(teacherId: String, departmentId: String) {
+        val teacher = scheduleTrackerDao.getTeacher(teacherId)
+        val department = scheduleTrackerDao.getDepartment(departmentId)
+
+        if (teacher == null || department == null) {
+            return
+        }
+
+        val teacherInitials = getInitials(teacher.name, teacher.surname, teacher.patronymic)
+
+        val actualSchedule = parser.getActualSchedule(
+            teachers = listOf(teacherInitials),
+            departments = listOf(department.name),
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusDays(14),
+        )
+
+        val lessonEntities = actualSchedule.lessons.map {
+            it.value.map {
+                lesson -> fromLessonParsingModelsToEntity(
+                    lessonParsingModel = lesson,
+                    teacherId = teacher.teacherId,
+                    departmentId = department.departmentId)
+            }
+        }.flatten()
+
+        lessonEntities.forEach {
+            scheduleTrackerDao.insert(it)
+        }
+    }
+
     private fun fromLessonParsingModelsToEntities(
         lessons: List<LessonParsingModel>,
-        departments: MutableSet<DepartmentEntity>,
+        departments: List<DepartmentEntity>,
         teacherId: String): List<LessonEntity>
     {
         return lessons.mapNotNull {
@@ -189,24 +214,10 @@ class ScheduleTrackerRepository(
             }
 
             if (department != null) {
-                val date = it.date // Example LocalDate
-                val time = it.time // Example LocalTime
-
-                val combinedDateTime: LocalDateTime = LocalDateTime.of(date, time)
-
-                LessonEntity(
-                    name = it.name,
-                    departmentId = department.departmentId,
-                    dateTime = combinedDateTime.toString(),
-                    teacherId = teacherId
-                )
+                fromLessonParsingModelsToEntity(it, department.departmentId, teacherId)
             }
             else
                 null
         }
-
     }
-
-
-
 }

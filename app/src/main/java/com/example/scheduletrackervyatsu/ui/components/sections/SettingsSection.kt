@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -25,8 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
-import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.domain.SettingsViewModel
 import com.example.scheduletrackervyatsu.ui.components.AddingDepartmentDialog
 import com.example.scheduletrackervyatsu.ui.components.AddingTeacherDialog
@@ -40,10 +37,10 @@ fun SettingsSection(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
-    val settings = settingsViewModel.settings.collectAsState(initial = emptyList()).value
+    val settings = settingsViewModel.trackedTeachersDepartments.collectAsState(initial = emptyList()).value
     val departments = settingsViewModel.departments.collectAsState(initial = emptyList()).value
     val teachers = settingsViewModel.teachers.collectAsState(initial = emptyList()).value
-    var openAddingDialogState = settingsViewModel.openAddingDialogState.collectAsState().value
+    val openAddingDialogState = settingsViewModel.openAddingDialogState.collectAsState().value
 
     var openAddingTeacherDialog by remember { mutableStateOf(false) }
 
@@ -86,8 +83,6 @@ fun SettingsSection(
                         )
                     }
                 }
-
-
             }
 
             items(settings) {
