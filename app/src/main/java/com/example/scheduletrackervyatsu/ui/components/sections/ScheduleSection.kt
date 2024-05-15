@@ -20,13 +20,13 @@ fun ScheduleSection(
     onAcceptButtonClick: () -> Unit,
     lessons: List<LessonEntity>
 ) {
-    var splitList = lessons.map {it.dateTime.split("T")[0]}.toSet()
+    var splitList = lessons.map {it.date}.toSet()
 
     val map = mutableMapOf<String, List<LessonEntity>>()
 
     lessons.forEach {
         lesson ->
-        val date = lesson.dateTime.split("T")[0]
+        val date = lesson.date
 
         if (!map.containsKey(date)) {
             map[date] = emptyList()
@@ -36,7 +36,6 @@ fun ScheduleSection(
     }
 
     val temp = map.toList()
-
 
     LazyColumn (
         modifier = modifier

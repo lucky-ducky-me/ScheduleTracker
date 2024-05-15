@@ -1,0 +1,297 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a493998547313320a43b2ac4d1706cd3",
+    "entities": [
+      {
+        "tableName": "lessonStatus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonStatusId` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`lessonStatusId`))",
+        "fields": [
+          {
+            "fieldPath": "lessonStatusId",
+            "columnName": "lessonStatusId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "lessonStatusId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "department",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`departmentId` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`departmentId`))",
+        "fields": [
+          {
+            "fieldPath": "departmentId",
+            "columnName": "departmentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "departmentId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_department_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_department_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "lesson",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "lessonId",
+            "columnName": "lessonId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "teacherId",
+            "columnName": "teacherId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departmentId",
+            "columnName": "departmentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oldData",
+            "columnName": "oldData",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "office",
+            "columnName": "office",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "oldOffice",
+            "columnName": "oldOffice",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lessonStatusId",
+            "columnName": "lessonStatusId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "lessonId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_lesson_date_time_departmentId_teacherId",
+            "unique": true,
+            "columnNames": [
+              "date",
+              "time",
+              "departmentId",
+              "teacherId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_lesson_date_time_departmentId_teacherId` ON `${TABLE_NAME}` (`date`, `time`, `departmentId`, `teacherId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "teacher",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "teacherId"
+            ],
+            "referencedColumns": [
+              "teacherId"
+            ]
+          },
+          {
+            "table": "department",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "departmentId"
+            ],
+            "referencedColumns": [
+              "departmentId"
+            ]
+          },
+          {
+            "table": "lessonStatus",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "lessonStatusId"
+            ],
+            "referencedColumns": [
+              "lessonStatusId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "teacher",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`teacherId` TEXT NOT NULL, `name` TEXT NOT NULL, `surname` TEXT NOT NULL, `patronymic` TEXT, `fio` TEXT NOT NULL, `defaultDepartment` TEXT, PRIMARY KEY(`teacherId`))",
+        "fields": [
+          {
+            "fieldPath": "teacherId",
+            "columnName": "teacherId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "surname",
+            "columnName": "surname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "patronymic",
+            "columnName": "patronymic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fio",
+            "columnName": "fio",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defaultDepartment",
+            "columnName": "defaultDepartment",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "teacherId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "teachersDepartmentCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, PRIMARY KEY(`teacherId`, `departmentId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "teacherId",
+            "columnName": "teacherId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departmentId",
+            "columnName": "departmentId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "teacherId",
+            "departmentId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "teacher",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "teacherId"
+            ],
+            "referencedColumns": [
+              "teacherId"
+            ]
+          },
+          {
+            "table": "department",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "departmentId"
+            ],
+            "referencedColumns": [
+              "departmentId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a493998547313320a43b2ac4d1706cd3')"
+    ]
+  }
+}

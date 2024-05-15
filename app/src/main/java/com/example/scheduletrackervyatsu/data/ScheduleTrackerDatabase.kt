@@ -6,15 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.scheduletrackervyatsu.DATABASE_NAME
+import com.example.scheduletrackervyatsu.LESSON_STATUSES
 import com.example.scheduletrackervyatsu.data.dao.ScheduleTrackerDao
 import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
-import com.example.scheduletrackervyatsu.data.entities.ChangeStatusEntity
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
-import com.example.scheduletrackervyatsu.data.entities.ScheduleChangeEntity
+import com.example.scheduletrackervyatsu.data.entities.LessonStatusEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
-import com.squareup.okhttp.OkHttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +21,9 @@ import kotlinx.coroutines.launch
 @Database(
     version = 1,
     entities = [
-        ChangeStatusEntity::class,
+        LessonStatusEntity::class,
         DepartmentEntity::class,
         LessonEntity::class,
-        ScheduleChangeEntity::class,
         TeacherEntity::class,
         TeachersDepartmentCrossRef::class
     ]
@@ -86,6 +84,10 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                                 }
 
                                 dao.insert(DepartmentEntity(name = "12321321321"))
+
+                                LESSON_STATUSES.forEach {
+                                    dao.insert(it)
+                                }
                             }
 
                         }

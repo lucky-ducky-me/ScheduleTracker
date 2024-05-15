@@ -69,18 +69,6 @@ class ScheduleTrackerRepository(
         scheduleTrackerDao.deleteAllTrackingForTeacher(teacherId)
     }
 
-    //TODO DELETE
-    fun getAll() {
-        scheduleTrackerDao.getAllScheduleChanges()
-        scheduleTrackerDao.getAllDepartments()
-        scheduleTrackerDao.getAllLessons()
-        scheduleTrackerDao.getAllTeachers()
-        scheduleTrackerDao.getAllChangeStatus()
-        scheduleTrackerDao.getDepartmentWithTeachers()
-        scheduleTrackerDao.getTeacherWithDepartments()
-
-    }
-
     /**
      * Получить кафедры у отслеживаемого преподавателя.
      * @param teacherId идентификатор преподавателя.

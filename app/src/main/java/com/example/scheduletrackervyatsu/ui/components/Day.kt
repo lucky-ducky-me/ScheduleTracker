@@ -25,7 +25,7 @@ fun Day(
     name:String,
     lessonsList: List<LessonEntity>) {
 
-    val date = lessonsList[0].dateTime.split("T")[0]
+    val date = lessonsList[0].date
 
     Column(
         modifier = modifier
@@ -70,14 +70,14 @@ fun Day(
 //                )
             ) {
                 Text(
-                    text = lesson.dateTime.split("T")[1],
+                    text = lesson.time,
                     modifier = modifier.fillMaxWidth(0.2f).padding(8.dp).fillMaxHeight(1f),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
 
                 Text(
-                    text = lesson.name,
+                    text = lesson.date,
                     modifier = modifier.fillMaxWidth().padding(8.dp),
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center)

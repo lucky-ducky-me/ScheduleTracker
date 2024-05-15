@@ -2,7 +2,6 @@ package com.example.scheduletrackervyatsu.data.helpers
 
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
-import java.time.LocalDateTime
 
 
 /**
@@ -24,15 +23,16 @@ fun fromLessonParsingModelsToEntity(
     lessonParsingModel: LessonParsingModel,
     departmentId: String,
     teacherId: String) : LessonEntity  {
-    val date = lessonParsingModel.date
-    val time = lessonParsingModel.time
-
-    val combinedDateTime: LocalDateTime = LocalDateTime.of(date, time)
 
     return LessonEntity(
-        name = lessonParsingModel.name,
+        data = lessonParsingModel.name,
         departmentId = departmentId,
-        dateTime = combinedDateTime.toString(),
-        teacherId = teacherId
+        date = lessonParsingModel.date.toString(),
+        time = lessonParsingModel.time.toString(),
+        teacherId = teacherId,
+        lessonStatusId = 0,
+        office = "",
+        oldData = "",
+        oldOffice = "",
     )
 }

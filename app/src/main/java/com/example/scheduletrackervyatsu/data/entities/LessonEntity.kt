@@ -24,9 +24,17 @@ import java.util.UUID
             childColumns = ["departmentId"],
             onDelete = ForeignKey.CASCADE
         )
+        ,
+        ForeignKey(
+            entity = LessonStatusEntity::class,
+            parentColumns = ["lessonStatusId"],
+            childColumns = ["lessonStatusId"],
+            onDelete = ForeignKey.NO_ACTION
+        )
     ],
     indices = [
-        Index(value = ["dateTime", "departmentId", "teacherId"], unique = true)
+        Index(value = ["date", "time", "departmentId", "teacherId"],
+            unique = true)
     ]
 )
 class LessonEntity(
@@ -34,8 +42,11 @@ class LessonEntity(
     @ColumnInfo(name = "lessonId")
     val lessonId: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo(name = "dateTime")
-    val dateTime: String,
+    @ColumnInfo(name = "date")
+    val date: String,
+
+    @ColumnInfo(name = "time")
+    val time: String,
 
     @ColumnInfo(name = "teacherId")
     val teacherId: String,
@@ -43,8 +54,20 @@ class LessonEntity(
     @ColumnInfo(name = "departmentId")
     val departmentId: String,
 
-    @ColumnInfo(name = "name")
-    val name: String
+    @ColumnInfo(name = "data")
+    val data: String,
+
+    @ColumnInfo(name = "oldData")
+    val oldData: String?,
+
+    @ColumnInfo(name = "office")
+    val office: String?,
+
+    @ColumnInfo(name = "oldOffice")
+    val oldOffice: String?,
+
+    @ColumnInfo(name = "lessonStatusId")
+    val lessonStatusId: Int
 )
 
 data class TeacherWithLessons(
@@ -52,6 +75,15 @@ data class TeacherWithLessons(
     @Relation(
         parentColumn = "teacherId",
         entityColumn = "teacherId"
+    )
+    val lessons: List<LessonEntity>
+)
+
+data class LessonStatusesWithLessons(
+    @Embedded val lessonStatus: LessonStatusEntity?,
+    @Relation(
+        parentColumn = "lessonStatusId",
+        entityColumn = "lessonStatusId"
     )
     val lessons: List<LessonEntity>
 )

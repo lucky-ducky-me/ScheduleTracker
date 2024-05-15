@@ -1,6 +1,18 @@
 package com.example.scheduletrackervyatsu
 
+import com.example.scheduletrackervyatsu.data.entities.LessonStatusEntity
+
 const val DATABASE_NAME = "scheduleTracker.db"
+
+
+val LESSON_STATUSES = listOf<LessonStatusEntity>(
+    LessonStatusEntity(lessonStatusId = 0, "Пустое"),
+    LessonStatusEntity(lessonStatusId = 1, "Новое"),
+    LessonStatusEntity(lessonStatusId = 2, "Изменены дынные"),
+    LessonStatusEntity(lessonStatusId = 3, "Удалённое"),
+    LessonStatusEntity(lessonStatusId = 4, "Изменена аудитория"),
+)
+
 
 enum class DateIntervals {
     Week,
@@ -15,7 +27,3 @@ val DateIntervalsStringValues = mapOf(
     DateIntervals.CurrentWeek to "Текущая неделя",
     DateIntervals.CurrentAndNextWeeks to "Текущая и следующая недели",
 )
-
-fun <T> concatenate(vararg lists: List<T>): List<T> {
-    return listOf(*lists).flatten()
-}
