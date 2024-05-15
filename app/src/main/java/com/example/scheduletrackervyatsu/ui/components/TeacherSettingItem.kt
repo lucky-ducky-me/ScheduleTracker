@@ -45,7 +45,7 @@ fun TeacherSettingItem(
                     .fillMaxWidth(),
                 onValueChange = {},
                 readOnly = true,
-                value = setting.first.name + setting.first.surname + " " + setting.first.patronymic,
+                value = setting.first.surname + " " + setting.first.name + " " + setting.first.patronymic,
                 trailingIcon = {
                     Row() {
                         IconButton(onClick = { expanded = !expanded }) {
