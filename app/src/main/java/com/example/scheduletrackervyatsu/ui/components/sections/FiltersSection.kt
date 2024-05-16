@@ -143,46 +143,6 @@ fun FiltersSection(
             }
         }
 
-        //  Выпадающий список с временным промежутком
-        ExposedDropdownMenuBox(
-            expanded = expandedDateInterval,
-            onExpandedChange = { expandedDateInterval = !expandedDateInterval },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextField(
-                value = dateIntervalName,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDateInterval)
-                },
-                modifier = Modifier.menuAnchor().fillMaxWidth()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expandedDateInterval,
-                onDismissRequest = { expandedDateInterval = false },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                datesIntervals.forEach { (key, value) ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = value,
-                            )
-                        },
-                        onClick = {
-                            expandedDateInterval = false
-                            dateIntervalName = value
-                            Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
-                            onSelectedDateIntervalChange(dateIntervalName)
-                        }
-                    )
-                }
-            }
-        }
-
-
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),

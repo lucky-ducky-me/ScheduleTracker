@@ -67,7 +67,13 @@ class LessonEntity(
     val oldOffice: String?,
 
     @ColumnInfo(name = "lessonStatusId")
-    val lessonStatusId: Int
+    val lessonStatusId: Int,
+
+    @ColumnInfo(name = "week")
+    val week: Boolean,
+
+    @ColumnInfo(name = "dayOfWeek")
+    val dayOfWeek: String
 )
 
 data class TeacherWithLessons(

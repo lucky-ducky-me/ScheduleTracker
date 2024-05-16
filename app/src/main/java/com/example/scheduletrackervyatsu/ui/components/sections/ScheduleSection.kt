@@ -4,13 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
-import com.example.scheduletrackervyatsu.ui.components.Day
+import com.example.scheduletrackervyatsu.ui.components.Week
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
 @Composable
@@ -18,24 +21,11 @@ fun ScheduleSection(
     modifier: Modifier = Modifier,
     filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit,
-    lessons: List<LessonEntity>
+    lessonsByWeeks: List<Pair<Int, List<LessonEntity>>>,
 ) {
-    var splitList = lessons.map {it.date}.toSet()
-
-    val map = mutableMapOf<String, List<LessonEntity>>()
-
-    lessons.forEach {
-        lesson ->
-        val date = lesson.date
-
-        if (!map.containsKey(date)) {
-            map[date] = emptyList()
-        }
-
-        map[date] = map[date]!!.plus(listOf(lesson))
+    var currentPage by rememberSaveable {
+        mutableIntStateOf(0)
     }
-
-    val temp = map.toList()
 
     LazyColumn (
         modifier = modifier
@@ -63,8 +53,25 @@ fun ScheduleSection(
             )
         }
 
-        items(temp) {
-            tem -> Day(name = "Пока не доне", lessonsList = tem.second)
+        val currentWeek = lessonsByWeeks.find {
+            it.first == currentPage
+        }
+
+        item {
+            if (currentWeek != null) {
+                Week(
+                    lessons = currentWeek.second,
+                    currentIndex = currentPage,
+                    startIndex = lessonsByWeeks[0].first,
+                    lastIndex = lessonsByWeeks[lessonsByWeeks.size - 1].first,
+                    onBackArrowClick = {
+                        currentPage--
+                    },
+                    onForwardArrowClick = {
+                        currentPage++
+                    }
+                )
+            }
         }
     }
 }

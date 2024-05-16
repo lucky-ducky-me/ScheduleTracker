@@ -22,10 +22,9 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 @Composable
 fun Day(
     modifier: Modifier = Modifier,
-    name:String,
-    lessonsList: List<LessonEntity>) {
+    lessons: List<LessonEntity>) {
 
-    val date = lessonsList[0].date
+    val header = lessons[0].dayOfWeek + " " + lessons[0].date
 
     Column(
         modifier = modifier
@@ -35,7 +34,7 @@ fun Day(
 
     ) {
         Text(
-            text = date,
+            text = header,
             modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
@@ -43,31 +42,9 @@ fun Day(
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )
 
-        lessonsList.forEach { lesson ->
+        lessons.forEach { lesson ->
 
             Row(modifier = modifier.fillMaxWidth()
-//                .border(
-//                    width = 16.dp,
-//                    color = Color.Black,
-//                    shape = object: Shape {
-//                        override fun createOutline(
-//                            size: Size,
-//                            layoutDirection: LayoutDirection,
-//                            density: Density
-//                        ): Outline {
-//                            return Outline.Generic(
-//                                // Just left border
-//                                Path().apply {
-//                                    moveTo(0f, 0f)
-//                                    lineTo(size.width, 0f)
-//                                    lineTo(size.width, 1f)
-//                                    lineTo(0f, 1f)
-//                                    close()
-//                                }
-//                            )
-//                        }
-//                    }
-//                )
             ) {
                 Text(
                     text = lesson.time,
@@ -77,7 +54,7 @@ fun Day(
                 )
 
                 Text(
-                    text = lesson.date,
+                    text = lesson.data,
                     modifier = modifier.fillMaxWidth().padding(8.dp),
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center)

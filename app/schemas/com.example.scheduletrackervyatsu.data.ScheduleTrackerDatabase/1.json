@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a493998547313320a43b2ac4d1706cd3",
+    "identityHash": "2b3336e3474f03257bcd967352886530",
     "entities": [
       {
         "tableName": "lessonStatus",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "lesson",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, `week` INTEGER NOT NULL, `dayOfWeek` TEXT NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "lessonId",
@@ -128,6 +128,18 @@
             "fieldPath": "lessonStatusId",
             "columnName": "lessonStatusId",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "week",
+            "columnName": "week",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dayOfWeek",
+            "columnName": "dayOfWeek",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -291,7 +303,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a493998547313320a43b2ac4d1706cd3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2b3336e3474f03257bcd967352886530')"
     ]
   }
 }

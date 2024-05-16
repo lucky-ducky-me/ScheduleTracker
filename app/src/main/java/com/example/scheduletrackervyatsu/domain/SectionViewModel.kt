@@ -8,7 +8,6 @@ import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.DateIntervalsStringValues
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
-import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
@@ -17,13 +16,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import java.util.Locale
 
 class SectionViewModel(
     application: Application,
@@ -103,6 +100,13 @@ class SectionViewModel(
     val lessons
         get() = _lessons
 
+    private var _lessonsByWeeks = MutableStateFlow<List<Pair<Int, List<LessonEntity>>>>(emptyList())
+
+    val lessonsByWeeks
+        get() = _lessonsByWeeks
+
+
+
     /**
      * Блок инициализации.
      */
@@ -158,6 +162,54 @@ class SectionViewModel(
                     department.value?.departmentId ?: ""
                 )
             }
+
+            setLessonsByWeeks()
+        }
+    }
+
+    fun setLessonsByWeeks() {
+        val map = mutableMapOf<String, List<LessonEntity>>()
+
+        _lessons.value.forEach {
+                lesson ->
+            val date = lesson.date
+
+            if (!map.containsKey(date)) {
+                map[date] = emptyList()
+            }
+
+            map[date] = map[date]!!.plus(listOf(lesson))
+        }
+
+        val lessonsByDays = map.toList().sortedWith(
+            compareBy { it.first }
+        )
+
+        val lessonsByWeeksMap = mutableMapOf<Int, List<LessonEntity>>()
+
+        var cntDay = 0
+        val dayCount = 6
+
+        lessonsByDays.forEach {
+            if (it.second[0].dayOfWeek.lowercase(Locale.ROOT) == "воскресенье") {
+                cntDay--
+            }
+
+            val week = cntDay / (dayCount)
+
+            if (!lessonsByWeeksMap.containsKey(week)) {
+                lessonsByWeeksMap[week] = emptyList()
+            }
+
+            lessonsByWeeksMap[week] =  lessonsByWeeksMap[week]!!.plus(it.second)
+
+            cntDay++
+        }
+
+        _lessonsByWeeks.update {
+            lessonsByWeeksMap.toList().sortedWith(
+                compareBy { it.first }
+            )
         }
     }
 

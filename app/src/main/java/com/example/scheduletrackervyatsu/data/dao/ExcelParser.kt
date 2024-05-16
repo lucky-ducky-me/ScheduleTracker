@@ -4,10 +4,8 @@ import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Workbook
-import java.time.LocalDateTime
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 /**
  * Парсер эксель файлов.
@@ -41,6 +39,10 @@ class ExcelParser {
 
         var currentDay = ""
 
+        var currentDayName = ""
+
+        var cntDay = 0
+
         for (i in 2..<rowCount) {
             val row = sheet.getRow(i)
 
@@ -62,6 +64,14 @@ class ExcelParser {
                 }
             }
 
+            currentDayName = when (firstCellVal.cellType) {
+                CellType.BLANK ->
+                    currentDayName
+                else -> {
+                    firstCellVal.stringCellValue.trim().split(" ")[0].trim()
+                }
+            }
+
             val time = row.getCell(1).stringCellValue.trim().split("-")[0].trim()
 
             for (j in teachersColumns) {
@@ -76,13 +86,20 @@ class ExcelParser {
                     }
                 }
 
-                if (cellValue == "") {
-                    continue
+                //if (cellValue == "") {
+                //    continue
+                //}
+
+                if (currentDayName == "воскресенье") {
+                    cntDay--
                 }
 
-                val lessonParsingModel = LessonParsingModel(name = cellValue
+                val lessonParsingModel = LessonParsingModel(
+                    name = cellValue
                     , date = LocalDate.parse(currentDay)
                     , time = LocalTime.parse(time)
+                    , week = cntDay / 6 != 0
+                    , dayOfWeek = currentDayName
                     , department = "")
 
                 if (!result.containsKey(j.first)) {
@@ -90,6 +107,10 @@ class ExcelParser {
                 }
 
                 result[j.first] = result[j.first]!!.plus(listOf(lessonParsingModel))
+            }
+
+            if (firstCellVal.cellType != CellType.BLANK) {
+                cntDay++
             }
         }
 

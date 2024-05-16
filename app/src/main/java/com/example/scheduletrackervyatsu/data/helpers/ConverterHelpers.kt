@@ -24,15 +24,29 @@ fun fromLessonParsingModelsToEntity(
     departmentId: String,
     teacherId: String) : LessonEntity  {
 
+    val office = if (lessonParsingModel.name.isNotEmpty()
+        && lessonParsingModel.name[0].isDigit())
+        lessonParsingModel.name.substring(0, lessonParsingModel.name.indexOf(" "))
+    else
+        null
+
+    val nameWithoutOffice = if (lessonParsingModel.name.isNotEmpty()
+        && lessonParsingModel.name[0].isDigit())
+        lessonParsingModel.name.substring(lessonParsingModel.name.indexOf(" "))
+    else
+        lessonParsingModel.name
+
     return LessonEntity(
-        data = lessonParsingModel.name,
+        data = nameWithoutOffice,
         departmentId = departmentId,
         date = lessonParsingModel.date.toString(),
         time = lessonParsingModel.time.toString(),
         teacherId = teacherId,
         lessonStatusId = 0,
-        office = "",
+        office = office,
         oldData = "",
         oldOffice = "",
+        week = lessonParsingModel.week,
+        dayOfWeek = lessonParsingModel.dayOfWeek
     )
 }
