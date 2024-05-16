@@ -9,9 +9,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -46,16 +51,38 @@ fun Day(
 
             Row(modifier = modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = lesson.time,
-                    modifier = modifier.fillMaxWidth(0.2f).padding(8.dp).fillMaxHeight(1f),
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+                    Text(
+                        text = lesson.time,
+                        modifier = modifier
+                            .fillMaxWidth(0.2f)
+                            .padding(8.dp)
+                            .fillMaxHeight(1f),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+
+                    if (!lesson.isStatusWatched) {
+                        IconButton(
+                            onClick = {  },
+                            enabled = true
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.RemoveRedEye,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
 
                 Text(
                     text = lesson.data,
-                    modifier = modifier.fillMaxWidth().padding(8.dp),
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center)
             }
