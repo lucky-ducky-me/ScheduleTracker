@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         val hour = LocalDateTime.now().hour
         val minute = LocalDateTime.now().minute + 1
 
-        //scheduleParsingTask(hour , minute)
+        scheduleParsingTask(hour , minute)
         //scheduleParsingTask(22, 15, "Evening Parsing")
     }
 
@@ -57,13 +57,6 @@ class MainActivity : ComponentActivity() {
                 0,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-
-            //alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            AlarmManager.INTERVAL_DAY,
-//            pendingIntent)
 
 
             alarmManager.setInexactRepeating(

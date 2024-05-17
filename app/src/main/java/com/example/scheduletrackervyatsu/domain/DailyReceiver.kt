@@ -2,16 +2,19 @@ package com.example.scheduletrackervyatsu.domain
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.scheduletrackervyatsu.MainActivity
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class DailyReceiver : BroadcastReceiver() {
 
@@ -31,15 +34,12 @@ class DailyReceiver : BroadcastReceiver() {
         repository = ScheduleTrackerRepository(
             ScheduleTrackerDatabase.getDatabase(context).getScheduleTrackerDao())
 
-
-
         CoroutineScope(Dispatchers.IO).launch {
-            val worker = DailyWorker(repository)
+            //val worker = DailyWorker(repository)
 
-            worker.doDailyWork()
+            //worker.doDailyWork()
 
-
-            sendNotification(context, "Пока тест", "Тестик")
+            sendNotification(context, "Изменения в расписании", "В расписании произошли изменения")
         }
     }
 
@@ -56,7 +56,16 @@ class DailyReceiver : BroadcastReceiver() {
             setContentTitle(taskName)
             setContentText(parsingResult)
             priority = NotificationCompat.PRIORITY_DEFAULT
+            setContentIntent(
+                PendingIntent.getActivity(
+                    context, // Context from onReceive method.
+                    0,
+                    Intent(context, MainActivity::class.java), // Activity you want to launch onClick.
+                        PendingIntent.FLAG_IMMUTABLE
+                )
+            )
         }
+
 
         Log.d("my", "Типо уведомляшку отправили")
         notificationManager.notify(notificationId, notificationBuilder.build())

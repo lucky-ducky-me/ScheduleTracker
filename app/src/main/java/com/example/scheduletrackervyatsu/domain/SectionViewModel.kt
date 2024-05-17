@@ -96,6 +96,18 @@ class SectionViewModel(
     val lessonsByWeeks
         get() = _lessonsByWeeks
 
+
+    private var _lessonsNotWatchedFlow = repository.getLessonsChangedFlow(
+        teacher.value?.teacherId ?: "",
+        department.value?.departmentId ?: ""
+    )
+
+    private var _lessonsNotWatched = MutableStateFlow<List<LessonEntity>>(emptyList())
+
+    val lessonsNotWatched
+        get() = _lessonsNotWatched
+
+
     /**
      * Блок инициализации.
      */
@@ -130,9 +142,11 @@ class SectionViewModel(
             department.collect {
                 if (it == null) {
                     _lessons.update { emptyList() }
+                    _lessonsNotWatched.update { emptyList() }
                 }
                 else {
                     getLessons()
+                    getNowWatchLessons()
                 }
             }
         }
@@ -141,9 +155,11 @@ class SectionViewModel(
             teacher.collect {
                 if (it == null) {
                     _lessons.update { emptyList() }
+                    _lessonsNotWatched.update { emptyList() }
                 }
                 else {
                     getLessons()
+                    getNowWatchLessons()
                 }
             }
         }
@@ -151,6 +167,12 @@ class SectionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _lessonsFlow.collect {
                 getLessons()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _lessonsNotWatchedFlow.collect {
+                getNowWatchLessons()
             }
         }
     }
@@ -188,6 +210,22 @@ class SectionViewModel(
             }
 
             setLessonsByWeeks()
+        }
+
+        getNowWatchLessons()
+    }
+
+    /**
+     * Получить занятия.
+     */
+    fun getNowWatchLessons() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _lessonsNotWatched.update {
+                repository.getLessonsChanged(
+                    teacher.value?.teacherId ?: "",
+                    department.value?.departmentId ?: ""
+                )
+            }
         }
     }
 
@@ -248,9 +286,27 @@ class SectionViewModel(
 
     fun testButton() {
         viewModelScope.launch(Dispatchers.IO) {
-            val worker = DailyWorker(repository)
+            val worker = DailyWorker(repository = repository)
 
             worker.doDailyWork(true)
+        }
+    }
+
+    var _watchinLessonId = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    var _watchingLesson = _watchinLessonId.flatMapLatest {
+        repository.getLesson(_watchinLessonId.value)
+    }
+
+    val watchingLesson
+        get() = _watchingLesson
+
+    fun getLesson(lessonId: String?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _watchinLessonId.update {
+                lessonId ?: ""
+            }
         }
     }
 }

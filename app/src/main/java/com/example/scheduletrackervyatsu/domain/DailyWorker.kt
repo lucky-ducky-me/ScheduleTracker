@@ -176,12 +176,12 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             var keys = trackedTeachersDepartments.keys.toList()
             var key = keys[0]
             var first = trackedTeachersDepartments[key]
-            var date = "2024-05-16"
+            var date = "2024-05-17"
             var time = "14:00"
-            var dateForChangeOffice = "2024-05-16"
+            var dateForChangeOffice = "2024-05-17"
             var timeForChangeOffice = "08:20"
 
-            var dateForChangeOfficeAndData = "2024-05-16"
+            var dateForChangeOfficeAndData = "2024-05-17"
             var timeForChangeOfficeAndData = "10:00"
 
             for (i in lessonEntities.indices) {
@@ -294,7 +294,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         var key = keys[0]
         var first = trackedTeachersDepartments[key]
 
-        var date = "2024-05-16"
+        var date = "2024-05-17"
         var time = "11:45"
 
         var lesson = repository.getLessonsByDatetime(
@@ -441,7 +441,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 isStatusWatched = false,
                 oldData = savedLesson.data,
                 data = savedLesson.data,
-                oldOffice = savedLesson.oldOffice,
+                oldOffice = savedLesson.office,
                 office = actualLesson.office,
                 dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 5,
@@ -456,7 +456,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 isStatusWatched = false,
                 oldData = savedLesson.data,
                 data = actualLesson.data,
-                oldOffice = savedLesson.oldOffice,
+                oldOffice = savedLesson.office,
                 office = actualLesson.office,
                 dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 6,

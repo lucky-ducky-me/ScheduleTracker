@@ -3,7 +3,7 @@ package com.example.scheduletrackervyatsu.data.helpers
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
-
+import java.time.LocalDateTime
 
 /**
  * Получение инициалов.
@@ -50,6 +50,7 @@ fun fromLessonParsingModelsToEntity(
         week = lessonParsingModel.week,
         dayOfWeek = lessonParsingModel.dayOfWeek,
         isStatusWatched = true,
+        modifiedOn = LocalDateTime.now().toString()
     )
 }
 fun fromLessonParsingModelsToEntities(

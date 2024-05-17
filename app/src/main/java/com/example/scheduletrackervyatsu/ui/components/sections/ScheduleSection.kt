@@ -25,6 +25,7 @@ fun ScheduleSection(
     onAcceptButtonClick: () -> Unit,
     lessonsByWeeks: List<Pair<Int, List<LessonEntity>>>,
     onWatchChangeClick: (String) -> Unit,
+    onChangeLessonClick: (String) -> Unit,
     onTest: (() -> Unit)?,
 ) {
     var currentPage by rememberSaveable {
@@ -84,7 +85,8 @@ fun ScheduleSection(
                             currentPage++
                         }
                     },
-                    onWatchChangeClick = onWatchChangeClick
+                    onWatchChangeClick = onWatchChangeClick,
+                    onChangeLessonClick = onChangeLessonClick
                 )
             }
         }

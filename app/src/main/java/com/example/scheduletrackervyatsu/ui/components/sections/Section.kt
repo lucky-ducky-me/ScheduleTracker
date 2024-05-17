@@ -15,10 +15,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
 import com.example.scheduletrackervyatsu.ui.components.TabRow
 import com.example.scheduletrackervyatsu.ui.components.TabRowDirection
@@ -43,6 +45,8 @@ fun Section(
 
     val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
     val department = filtersViewModel.department.collectAsState(initial = null).value
+
+    var lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
 
     val filtersSectionData = FiltersSectionData(
         department = department,
@@ -95,6 +99,9 @@ fun Section(
                     onWatchChangeClick = {
                         lessonId: String -> filtersViewModel.watchLessonStatus(lessonId)
                     },
+                    onChangeLessonClick = {
+                        lessonId -> navController.navigateSingleTopTo("Schedule/$lessonId")
+                    },
                     onTest = {
                         filtersViewModel.testButton()
                     }
@@ -106,10 +113,28 @@ fun Section(
                     onAcceptButtonClick = {
                         filtersViewModel.getLessons()
                     },
+                    onWatchChangeClick = {
+                            lessonId: String -> filtersViewModel.watchLessonStatus(lessonId)
+                    },
+                    lessonsNotWatched = lessonsNotWatched
                 )
             }
             composable(route = "Settings") {
                 SettingsSection()
+            }
+            composable(route = "Schedule/{lessonId}",
+                arguments = listOf(navArgument("lessonId") { type = NavType.StringType })) {
+                    navBackStackEntry ->
+                val lessonId = navBackStackEntry.arguments?.getString("lessonId")
+                filtersViewModel.getLesson(lessonId)
+
+                SingleLessonSection(lessonEntity = filtersViewModel.watchingLesson.collectAsState(
+                    initial = null
+                ).value, onWatchChangeClick = {
+                    lessonId: String ->
+                    navController.navigateSingleTopTo("Schedule")
+                    filtersViewModel.watchLessonStatus(lessonId)
+                })
             }
         }
     }

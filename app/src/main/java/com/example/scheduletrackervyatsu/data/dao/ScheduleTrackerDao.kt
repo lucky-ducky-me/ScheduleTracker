@@ -129,9 +129,20 @@ interface ScheduleTrackerDao {
             "AND lesson.departmentId = :departmentId")
     fun getLesson(teacherId: String, departmentId: String, date: String, time: String): LessonEntity
 
+    @Query("SELECT * FROM lesson WHERE lessonId = :lessonId")
+    fun getLesson(lessonId: String): Flow<LessonEntity>
+
     @Query("UPDATE lesson SET isStatusWatched = :isWatched WHERE lessonId = :lessonId")
     fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean)
 
     @Query("DELETE FROM lesson WHERE date < :date")
     fun deletePreviousSchedule(date: String)
+
+    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId " +
+            "AND lessonStatusId != 1 AND isStatusWatched = 0 ORDER BY modifiedOn")
+    fun getNotWatchLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>
+
+    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId " +
+            "AND lessonStatusId != 1 AND isStatusWatched = 0 ORDER BY modifiedOn")
+    fun getNotWatchLessons(teacherId: String, departmentId: String): List<LessonEntity>
 }

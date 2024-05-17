@@ -3,6 +3,7 @@ package com.example.scheduletrackervyatsu.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,13 +23,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.compose.changeAddedColor
+import com.example.compose.changeDeletedColor
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 
 @Composable
 fun Day(
     modifier: Modifier = Modifier,
     lessons: List<LessonEntity>,
-    onWatchChangeClick: (String) -> Unit) {
+    onWatchChangeClick: (String) -> Unit,
+    onChangeLessonClick: (String) -> Unit) {
 
     val header = lessons[0].dayOfWeek + " " + lessons[0].date
 
@@ -50,21 +54,20 @@ fun Day(
         lessons.forEachIndexed {index, lesson ->
             var rowModifier = Modifier.fillMaxWidth()
 
-            if (index != lessons.size - 1) {
-               // rowModifier = rowModifier.border(BorderStroke(1.dp, Color.Black))
-            }
-
             if (index % 2 == 0) {
                 rowModifier = rowModifier.background(MaterialTheme.colorScheme.tertiaryContainer)
             }
 
             if (!lesson.isStatusWatched) {
                 if (lesson.lessonStatusId == 4) {
-                    rowModifier = rowModifier.background(Color.Red)
+                    rowModifier = rowModifier.background(changeDeletedColor)
                 }
+
                 if (lesson.lessonStatusId == 2) {
-                    rowModifier = rowModifier.background(Color.Green)
+                    rowModifier = rowModifier.background(changeAddedColor)
                 }
+
+                rowModifier = rowModifier.clickable { onChangeLessonClick(lesson.lessonId) }
             }
 
             Row(
@@ -110,7 +113,7 @@ fun Day(
                                 && lesson.lessonStatusId != 6
                                 || lesson.isStatusWatched)
                                 MaterialTheme.colorScheme.onSecondaryContainer
-                            else Color.LightGray,
+                            else MaterialTheme.colorScheme.onTertiary,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -123,7 +126,7 @@ fun Day(
                             && lesson.lessonStatusId != 6
                             || lesson.isStatusWatched)
                             MaterialTheme.colorScheme.onSecondaryContainer
-                        else Color.LightGray,
+                        else MaterialTheme.colorScheme.onTertiary,
                         textAlign = TextAlign.Center)
                 }
             }

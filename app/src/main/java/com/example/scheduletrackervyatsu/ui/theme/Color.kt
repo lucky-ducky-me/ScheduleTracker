@@ -1,6 +1,9 @@
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
+val changeDeletedColor = Color(0xFFA31526)
+val changeAddedColor = Color(0xFF1F8114)
+
 val primaryLight = Color(0xFF5700D2)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF7D41FF)
@@ -37,7 +40,7 @@ val surfaceContainerLight = Color(0xFFF3EBFB)
 val surfaceContainerHighLight = Color(0xFFEDE5F6)
 val surfaceContainerHighestLight = Color(0xFFE7DFF0)
 
-val primaryLightMediumContrast = Color(0xFF5000C2)
+val primaryLightMediumContrast = Color(0xFF1F8114)
 val onPrimaryLightMediumContrast = Color(0xFFFFFFFF)
 val primaryContainerLightMediumContrast = Color(0xFF7D41FF)
 val onPrimaryContainerLightMediumContrast = Color(0xFFFFFFFF)

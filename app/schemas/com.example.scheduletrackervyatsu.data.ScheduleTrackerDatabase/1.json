@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7648bfaa78a48378e9e3c20f4052ecf2",
+    "identityHash": "354ba92a31bf89a3a6ef2e740c3f1b79",
     "entities": [
       {
         "tableName": "lessonStatus",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "lesson",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, `week` INTEGER NOT NULL, `dayOfWeek` TEXT NOT NULL, `isStatusWatched` INTEGER NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, `week` INTEGER NOT NULL, `dayOfWeek` TEXT NOT NULL, `isStatusWatched` INTEGER NOT NULL, `modifiedOn` TEXT NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "lessonId",
@@ -146,6 +146,12 @@
             "fieldPath": "isStatusWatched",
             "columnName": "isStatusWatched",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modifiedOn",
+            "columnName": "modifiedOn",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -309,7 +315,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7648bfaa78a48378e9e3c20f4052ecf2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '354ba92a31bf89a3a6ef2e740c3f1b79')"
     ]
   }
 }

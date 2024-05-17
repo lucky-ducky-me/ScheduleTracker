@@ -77,6 +77,9 @@ class LessonEntity(
 
     @ColumnInfo(name = "isStatusWatched")
     val isStatusWatched: Boolean,
+
+    @ColumnInfo(name = "modifiedOn")
+    val modifiedOn: String = ""
 )
 
 data class TeacherWithLessons(

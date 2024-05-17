@@ -252,4 +252,16 @@ class ScheduleTrackerRepository(
     fun deleteOldSchedule(currentDateTime: LocalDate?) {
         scheduleTrackerDao.deletePreviousSchedule(currentDateTime.toString())
     }
+
+    fun getLesson(lessonId: String): Flow<LessonEntity> {
+        return scheduleTrackerDao.getLesson(lessonId)
+    }
+
+    fun getLessonsChangedFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>> {
+        return scheduleTrackerDao.getNotWatchLessonsFlow(teacherId, departmentId)
+    }
+
+    fun getLessonsChanged(teacherId: String, departmentId: String): List<LessonEntity> {
+        return scheduleTrackerDao.getNotWatchLessons(teacherId, departmentId)
+    }
 }
