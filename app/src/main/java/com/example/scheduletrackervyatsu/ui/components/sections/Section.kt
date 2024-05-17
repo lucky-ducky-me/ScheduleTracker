@@ -41,7 +41,6 @@ fun Section(
     val trackingTeachers = filtersViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
     val trackingTeacherDepartments = filtersViewModel.trackingTeacherDepartments.collectAsState(initial = emptyList()).value
     val dateIntervals = filtersViewModel.dateIntervals
-    val lessons = filtersViewModel.lessons.collectAsState(initial = emptyList()).value
     val lessonsByWeeks = filtersViewModel.lessonsByWeeks.collectAsState(initial = emptyList()).value
 
     val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
@@ -102,7 +101,10 @@ fun Section(
                     onAcceptButtonClick = {
                         filtersViewModel.getLessons()
                     },
-                    lessonsByWeeks = lessonsByWeeks
+                    lessonsByWeeks = lessonsByWeeks,
+                    onTest = {
+                        filtersViewModel.testButton()
+                    }
                 )
             }
             composable(route = "Changes") {

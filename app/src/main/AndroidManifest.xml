@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".ParsingReceiver"
+            android:name=".domain.DailyReceiver"
             android:enabled="true"/>
     </application>
 

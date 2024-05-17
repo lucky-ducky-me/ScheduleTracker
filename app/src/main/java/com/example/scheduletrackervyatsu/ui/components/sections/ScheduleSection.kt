@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,6 +24,7 @@ fun ScheduleSection(
     filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit,
     lessonsByWeeks: List<Pair<Int, List<LessonEntity>>>,
+    onTest: (() -> Unit)?,
 ) {
     var currentPage by rememberSaveable {
         mutableIntStateOf(0)
@@ -55,6 +58,20 @@ fun ScheduleSection(
 
         val currentWeek = lessonsByWeeks.find {
             it.first == currentPage
+        }
+
+        if (onTest != null) {
+            item {
+                Button(
+                    modifier = Modifier,
+
+                    onClick = {
+                        onTest()
+                    }
+                ) {
+                    Text("Применить")
+                }
+            }
         }
 
         item {

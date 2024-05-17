@@ -1,5 +1,6 @@
 package com.example.scheduletrackervyatsu.data.helpers
 
+import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
 
@@ -42,11 +43,29 @@ fun fromLessonParsingModelsToEntity(
         date = lessonParsingModel.date.toString(),
         time = lessonParsingModel.time.toString(),
         teacherId = teacherId,
-        lessonStatusId = 0,
+        lessonStatusId = 1,
         office = office,
-        oldData = "",
-        oldOffice = "",
+        oldData = null,
+        oldOffice = null,
         week = lessonParsingModel.week,
-        dayOfWeek = lessonParsingModel.dayOfWeek
+        dayOfWeek = lessonParsingModel.dayOfWeek,
+        isStatusWatched = true,
     )
+}
+fun fromLessonParsingModelsToEntities(
+    lessons: List<LessonParsingModel>,
+    departments: List<DepartmentEntity>,
+    teacherId: String): List<LessonEntity>
+{
+    return lessons.mapNotNull {
+        val department = departments.find {
+                department -> department.name == it.department
+        }
+
+        if (department != null) {
+            fromLessonParsingModelsToEntity(it, department.departmentId, teacherId)
+        }
+        else
+            null
+    }
 }

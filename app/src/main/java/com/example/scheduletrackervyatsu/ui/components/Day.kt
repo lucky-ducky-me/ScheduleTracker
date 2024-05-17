@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +49,20 @@ fun Day(
 
         lessons.forEach { lesson ->
 
-            Row(modifier = modifier.fillMaxWidth()
+            var rowModifier = Modifier.fillMaxWidth()
+
+
+            if (!lesson.isStatusWatched) {
+                if (lesson.lessonStatusId == 4) {
+                    rowModifier = rowModifier.background(Color.Red)
+                }
+                if (lesson.lessonStatusId == 2) {
+                    rowModifier = rowModifier.background(Color.Green)
+                }
+            }
+
+            Row(
+                modifier = rowModifier
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -59,7 +72,6 @@ fun Day(
                         text = lesson.time,
                         modifier = modifier
                             .fillMaxWidth(0.2f)
-                            .padding(8.dp)
                             .fillMaxHeight(1f),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -71,20 +83,37 @@ fun Day(
                             enabled = true
                         ) {
                             Icon(
-                                imageVector = Icons.Default.RemoveRedEye,
+                                imageVector = Icons.Default.Check,
                                 contentDescription = null
                             )
                         }
                     }
                 }
 
-                Text(
-                    text = lesson.data,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    textAlign = TextAlign.Center)
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (lesson.office != null) {
+                        Text(
+                            text = lesson.office,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = if (lesson.lessonStatusId != 5 && lesson.lessonStatusId != 6)
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            else Color.LightGray,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Text(
+                        text = lesson.data,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        color = if (lesson.lessonStatusId != 3 && lesson.lessonStatusId != 6)
+                            MaterialTheme.colorScheme.onSecondaryContainer
+                        else Color.LightGray,
+                        textAlign = TextAlign.Center)
+                }
             }
         }
     }

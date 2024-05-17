@@ -149,8 +149,6 @@ class SectionViewModel(
     fun changeDateInterval(dateInterval: DateIntervals) {
         _dateInterval.value = dateInterval
         viewModelScope.launch (Dispatchers.IO) {
-            //VyatsuParser().getTeachers()
-            //repository.getAll()
         }
     }
 
@@ -213,11 +211,14 @@ class SectionViewModel(
         }
     }
 
-    fun parseFullSchedule() {
+    fun testButton() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveSchedule()
+            val worker = DailyWorker(repository)
+
+            worker.doDailyWork(true)
         }
     }
+
 
 
 }

@@ -73,7 +73,10 @@ class LessonEntity(
     val week: Boolean,
 
     @ColumnInfo(name = "dayOfWeek")
-    val dayOfWeek: String
+    val dayOfWeek: String,
+
+    @ColumnInfo(name = "isStatusWatched")
+    val isStatusWatched: Boolean,
 )
 
 data class TeacherWithLessons(

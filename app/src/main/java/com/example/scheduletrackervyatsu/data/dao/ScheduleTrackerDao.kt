@@ -97,4 +97,13 @@ interface ScheduleTrackerDao {
     fun deleteAllTrackingForTeacher(teacherId: String)
 
 
+    @Query("SELECT * FROM lesson WHERE lesson.date = :date")
+    fun getDayWeekAndName(date:String): List<LessonEntity>
+
+    @Query("SELECT * FROM lesson WHERE lesson.date = :date " +
+            "AND lesson.time = :time " +
+            "AND lesson.teacherId = :teacherId " +
+            "AND lesson.departmentId = :departmentId")
+    fun getLesson(teacherId: String, departmentId: String, date: String, time: String): LessonEntity
+
 }

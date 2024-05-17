@@ -6,9 +6,9 @@ import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
+import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntities
 import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntity
 import com.example.scheduletrackervyatsu.data.helpers.getInitials
-import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -88,6 +88,39 @@ class ScheduleTrackerRepository(
         return scheduleTrackerDao.getLessons(teacherId, departmentId)
     }
 
+    /**
+     * Получить занятия.
+     * @return список занятий.
+     */
+    fun getAllLessons(): List<LessonEntity> {
+        return scheduleTrackerDao.getAllLessons()
+    }
+
+    fun getTrackedTeachersDepartments(): Map<TeacherEntity, List<DepartmentEntity>> {
+        return scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
+    }
+
+
+    //region Функции для DailyReceiver
+
+    fun getDayWeekAndName(day: LocalDate): Pair<Boolean, String>? {
+        var ans = scheduleTrackerDao.getDayWeekAndName(day.toString())
+
+        if (ans != null && ans.isNotEmpty()) {
+            return Pair(ans[0].week, ans[0].dayOfWeek)
+        }
+
+        val prevDay = day.minusDays(14)
+
+        ans = scheduleTrackerDao.getDayWeekAndName(prevDay.toString())
+
+        if (ans != null && ans.isNotEmpty()) {
+            return Pair(ans[0].week, ans[0].dayOfWeek)
+        }
+
+        return null
+    }
+
 
     //region Парсинг
 
@@ -95,13 +128,13 @@ class ScheduleTrackerRepository(
      * Получить и сохранить расписание для всех отлеживаемых преподавателей.
      */
     fun saveSchedule() {
-        val trackedTeachersDepartments = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
+        val trackedTeachersDepartmentsNotFlow = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
 
-        val teachers = trackedTeachersDepartments.keys
+        val teachers = trackedTeachersDepartmentsNotFlow.keys
 
         val departments = mutableSetOf<DepartmentEntity>()
 
-        trackedTeachersDepartments.values.forEach {
+        trackedTeachersDepartmentsNotFlow.values.forEach {
             departments.addAll(it)
         }
 
@@ -133,7 +166,7 @@ class ScheduleTrackerRepository(
                         teacher -> teacher.teacherId == it.teacherId }
 
                 if (teacher != null) {
-                    val trackingDepartments = trackedTeachersDepartments[teacher]
+                    val trackingDepartments = trackedTeachersDepartmentsNotFlow[teacher]
 
                     if (trackingDepartments != null) {
                         trackingDepartments.find {
@@ -191,21 +224,14 @@ class ScheduleTrackerRepository(
         }
     }
 
-    private fun fromLessonParsingModelsToEntities(
-        lessons: List<LessonParsingModel>,
-        departments: List<DepartmentEntity>,
-        teacherId: String): List<LessonEntity>
-    {
-        return lessons.mapNotNull {
-            val department = departments.find {
-                department -> department.name == it.department
-            }
+    /**
+     * Вставить занятие.
+     */
+    fun insertLesson(lessonEntity: LessonEntity) {
+        scheduleTrackerDao.insert(lessonEntity)
+    }
 
-            if (department != null) {
-                fromLessonParsingModelsToEntity(it, department.departmentId, teacherId)
-            }
-            else
-                null
-        }
+    fun getLessonsByDatetime(teacherId: String, departmentId: String, date: String, time: String): LessonEntity {
+        return scheduleTrackerDao.getLesson(teacherId, departmentId, date, time)
     }
 }

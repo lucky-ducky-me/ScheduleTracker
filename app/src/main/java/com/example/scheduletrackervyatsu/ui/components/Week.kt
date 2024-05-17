@@ -52,7 +52,7 @@ fun Week(
             //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
             //.clip(shape = RoundedCornerShape(5))
             //.background(MaterialTheme.colorScheme.secondaryContainer),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
