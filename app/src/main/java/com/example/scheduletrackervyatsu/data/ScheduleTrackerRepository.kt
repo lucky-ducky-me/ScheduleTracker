@@ -234,4 +234,8 @@ class ScheduleTrackerRepository(
     fun getLessonsByDatetime(teacherId: String, departmentId: String, date: String, time: String): LessonEntity {
         return scheduleTrackerDao.getLesson(teacherId, departmentId, date, time)
     }
+
+    fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean) {
+        scheduleTrackerDao.changeLessonStatusVisibility(lessonId, isWatched)
+    }
 }

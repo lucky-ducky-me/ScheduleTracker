@@ -106,4 +106,6 @@ interface ScheduleTrackerDao {
             "AND lesson.departmentId = :departmentId")
     fun getLesson(teacherId: String, departmentId: String, date: String, time: String): LessonEntity
 
+    @Query("UPDATE lesson SET isStatusWatched = :isWatched WHERE lessonId = :lessonId")
+    fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean)
 }

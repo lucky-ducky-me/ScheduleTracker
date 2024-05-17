@@ -27,7 +27,8 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 @Composable
 fun Day(
     modifier: Modifier = Modifier,
-    lessons: List<LessonEntity>) {
+    lessons: List<LessonEntity>,
+    onWatchChangeClick: (String) -> Unit) {
 
     val header = lessons[0].dayOfWeek + " " + lessons[0].date
 
@@ -48,9 +49,7 @@ fun Day(
         )
 
         lessons.forEach { lesson ->
-
             var rowModifier = Modifier.fillMaxWidth()
-
 
             if (!lesson.isStatusWatched) {
                 if (lesson.lessonStatusId == 4) {
@@ -79,7 +78,9 @@ fun Day(
 
                     if (!lesson.isStatusWatched) {
                         IconButton(
-                            onClick = {  },
+                            onClick = {
+                                onWatchChangeClick(lesson.lessonId)
+                            },
                             enabled = true
                         ) {
                             Icon(
@@ -98,7 +99,9 @@ fun Day(
                         Text(
                             text = lesson.office,
                             modifier = Modifier.fillMaxWidth(),
-                            color = if (lesson.lessonStatusId != 5 && lesson.lessonStatusId != 6)
+                            color = if (lesson.lessonStatusId != 5
+                                && lesson.lessonStatusId != 6
+                                || lesson.isStatusWatched)
                                 MaterialTheme.colorScheme.onSecondaryContainer
                             else Color.LightGray,
                             textAlign = TextAlign.Center
@@ -109,7 +112,9 @@ fun Day(
                         modifier = modifier
                             .fillMaxWidth()
                             .padding(8.dp),
-                        color = if (lesson.lessonStatusId != 3 && lesson.lessonStatusId != 6)
+                        color = if (lesson.lessonStatusId != 3
+                            && lesson.lessonStatusId != 6
+                            || lesson.isStatusWatched)
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else Color.LightGray,
                         textAlign = TextAlign.Center)

@@ -154,6 +154,12 @@ class SectionViewModel(
         }
     }
 
+    fun watchLessonStatus(lessonId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.changeLessonStatusVisibility(lessonId, true)
+        }
+    }
+
     /**
      * Распределить занятия по неделям.
      */

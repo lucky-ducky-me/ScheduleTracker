@@ -23,24 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
-import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
+import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersSection(
     modifier: Modifier = Modifier,
-    selectedDepartment: DepartmentEntity?,
-    selectedTeacher: TeacherEntity?,
-    onSelectedDepartmentChange: (String) -> Unit,
-    onSelectedTeacherChange: (String) -> Unit,
-    departments: List<DepartmentEntity>,
-    teachers: List<TeacherEntity>,
+    filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
 
-    var expandedDateInterval by remember { mutableStateOf(false) }
     var expandedTeacher by remember { mutableStateOf(false) }
     var expandedDepartment by remember { mutableStateOf(false) }
 
@@ -57,7 +50,7 @@ fun FiltersSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
-                value = selectedTeacher?.fio ?: "",
+                value = filtersSectionData.teacher?.fio ?: "",
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -75,7 +68,7 @@ fun FiltersSection(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                teachers.forEachIndexed { index, item ->
+                filtersSectionData.teachers.forEachIndexed { index, item ->
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(),
                         text = {
@@ -87,7 +80,7 @@ fun FiltersSection(
                         onClick = {
                             expandedTeacher = false
                             Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-                            onSelectedTeacherChange(item.teacherId)
+                            filtersSectionData.onSelectedTeacherChange(item.teacherId)
                         }
                     )
                 }
@@ -101,7 +94,7 @@ fun FiltersSection(
             modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
-                value = selectedDepartment?.name ?: "",
+                value = filtersSectionData.department?.name ?: "",
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
@@ -115,7 +108,7 @@ fun FiltersSection(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                departments.forEachIndexed { index, item ->
+                filtersSectionData.departments.forEachIndexed { index, item ->
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(),
                         text = {
@@ -126,7 +119,7 @@ fun FiltersSection(
                         onClick = {
                             expandedDepartment = false
                             Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-                            onSelectedDepartmentChange(item.departmentId)
+                            filtersSectionData.onSelectedDepartmentChange(item.departmentId)
                         }
                     )
                 }

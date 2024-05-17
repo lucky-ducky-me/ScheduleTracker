@@ -27,18 +27,10 @@ fun ChangesSection(
         item {
             FiltersSection(
                 modifier = Modifier,
-                selectedDepartment = filtersSectionData.department,
-                selectedTeacher =  filtersSectionData.teacher,
-                selectedDateTimeInterval = filtersSectionData.datetimeInterval,
-                onSelectedDepartmentChange = filtersSectionData.onSelectedDepartmentChange,
-                onSelectedTeacherChange = filtersSectionData.onSelectedTeacherChange,
-                onSelectedDateIntervalChange = filtersSectionData.onSelectedDateTimeIntervalChange,
-                departments = filtersSectionData.departments,
-                teachers  = filtersSectionData.teachers,
-                datesIntervals = filtersSectionData.datetimeIntervals,
                 onAcceptButtonClick = {
                     onAcceptButtonClick()
-                }
+                },
+                filtersSectionData = filtersSectionData
             )
         }
 

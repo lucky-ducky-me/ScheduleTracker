@@ -24,6 +24,7 @@ fun ScheduleSection(
     filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit,
     lessonsByWeeks: List<Pair<Int, List<LessonEntity>>>,
+    onWatchChangeClick: (String) -> Unit,
     onTest: (() -> Unit)?,
 ) {
     var currentPage by rememberSaveable {
@@ -41,18 +42,10 @@ fun ScheduleSection(
         item {
             FiltersSection(
                 modifier = Modifier,
-                selectedDepartment = filtersSectionData.department,
-                selectedTeacher =  filtersSectionData.teacher,
-                selectedDateTimeInterval = filtersSectionData.datetimeInterval,
-                onSelectedDepartmentChange = filtersSectionData.onSelectedDepartmentChange,
-                onSelectedTeacherChange = filtersSectionData.onSelectedTeacherChange,
-                onSelectedDateIntervalChange = filtersSectionData.onSelectedDateTimeIntervalChange,
-                departments = filtersSectionData.departments,
-                teachers  = filtersSectionData.trackingTeachers,
-                datesIntervals = filtersSectionData.datetimeIntervals,
                 onAcceptButtonClick = {
                     onAcceptButtonClick()
-                }
+                },
+                filtersSectionData = filtersSectionData
             )
         }
 
@@ -86,7 +79,8 @@ fun ScheduleSection(
                     },
                     onForwardArrowClick = {
                         currentPage++
-                    }
+                    },
+                    onWatchChangeClick = onWatchChangeClick
                 )
             }
         }

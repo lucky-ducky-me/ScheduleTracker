@@ -26,7 +26,7 @@ fun Week(
     lastIndex: Int,
     onBackArrowClick: () -> Unit,
     onForwardArrowClick: () -> Unit,
-
+    onWatchChangeClick: (String) -> Unit
 ) {
     val map = mutableMapOf<String, List<LessonEntity>>()
 
@@ -87,7 +87,7 @@ fun Week(
         }
 
         lessonsByDays.forEach {
-            Day(lessons = it.second)
+            Day(lessons = it.second, onWatchChangeClick = onWatchChangeClick)
         }
     }
 }

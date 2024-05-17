@@ -92,6 +92,9 @@ fun Section(
                         filtersViewModel.getLessons()
                     },
                     lessonsByWeeks = lessonsByWeeks,
+                    onWatchChangeClick = {
+                        lessonId: String -> filtersViewModel.watchLessonStatus(lessonId)
+                    },
                     onTest = {
                         filtersViewModel.testButton()
                     }
