@@ -1,7 +1,7 @@
 package com.example.scheduletrackervyatsu.domain
 
 import android.util.Log
-import com.example.scheduletrackervyatsu.LESSON_STATUSES_KEY
+import com.example.scheduletrackervyatsu.LessonStatusKey
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
@@ -293,29 +293,29 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
 
     private fun compareActualAndSavedLesson(
         actualLesson: LessonEntity,
-        savedLesson: LessonEntity) : LESSON_STATUSES_KEY {
+        savedLesson: LessonEntity) : LessonStatusKey {
         if (actualLesson.data.isEmpty() && savedLesson.data.isNotEmpty()) {
-            return LESSON_STATUSES_KEY.DELETED
+            return LessonStatusKey.DELETED
         }
 
         if (actualLesson.data.isNotEmpty() && savedLesson.data.isEmpty()) {
-            return LESSON_STATUSES_KEY.ADDED
+            return LessonStatusKey.ADDED
         }
 
         if (actualLesson.data != savedLesson.data && actualLesson.office != savedLesson.office) {
-            return LESSON_STATUSES_KEY.CHANGED_DATA_AND_OFFICE
+            return LessonStatusKey.CHANGED_DATA_AND_OFFICE
         }
 
 
         if (actualLesson.data != savedLesson.data) {
-            return LESSON_STATUSES_KEY.CHANGED_DATA
+            return LessonStatusKey.CHANGED_DATA
         }
 
         if (actualLesson.office != savedLesson.office) {
-            return LESSON_STATUSES_KEY.CHANGED_OFFICE
+            return LessonStatusKey.CHANGED_OFFICE
         }
 
-        return LESSON_STATUSES_KEY.NEW
+        return LessonStatusKey.NEW
     }
 
     private fun isFirstDayPart(hour: Int): Boolean {
@@ -329,8 +329,8 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         var newLessonEntity: LessonEntity? = null
 
         when (compareActualAndSavedLesson(actualLesson, savedLesson)) {
-            LESSON_STATUSES_KEY.NEW -> newLessonEntity = null
-            LESSON_STATUSES_KEY.ADDED -> newLessonEntity = LessonEntity(
+            LessonStatusKey.NEW -> newLessonEntity = null
+            LessonStatusKey.ADDED -> newLessonEntity = LessonEntity(
                 lessonId = savedLesson.lessonId,
                 teacherId = savedLesson.teacherId,
                 departmentId = savedLesson.departmentId,
@@ -345,7 +345,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 lessonStatusId = 2,
                 week = savedLesson.week
             )
-            LESSON_STATUSES_KEY.CHANGED_DATA -> newLessonEntity = LessonEntity(
+            LessonStatusKey.CHANGED_DATA -> newLessonEntity = LessonEntity(
                 lessonId = savedLesson.lessonId,
                 teacherId = savedLesson.teacherId,
                 departmentId = savedLesson.departmentId,
@@ -360,7 +360,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 lessonStatusId = 3,
                 week = savedLesson.week
             )
-            LESSON_STATUSES_KEY.DELETED -> newLessonEntity = LessonEntity(
+            LessonStatusKey.DELETED -> newLessonEntity = LessonEntity(
                 lessonId = savedLesson.lessonId,
                 teacherId = savedLesson.teacherId,
                 departmentId = savedLesson.departmentId,
@@ -375,7 +375,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 lessonStatusId = 4,
                 week = savedLesson.week
             )
-            LESSON_STATUSES_KEY.CHANGED_OFFICE -> newLessonEntity = LessonEntity(
+            LessonStatusKey.CHANGED_OFFICE -> newLessonEntity = LessonEntity(
                 lessonId = savedLesson.lessonId,
                 teacherId = savedLesson.teacherId,
                 departmentId = savedLesson.departmentId,
@@ -390,7 +390,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 lessonStatusId = 5,
                 week = savedLesson.week
             )
-            LESSON_STATUSES_KEY.CHANGED_DATA_AND_OFFICE -> newLessonEntity = LessonEntity(
+            LessonStatusKey.CHANGED_DATA_AND_OFFICE -> newLessonEntity = LessonEntity(
                 lessonId = savedLesson.lessonId,
                 teacherId = savedLesson.teacherId,
                 departmentId = savedLesson.departmentId,

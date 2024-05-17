@@ -1,11 +1,8 @@
 package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scheduletrackervyatsu.DateIntervals
-import com.example.scheduletrackervyatsu.DateIntervalsStringValues
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
@@ -78,28 +75,17 @@ class SectionViewModel(
     val department
         get() = _department.asStateFlow()
 
-
     /**
-     * Временные промежутки.
+     * Занятия.
      */
-    var dateIntervals = DateIntervalsStringValues
-
-    /**
-     * Выбранный временной промежуток.
-     */
-    private var _dateInterval = mutableStateOf(DateIntervals.Week)
-
-    /**
-     * Выбранный временной промежуток.
-     */
-    val dateInterval
-        get() = _dateInterval
-
     private var _lessons = MutableStateFlow<List<LessonEntity>>(emptyList())
 
     val lessons
         get() = _lessons
 
+    /**
+     * По неделям.
+     */
     private var _lessonsByWeeks = MutableStateFlow<List<Pair<Int, List<LessonEntity>>>>(emptyList())
 
     val lessonsByWeeks
@@ -132,6 +118,9 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Изменить выбранный департамент.
+     */
     fun changeCurrentDepartment(departmentId: String) {
         _department.update {
             _trackingTeacherDepartments.value.find { it.departmentId == departmentId }
@@ -139,6 +128,9 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Изменить выбранного преподавателя.
+     */
     fun changeCurrentTeacher(teacherId: String) {
         _teacher.update {
             _trackingTeachers.value.find {it.teacherId == teacherId}
@@ -146,12 +138,9 @@ class SectionViewModel(
         }
     }
 
-    fun changeDateInterval(dateInterval: DateIntervals) {
-        _dateInterval.value = dateInterval
-        viewModelScope.launch (Dispatchers.IO) {
-        }
-    }
-
+    /**
+     * Получить занятия.
+     */
     fun getLessons() {
         viewModelScope.launch(Dispatchers.IO) {
             _lessons.update {
@@ -165,7 +154,10 @@ class SectionViewModel(
         }
     }
 
-    fun setLessonsByWeeks() {
+    /**
+     * Распределить занятия по неделям.
+     */
+    private fun setLessonsByWeeks() {
         val map = mutableMapOf<String, List<LessonEntity>>()
 
         _lessons.value.forEach {
@@ -218,7 +210,4 @@ class SectionViewModel(
             worker.doDailyWork(true)
         }
     }
-
-
-
 }

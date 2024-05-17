@@ -19,7 +19,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
 import com.example.scheduletrackervyatsu.ui.components.TabRow
 import com.example.scheduletrackervyatsu.ui.components.TabRowDirection
@@ -40,7 +39,6 @@ fun Section(
 
     val trackingTeachers = filtersViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
     val trackingTeacherDepartments = filtersViewModel.trackingTeacherDepartments.collectAsState(initial = emptyList()).value
-    val dateIntervals = filtersViewModel.dateIntervals
     val lessonsByWeeks = filtersViewModel.lessonsByWeeks.collectAsState(initial = emptyList()).value
 
     val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
@@ -49,7 +47,6 @@ fun Section(
     val filtersSectionData = FiltersSectionData(
         department = department,
         teacher = teacher,
-        datetimeInterval = filtersViewModel.dateInterval.value,
         onSelectedDepartmentChange = { newValue ->
             filtersViewModel.changeCurrentDepartment(
                 newValue
@@ -60,15 +57,8 @@ fun Section(
                 newValue
             )
         },
-        onSelectedDateTimeIntervalChange = { newValue ->
-            filtersViewModel.changeDateInterval(
-                dateIntervals.toList().find { it.second == newValue }?.first
-                    ?: DateIntervals.Week
-            )
-        },
         departments = trackingTeacherDepartments,
         teachers = trackingTeachers,
-        datetimeIntervals = dateIntervals,
         trackingTeachers = trackingTeachers
     )
 

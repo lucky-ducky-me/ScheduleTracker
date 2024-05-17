@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.scheduletrackervyatsu.DateIntervals
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 
@@ -33,13 +32,10 @@ fun FiltersSection(
     modifier: Modifier = Modifier,
     selectedDepartment: DepartmentEntity?,
     selectedTeacher: TeacherEntity?,
-    selectedDateTimeInterval: DateIntervals,
     onSelectedDepartmentChange: (String) -> Unit,
     onSelectedTeacherChange: (String) -> Unit,
-    onSelectedDateIntervalChange: (String) -> Unit,
     departments: List<DepartmentEntity>,
     teachers: List<TeacherEntity>,
-    datesIntervals: Map<DateIntervals, String>,
     onAcceptButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -47,12 +43,6 @@ fun FiltersSection(
     var expandedDateInterval by remember { mutableStateOf(false) }
     var expandedTeacher by remember { mutableStateOf(false) }
     var expandedDepartment by remember { mutableStateOf(false) }
-
-    var dateIntervalName by remember {
-       mutableStateOf(datesIntervals[selectedDateTimeInterval] ?: "")
-    }
-
-    dateIntervalName = datesIntervals[selectedDateTimeInterval] ?: ""
 
     Column(
         modifier = Modifier.wrapContentHeight(),
