@@ -78,7 +78,11 @@ fun ScheduleSection(
                         currentPage--
                     },
                     onForwardArrowClick = {
-                        currentPage++
+                        if (lessonsByWeeks.find {
+                                it.first == currentPage
+                            } != null) {
+                            currentPage++
+                        }
                     },
                     onWatchChangeClick = onWatchChangeClick
                 )

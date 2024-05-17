@@ -17,7 +17,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
     private val parser = VyatsuParser()
 
     fun doDailyWork(isTest: Boolean = false) {
-        //Определить какой день
         val currentDateTime = LocalDateTime.now()
 
         val data = repository.getDayWeekAndName(LocalDate.from(currentDateTime))
@@ -27,30 +26,93 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         var lessonToUpdate: List<LessonEntity> = emptyList()
 
         if (data == null) {
-            //пока хз, это типо пусто в расписании
             Log.d("my", "Пустое расписание")
+            return
         }
         else if (isMorning && data.first && data.second == "пятница") {
-            //todo закачку
+            lessonToUpdate = loadNewAndCheckWithOld(isTest)
         }
-        else if (isMorning && !data.first && data.second == "понедельник") {
-            //todo удаление
+        else if (!data.first && data.second == "понедельник") {
+            deleteOldSchedule()
+            lessonToUpdate = standardCheck(isTest)
         }
         else {
-            //todo стандартная проверка
             lessonToUpdate = standardCheck(isTest)
+        }
 
-            lessonToUpdate.forEach {
-                repository.insertLesson(it)
-            }
+        lessonToUpdate.forEach {
+            repository.insertLesson(it)
         }
 
         Log.d("my", "Выполнено")
     }
 
-    private fun standardCheck(isTest:Boolean = false) : List<LessonEntity> {
-        val currentDateTime = LocalDateTime.now()
+    private fun deleteOldSchedule() {
+        var currentDateTime = LocalDate.now()
 
+        repository.deleteOldSchedule(currentDateTime)
+    }
+
+    private fun loadNewAndCheckWithOld(isTest: Boolean = false): List<LessonEntity> {
+        val startDate = LocalDate.now().plusDays(17)
+        val endDate = startDate.plusDays(1)
+
+        val (lessonEntities, currentLessons) = getActualAndSavedLessons(
+            startDate = startDate,
+            endDate = endDate,
+            isTest = isTest)
+
+        var resultEntities = lessonEntities.filter {
+            !currentLessons.contains(it)
+        }.toMutableList()
+
+        val savedLessons = repository.getAllLessons()
+
+        if (lessonEntities.isEmpty()) {
+            return emptyList()
+        }
+
+        for (i in resultEntities.indices) {
+            val sameLessonTwoWeeksAgo = savedLessons.find {
+                    savedLesson ->
+                LocalDate.parse(resultEntities[i].date).minusDays(14) ==
+                        LocalDate.parse(savedLesson.date) &&
+                        resultEntities[i].time == savedLesson.time &&
+                        resultEntities[i].departmentId == savedLesson.departmentId &&
+                        resultEntities[i].teacherId == savedLesson.teacherId &&
+                        savedLesson.lessonStatusId == 1
+                        // && savedLesson.data.isNotEmpty()
+            }
+
+            if (sameLessonTwoWeeksAgo != null) {
+                val newLesson = createNewLesson(resultEntities[i], sameLessonTwoWeeksAgo)
+
+                resultEntities[i] = newLesson
+            }
+        }
+
+        return resultEntities
+    }
+
+
+    private fun standardCheck(isTest: Boolean = false) : List<LessonEntity> {
+        val startDate = LocalDate.now()
+        val endDate = LocalDate.now().plusDays(14)
+
+        var (lessonEntities, currentLessons) = getActualAndSavedLessons(
+            startDate = startDate, endDate = endDate, isTest = isTest)
+
+        val dates = currentLessons.map { it.date }.toSet()
+
+        lessonEntities = lessonEntities.filter { it.date in dates }
+
+        return compareActualAndSavedLessons(actualLessons = lessonEntities, savedLessons = currentLessons)
+    }
+
+    private fun getActualAndSavedLessons(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        isTest: Boolean = false) : Pair<List<LessonEntity>, List<LessonEntity>> {
         val trackedTeachersDepartments = repository.getTrackedTeachersDepartments()
 
         val teachers = trackedTeachersDepartments.keys
@@ -62,8 +124,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         }
 
         val teacherNameForParsing = {
-                teacher: TeacherEntity ->
-            getInitials(teacher.name, teacher.surname, teacher.patronymic)
+                teacher: TeacherEntity -> getInitials(teacher.name, teacher.surname, teacher.patronymic)
         }
 
         val teacherShortcuts =
@@ -72,12 +133,12 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         val actualSchedule = parser.getActualSchedule(
             teachers = teachers.map { teacherNameForParsing(it) },
             departments = departments.map { it.name },
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusDays(14),
+            startDate = startDate,
+            endDate = endDate,
         )
 
         if (actualSchedule.lessons.isEmpty()) {
-            return emptyList()
+            return Pair(listOf(), listOf())
         }
 
         val schedule = teachers.map {
@@ -88,26 +149,26 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         var lessonEntities = schedule.map {
             fromLessonParsingModelsToEntities(it.second, departments.toList(), it.first)
         }
-        .flatten().filter {
-            val teacher = teachers.find {
-                    teacher -> teacher.teacherId == it.teacherId }
+            .flatten().filter {
+                val teacher = teachers.find {
+                        teacher -> teacher.teacherId == it.teacherId }
 
-            if (teacher != null) {
-                val trackingDepartments = trackedTeachersDepartments[teacher]
+                if (teacher != null) {
+                    val trackingDepartments = trackedTeachersDepartments[teacher]
 
-                if (trackingDepartments != null) {
-                    trackingDepartments.find {
-                            department -> it.departmentId == department.departmentId
-                    } != null
+                    if (trackingDepartments != null) {
+                        trackingDepartments.find {
+                                department -> it.departmentId == department.departmentId
+                        } != null
+                    }
+                    else {
+                        false
+                    }
                 }
                 else {
                     false
                 }
-            }
-            else {
-                false
-            }
-        }.toMutableList()
+            }.toMutableList()
 
         // TODO DELETE
 
@@ -219,15 +280,12 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         }
         // TODO DELETE
 
+        val currentDateTime = LocalDateTime.now()
 
         val currentLessons = repository.getAllLessons().filter{
             it.date >= LocalDate.from(currentDateTime).toString().split("T")[0]}
 
-        val dates = currentLessons.map { it.date }.toSet()
-
-        lessonEntities = lessonEntities.filter { it.date in dates }.toMutableList()
-
-        return compareActualAndSavedLessons(actualLessons = lessonEntities.toList(), savedLessons = currentLessons)
+        return Pair(lessonEntities.toList(), currentLessons)
     }
 
     private fun CHANGE_FOR_DELETED_TEST(
@@ -259,7 +317,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             dayOfWeek = lesson.dayOfWeek,
             lessonStatusId = lesson.lessonStatusId,
             week = lesson.week))
-
     }
 
     private fun compareActualAndSavedLessons(
@@ -404,6 +461,94 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 6,
                 week = savedLesson.week
+            )
+        }
+
+        return newLessonEntity
+    }
+
+    private fun createNewLesson(
+        actualLesson: LessonEntity,
+        savedLesson: LessonEntity)
+            : LessonEntity {
+        lateinit var newLessonEntity: LessonEntity
+
+        when (compareActualAndSavedLesson(actualLesson, savedLesson)) {
+            LessonStatusKey.NEW -> newLessonEntity = actualLesson
+            LessonStatusKey.ADDED -> newLessonEntity = LessonEntity(
+                lessonId = actualLesson.lessonId,
+                teacherId = actualLesson.teacherId,
+                departmentId = actualLesson.departmentId,
+                date = actualLesson.date,
+                time = actualLesson.time,
+                isStatusWatched = false,
+                oldData = savedLesson.data,
+                data = actualLesson.data,
+                oldOffice = savedLesson.oldOffice,
+                office = actualLesson.office,
+                dayOfWeek = actualLesson.dayOfWeek,
+                lessonStatusId = 2,
+                week = actualLesson.week
+            )
+            LessonStatusKey.CHANGED_DATA -> newLessonEntity = LessonEntity(
+                lessonId = actualLesson.lessonId,
+                teacherId = actualLesson.teacherId,
+                departmentId = actualLesson.departmentId,
+                date = actualLesson.date,
+                time = actualLesson.time,
+                isStatusWatched = false,
+                oldData = savedLesson.data,
+                data = actualLesson.data,
+                oldOffice = null,
+                office = actualLesson.office,
+                dayOfWeek = actualLesson.dayOfWeek,
+                lessonStatusId = 3,
+                week = actualLesson.week
+            )
+            LessonStatusKey.DELETED -> newLessonEntity = LessonEntity(
+                lessonId = actualLesson.lessonId,
+                teacherId = actualLesson.teacherId,
+                departmentId = actualLesson.departmentId,
+                date = actualLesson.date,
+                time = actualLesson.time,
+                isStatusWatched = false,
+                oldData = savedLesson.data,
+                data = actualLesson.data,
+                oldOffice = savedLesson.oldOffice,
+                office = actualLesson.office,
+                dayOfWeek = actualLesson.dayOfWeek,
+                lessonStatusId = 4,
+                week = actualLesson.week
+            )
+            LessonStatusKey.CHANGED_OFFICE -> newLessonEntity = LessonEntity(
+                lessonId = actualLesson.lessonId,
+                teacherId = actualLesson.teacherId,
+                departmentId = actualLesson.departmentId,
+                date = actualLesson.date,
+                time = actualLesson.time,
+                isStatusWatched = false,
+                oldData = savedLesson.data,
+                data = actualLesson.data,
+                oldOffice = savedLesson.oldOffice,
+                office = actualLesson.office,
+                dayOfWeek = actualLesson.dayOfWeek,
+                lessonStatusId = 5,
+                week = actualLesson.week
+            )
+            LessonStatusKey.CHANGED_DATA_AND_OFFICE -> newLessonEntity = LessonEntity(
+                lessonId = actualLesson.lessonId,
+                teacherId = actualLesson.teacherId,
+                departmentId = actualLesson.departmentId,
+                date = actualLesson.date,
+                time = actualLesson.time,
+                isStatusWatched = false,
+                oldData = savedLesson.data,
+                data = actualLesson.data,
+                oldOffice = savedLesson.oldOffice,
+                office = actualLesson.office,
+                dayOfWeek = actualLesson.dayOfWeek,
+                lessonStatusId = 6,
+                week = actualLesson.week
             )
         }
 

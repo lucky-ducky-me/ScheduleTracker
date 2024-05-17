@@ -38,6 +38,27 @@ interface ScheduleTrackerDao {
     @Delete
     fun delete(entity: TeachersDepartmentCrossRef)
 
+    @Query("DELETE FROM teachersDepartmentCrossRef WHERE teacherId = :teacherId")
+    fun deleteAllTrackingForTeacher(teacherId: String)
+
+    @Query("DELETE FROM lesson WHERE teacherId = :teacherId")
+    fun deleteLessons(teacherId: String)
+
+    @Query("DELETE FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId")
+    fun deleteLessons(teacherId: String, departmentId: String)
+
+    @Transaction
+    fun deleteTeacherData(teacherId: String, departmentId: String? = null) {
+        if (departmentId == null) {
+            deleteAllTrackingForTeacher(teacherId)
+            deleteLessons(teacherId)
+        }
+        else {
+            delete(TeachersDepartmentCrossRef(teacherId= teacherId, departmentId = departmentId))
+            deleteLessons(teacherId, departmentId)
+        }
+    }
+
     @Query("SELECT * FROM teacher WHERE teacher.teacherId = :teacherId")
     fun getTeacher(teacherId: String): TeacherEntity
 
@@ -93,9 +114,11 @@ interface ScheduleTrackerDao {
             "ORDER BY lesson.date, lesson.time")
     fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>
 
-    @Query("DELETE FROM teachersDepartmentCrossRef WHERE teacherId = :teacherId")
-    fun deleteAllTrackingForTeacher(teacherId: String)
-
+    @Query("SELECT * FROM lesson " +
+            "WHERE lesson.departmentId = :departmentId " +
+            "   AND lesson.teacherId = :teacherId " +
+            "ORDER BY lesson.date, lesson.time")
+    fun getLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>
 
     @Query("SELECT * FROM lesson WHERE lesson.date = :date")
     fun getDayWeekAndName(date:String): List<LessonEntity>
@@ -108,4 +131,7 @@ interface ScheduleTrackerDao {
 
     @Query("UPDATE lesson SET isStatusWatched = :isWatched WHERE lessonId = :lessonId")
     fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean)
+
+    @Query("DELETE FROM lesson WHERE date < :date")
+    fun deletePreviousSchedule(date: String)
 }

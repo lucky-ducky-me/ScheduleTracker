@@ -4,12 +4,12 @@ import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
 import com.example.scheduletrackervyatsu.data.parsing_models.ScheduleParserData
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import org.jsoup.nodes.Element
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class VyatsuParser(
     val baseUrl: String = "https://www.vyatsu.ru/",
@@ -149,11 +149,9 @@ class VyatsuParser(
                 var start = LocalDate.parse(dates[0], formatter)
                 var end =  LocalDate.parse(dates[1], formatter)
 
-                var cond = end >= startDate && startDate >= start
-                        ||  end >= endDate && endDate >= start
-
                 end >= startDate && startDate >= start
-                        ||  end >= endDate && endDate >= start
+                        || end >= endDate && endDate >= start
+                        || end >= endDate && start <= startDate
             }
 
             resultList = resultList.plus(excelLinks.mapNotNull {

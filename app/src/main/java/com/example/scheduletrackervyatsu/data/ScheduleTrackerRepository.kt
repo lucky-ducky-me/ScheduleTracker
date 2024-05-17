@@ -58,7 +58,7 @@ class ScheduleTrackerRepository(
      * @param departmentId идентификатор кафедры.
      */
     fun deleteTrackingForTeacher(teacherId: String, departmentId: String) {
-        scheduleTrackerDao.delete(TeachersDepartmentCrossRef(teacherId, departmentId))
+        scheduleTrackerDao.deleteTeacherData(teacherId = teacherId, departmentId = departmentId)
     }
 
     /**
@@ -66,7 +66,7 @@ class ScheduleTrackerRepository(
      * @param teacherId идентификатор преподавателя.
      */
     fun deleteTrackingForTeacher(teacherId: String) {
-        scheduleTrackerDao.deleteAllTrackingForTeacher(teacherId)
+        scheduleTrackerDao.deleteTeacherData(teacherId = teacherId)
     }
 
     /**
@@ -86,6 +86,16 @@ class ScheduleTrackerRepository(
      */
     fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>{
         return scheduleTrackerDao.getLessons(teacherId, departmentId)
+    }
+
+    /**
+     * Получить занятия.
+     * @param teacherId идентификатор преподавателя.
+     * @param departmentId идентификатор кафедры.
+     * @return список занятий.
+     */
+    fun getLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>{
+        return scheduleTrackerDao.getLessonsFlow(teacherId, departmentId)
     }
 
     /**
@@ -237,5 +247,9 @@ class ScheduleTrackerRepository(
 
     fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean) {
         scheduleTrackerDao.changeLessonStatusVisibility(lessonId, isWatched)
+    }
+
+    fun deleteOldSchedule(currentDateTime: LocalDate?) {
+        scheduleTrackerDao.deletePreviousSchedule(currentDateTime.toString())
     }
 }

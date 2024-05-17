@@ -83,6 +83,11 @@ class SectionViewModel(
     val lessons
         get() = _lessons
 
+    private var _lessonsFlow = repository.getLessonsFlow(
+        teacher.value?.teacherId ?: "",
+        department.value?.departmentId ?: ""
+    )
+
     /**
      * По неделям.
      */
@@ -90,8 +95,6 @@ class SectionViewModel(
 
     val lessonsByWeeks
         get() = _lessonsByWeeks
-
-
 
     /**
      * Блок инициализации.
@@ -102,6 +105,9 @@ class SectionViewModel(
                 if (teachers.isNotEmpty() && (_teacher.value == null
                             || !teachers.contains(_teacher.value))) {
                     _teacher.update { teachers[0] }
+                }
+                else if (teachers.isEmpty()) {
+                    _teacher.update { null}
                 }
             }
 
@@ -114,6 +120,37 @@ class SectionViewModel(
                         departments[0]
                     }
                 }
+                else {
+                    _department.update { null}
+                }
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO){
+            department.collect {
+                if (it == null) {
+                    _lessons.update { emptyList() }
+                }
+                else {
+                    getLessons()
+                }
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO){
+            teacher.collect {
+                if (it == null) {
+                    _lessons.update { emptyList() }
+                }
+                else {
+                    getLessons()
+                }
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _lessonsFlow.collect {
+                getLessons()
             }
         }
     }

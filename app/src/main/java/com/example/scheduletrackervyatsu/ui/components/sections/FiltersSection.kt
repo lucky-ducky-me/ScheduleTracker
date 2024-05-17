@@ -139,7 +139,7 @@ fun FiltersSection(
                 onAcceptButtonClick()
             }
         ) {
-            Text("Применить")
+            Text("Обновить расписание")
         }
     }
 }

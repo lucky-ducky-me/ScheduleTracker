@@ -37,7 +37,6 @@ fun Day(
             .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
             .clip(shape = RoundedCornerShape(5))
             .background(MaterialTheme.colorScheme.secondaryContainer)
-
     ) {
         Text(
             text = header,
@@ -48,8 +47,16 @@ fun Day(
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )
 
-        lessons.forEach { lesson ->
+        lessons.forEachIndexed {index, lesson ->
             var rowModifier = Modifier.fillMaxWidth()
+
+            if (index != lessons.size - 1) {
+               // rowModifier = rowModifier.border(BorderStroke(1.dp, Color.Black))
+            }
+
+            if (index % 2 == 0) {
+                rowModifier = rowModifier.background(MaterialTheme.colorScheme.tertiaryContainer)
+            }
 
             if (!lesson.isStatusWatched) {
                 if (lesson.lessonStatusId == 4) {
