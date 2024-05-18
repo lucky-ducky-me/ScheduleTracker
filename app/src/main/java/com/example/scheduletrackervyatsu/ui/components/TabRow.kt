@@ -21,7 +21,7 @@ fun TabRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth().height(50.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(MaterialTheme.colorScheme.primary),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

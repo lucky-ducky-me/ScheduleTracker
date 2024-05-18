@@ -2,6 +2,7 @@ package com.example.scheduletrackervyatsu.domain
 
 import android.util.Log
 import com.example.scheduletrackervyatsu.LessonStatusKey
+import com.example.scheduletrackervyatsu.UNIQUE_LESSONS
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
@@ -16,7 +17,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
 
     private val parser = VyatsuParser()
 
-    fun doDailyWork(isTest: Boolean = false) {
+    fun doDailyWork(isTest: Boolean = false) : Boolean {
         val currentDateTime = LocalDateTime.now()
 
         val data = repository.getDayWeekAndName(LocalDate.from(currentDateTime))
@@ -27,7 +28,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
 
         if (data == null) {
             Log.d("my", "Пустое расписание")
-            return
+            return false
         }
         else if (isMorning && data.first && data.second == "пятница") {
             lessonToUpdate = loadNewAndCheckWithOld(isTest)
@@ -44,11 +45,17 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             repository.insertLesson(it)
         }
 
+        val isNeedNotification = lessonToUpdate.find {
+            !it.isStatusWatched
+        }
+
         Log.d("my", "Выполнено")
+
+        return isNeedNotification != null
     }
 
     private fun deleteOldSchedule() {
-        var currentDateTime = LocalDate.now()
+        val currentDateTime = LocalDate.now()
 
         repository.deleteOldSchedule(currentDateTime)
     }
@@ -73,6 +80,15 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         }
 
         for (i in resultEntities.indices) {
+            val isUniqueLesson = {
+                lesson: String ->
+                var result = false
+                UNIQUE_LESSONS.forEach {
+                    result = result || lesson.contains(it)
+                }
+                result
+            }
+
             val sameLessonTwoWeeksAgo = savedLessons.find {
                     savedLesson ->
                 LocalDate.parse(resultEntities[i].date).minusDays(14) ==
@@ -81,7 +97,8 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                         resultEntities[i].departmentId == savedLesson.departmentId &&
                         resultEntities[i].teacherId == savedLesson.teacherId &&
                         savedLesson.lessonStatusId == 1
-                        // && savedLesson.data.isNotEmpty()
+                        && !isUniqueLesson(savedLesson.data)
+                        &&!isUniqueLesson(resultEntities[i].data)
             }
 
             if (sameLessonTwoWeeksAgo != null) {
@@ -176,12 +193,12 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             var keys = trackedTeachersDepartments.keys.toList()
             var key = keys[0]
             var first = trackedTeachersDepartments[key]
-            var date = "2024-05-17"
+            var date = "2024-05-31"
             var time = "14:00"
-            var dateForChangeOffice = "2024-05-17"
+            var dateForChangeOffice = "2024-05-31"
             var timeForChangeOffice = "08:20"
 
-            var dateForChangeOfficeAndData = "2024-05-17"
+            var dateForChangeOfficeAndData = "2024-05-31"
             var timeForChangeOfficeAndData = "10:00"
 
             for (i in lessonEntities.indices) {
@@ -294,7 +311,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         var key = keys[0]
         var first = trackedTeachersDepartments[key]
 
-        var date = "2024-05-17"
+        var date = "2024-05-31"
         var time = "11:45"
 
         var lesson = repository.getLessonsByDatetime(

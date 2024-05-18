@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.compose.changeAddedColor
 import com.example.compose.changeDeletedColor
+import com.example.compose.changeLessonText
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 
 @Composable
@@ -44,7 +45,8 @@ fun SingleLesson(
     ) {
         Text(
             text = "Дата: " + lessonEntity.date,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier =Modifier.padding(5.dp)
         )
 
         var beforeColumnModifier = Modifier.fillMaxWidth()
@@ -98,7 +100,7 @@ fun SingleLesson(
                             || lessonEntity.isStatusWatched
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
-                        else Color.LightGray,
+                        else changeLessonText,
                         textAlign = TextAlign.Center
                     )
                     Text(
@@ -111,7 +113,7 @@ fun SingleLesson(
                             || lessonEntity.isStatusWatched
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
-                        else Color.LightGray,
+                        else changeLessonText,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -169,7 +171,7 @@ fun SingleLesson(
                                 || lessonEntity.isStatusWatched
                             )
                                 MaterialTheme.colorScheme.onSecondaryContainer
-                            else Color.LightGray,
+                            else changeLessonText,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -183,7 +185,7 @@ fun SingleLesson(
                             || lessonEntity.isStatusWatched
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
-                        else Color.LightGray,
+                        else changeLessonText,
                         textAlign = TextAlign.Center
                     )
                 }

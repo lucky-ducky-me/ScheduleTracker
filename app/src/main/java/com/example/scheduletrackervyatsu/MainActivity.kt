@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
             alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                1000 * 60,
+                3000 * 60,
                 pendingIntent
             )
         }

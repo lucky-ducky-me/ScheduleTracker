@@ -35,11 +35,17 @@ class DailyReceiver : BroadcastReceiver() {
             ScheduleTrackerDatabase.getDatabase(context).getScheduleTrackerDao())
 
         CoroutineScope(Dispatchers.IO).launch {
-            //val worker = DailyWorker(repository)
+            val worker = DailyWorker(repository)
 
-            //worker.doDailyWork()
+            var res = worker.doDailyWork()
 
-            sendNotification(context, "Изменения в расписании", "В расписании произошли изменения")
+            if (res) {
+                sendNotification(
+                    context,
+                    "Изменения в расписании",
+                    "В расписании произошли изменения"
+                )
+            }
         }
     }
 
