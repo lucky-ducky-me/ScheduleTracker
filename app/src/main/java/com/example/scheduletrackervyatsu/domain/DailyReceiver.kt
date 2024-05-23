@@ -37,7 +37,7 @@ class DailyReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.IO).launch {
             val worker = DailyWorker(repository)
 
-            var res = worker.doDailyWork()
+            var res = worker.doDailyWork(isTest = true)
 
             if (res) {
                 sendNotification(

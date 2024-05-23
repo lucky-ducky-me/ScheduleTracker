@@ -98,7 +98,7 @@ fun AddingDepartmentDialog(
                     onConfirmation(departments.find { it.name == departmentName }?.departmentId)
                 }
             ) {
-                Text("Потвердить")
+                Text("Подтвердить")
             }
         },
         dismissButton = {

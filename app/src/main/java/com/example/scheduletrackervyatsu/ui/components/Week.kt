@@ -46,7 +46,7 @@ fun Week(
         compareBy { it.first }
     )
 
-    val header = lessonsByDays[0].first + "-" + lessonsByDays[lessonsByDays.size - 1].first
+    val header = lessonsByDays[0].first + "  -  " + lessonsByDays[lessonsByDays.size - 1].first
 
     Column(
         modifier = modifier,

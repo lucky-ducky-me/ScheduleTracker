@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,15 +39,19 @@ fun DepartmentSettingItem(
     ) {
         Row (
             modifier  = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
-            Text(modifier  = Modifier, text = "Кафедры")
+            Text(
+                modifier  = Modifier,
+                text = "Кафедры",
+                color = MaterialTheme.colorScheme.onPrimaryContainer)
             IconButton(onClick = {
                 onAddButtonClick(setting.first.teacherId)
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
@@ -57,6 +62,7 @@ fun DepartmentSettingItem(
                     modifier = Modifier.weight(0.9f),
                     text = it.name,
                     textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 IconButton(
                     modifier = Modifier.weight(0.1f),
@@ -65,7 +71,8 @@ fun DepartmentSettingItem(
                     }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }

@@ -1,5 +1,8 @@
 package com.example.scheduletrackervyatsu.ui.components.sections
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,10 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,15 +67,45 @@ fun SettingsSection(
         )
     }
 
+    if (openAddingDialogState.isOpen) {
+        AddingDepartmentDialog(
+            onDismissRequest = { settingsViewModel.changeAddingDialogState(
+                isOpen = false,
+                teacherId = null,
+                departmentId = null) },
+            onConfirmation = {
+                if (openAddingDialogState.teacherId != null && it != null) {
+                    settingsViewModel.addDepartmentForTeacher(
+                        openAddingDialogState.teacherId!!,
+                        it
+                    )
+                }
+
+                settingsViewModel.changeAddingDialogState(
+                    isOpen = false,
+                    teacherId = null,
+                    departmentId = null)
+            },
+            dialogTitle = "Укажите кафедру: ",
+            departments = departments
+        )
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
+                .clip(shape = RoundedCornerShape(5))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(horizontal = 10.dp, vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 Row(
@@ -75,11 +114,13 @@ fun SettingsSection(
                     Text(
                         modifier = modifier.weight(0.9f),
                         text = "Список преподавателей",
-                        textAlign = TextAlign.Center)
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer)
                     IconButton(onClick = { openAddingTeacherDialog = !openAddingTeacherDialog }) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -87,30 +128,6 @@ fun SettingsSection(
 
             items(settings) {
                     setting ->
-
-                if (openAddingDialogState.isOpen) {
-                    AddingDepartmentDialog(
-                        onDismissRequest = { settingsViewModel.changeAddingDialogState(
-                            isOpen = false,
-                            teacherId = null,
-                            departmentId = null) },
-                        onConfirmation = {
-                            if (openAddingDialogState.teacherId != null && it != null) {
-                                settingsViewModel.addDepartmentForTeacher(
-                                    openAddingDialogState.teacherId!!,
-                                    it
-                                )
-                            }
-
-                            settingsViewModel.changeAddingDialogState(
-                                isOpen = false,
-                                teacherId = null,
-                                departmentId = null)
-                        },
-                        dialogTitle = "Укажите кафедру: ",
-                        departments = departments
-                    )
-                }
 
                 TeacherSettingItem(
                     setting = setting,
@@ -129,6 +146,36 @@ fun SettingsSection(
                         settingsViewModel.deleteDepartmentForTeacher(teacherId, departmentId)
                     }
                 )
+            }
+
+            item {
+                Button(
+                    modifier = Modifier,
+                    onClick = {},
+                    colors = ButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        disabledContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
+                ) {
+                    Text("Проверить изменения")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier,
+                    onClick = {},
+                    colors = ButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        disabledContainerColor = MaterialTheme.colorScheme.tertiary
+                    ),
+                ) {
+                    Text("Обновить расписание")
+                }
             }
         }
     }

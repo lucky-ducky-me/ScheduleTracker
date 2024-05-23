@@ -9,7 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import com.example.compose.ScheduleTrackerTheme
+import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerTheme
 import com.example.scheduletrackervyatsu.domain.DailyReceiver
 import com.example.scheduletrackervyatsu.ui.components.MyApp
 import java.time.LocalDateTime
@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
         val minute = LocalDateTime.now().minute + 1
 
         scheduleParsingTask(hour , minute)
-        //scheduleParsingTask(22, 15, "Evening Parsing")
     }
 
     private fun scheduleParsingTask(hour: Int, minute: Int) {

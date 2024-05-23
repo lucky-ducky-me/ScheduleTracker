@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.compose.changeAddedColor
 import com.example.compose.changeDeletedColor
-import com.example.compose.changeLessonText
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 
 @Composable
@@ -56,7 +55,7 @@ fun Day(
             var rowModifier = Modifier.fillMaxWidth()
 
             if (index % 2 == 0) {
-                rowModifier = rowModifier.background(MaterialTheme.colorScheme.tertiary)
+                rowModifier = rowModifier.background(MaterialTheme.colorScheme.tertiaryContainer)
             }
 
             if (!lesson.isStatusWatched) {
@@ -114,7 +113,7 @@ fun Day(
                                 && lesson.lessonStatusId != 6
                                 || lesson.isStatusWatched)
                                 MaterialTheme.colorScheme.onSecondaryContainer
-                            else changeLessonText,
+                            else MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -127,7 +126,7 @@ fun Day(
                             && lesson.lessonStatusId != 6
                             || lesson.isStatusWatched)
                             MaterialTheme.colorScheme.onSecondaryContainer
-                        else changeLessonText,
+                        else MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center)
                 }
             }
