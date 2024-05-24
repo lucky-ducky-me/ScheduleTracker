@@ -15,6 +15,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,8 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
+import com.example.scheduletrackervyatsu.domain.AddingTeacherDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,13 +38,17 @@ fun AddingTeacherDialog(
     onConfirmation: (String, String) -> Unit,
     dialogTitle: String,
     teachers: List<TeacherEntity>,
-    departments: List<DepartmentEntity>
+    departments: List<DepartmentEntity>,
+    addingTeacherDialogViewModel: AddingTeacherDialogViewModel = viewModel()
 ) {
+    val selectedDepartment = addingTeacherDialogViewModel.department.collectAsState(initial = null).value
+
     val context = LocalContext.current
 
     var teacherFIO by remember {
         mutableStateOf("")
     }
+
     val scope = rememberCoroutineScope()
 
     val teachersFIOs = teachers.map { it.fio  }
@@ -55,7 +62,7 @@ fun AddingTeacherDialog(
     var departmentNames = departments.map { it.name }
 
     var departmentName by remember {
-        mutableStateOf("")
+        mutableStateOf(selectedDepartment?.name ?: "")
     }
 
     Column(
@@ -91,8 +98,7 @@ fun AddingTeacherDialog(
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                             },
                             modifier = Modifier.menuAnchor(),
-
-                            )
+                        )
 
                         val filteredOptions = teachersFIOs.filter {
                             it.contains(teacherFIO, ignoreCase = true) }
@@ -108,6 +114,13 @@ fun AddingTeacherDialog(
                                         text = { Text(text = item) },
                                         onClick = {
                                             teacherFIO = item
+                                            val teacher =  teachers.find { it.fio == teacherFIO }
+                                            val department = departments.find {it.departmentId == teacher?.defaultDepartment}
+
+                                            if (department != null) {
+                                                addingTeacherDialogViewModel.onSelectTeacherClick(department)
+                                            }
+
                                             expanded = false
                                             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                                         }
@@ -125,7 +138,7 @@ fun AddingTeacherDialog(
 
                         ) {
                         TextField(
-                            value = departmentName,
+                            value = selectedDepartment?.name ?: "",
                             onValueChange = {
                                 departmentName = it
                             },
@@ -151,6 +164,12 @@ fun AddingTeacherDialog(
                                         text = { Text(text = item) },
                                         onClick = {
                                             departmentName = item
+                                            val department = departments.find {it.name == departmentName}
+
+                                            if (department != null) {
+                                                addingTeacherDialogViewModel.onSelectTeacherClick(department)
+                                            }
+
                                             expandedDepartment = false
                                             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                                         }
@@ -160,9 +179,6 @@ fun AddingTeacherDialog(
                         }
                     }
                 }
-
-
-
             },
             onDismissRequest = {
                 onDismissRequest()
@@ -172,7 +188,7 @@ fun AddingTeacherDialog(
                     onClick = {
                         onConfirmation(
                             teachers.find { it.fio == teacherFIO }?.teacherId ?: "",
-                            departments.find { it.name == departmentName }?.departmentId ?: "")
+                            selectedDepartment?.departmentId ?: "")
                     }
                 ) {
                     Text("Подтвердить")

@@ -60,21 +60,6 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
                                 val parser = VyatsuParser()
 
-                                val teachers = parser.getTeachers().map {
-                                    val array = it.split(" ")
-
-                                    if (array.size == 3) {
-                                        TeacherEntity(name = array[1], surname = array[0], patronymic = array[2])
-                                    }
-                                    else {
-                                        TeacherEntity(name = array[1], surname = array[0], patronymic = null)
-                                    }
-                                }
-
-                                teachers.forEach {
-                                    dao.insert(it)
-                                }
-
                                 val departments = parser.getDepartments().map {
                                     DepartmentEntity(name = it)
                                 }
@@ -83,7 +68,27 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                                     dao.insert(it)
                                 }
 
-                                dao.insert(DepartmentEntity(name = "12321321321"))
+                                val teachers = parser.getTeachers().map {
+                                    val teacherFio = it.first.split(" ")
+                                    val department = departments.find {
+                                        department -> it.second == department.name
+                                    }
+
+                                    if (teacherFio.size == 3) {
+                                        TeacherEntity(name = teacherFio[1],
+                                            surname = teacherFio[0], patronymic = teacherFio[2],
+                                            defaultDepartment = department?.departmentId)
+                                    }
+                                    else {
+                                        TeacherEntity(name = teacherFio[1],
+                                            surname = teacherFio[0], patronymic = null,
+                                            defaultDepartment = department?.departmentId)
+                                    }
+                                }
+
+                                teachers.forEach {
+                                    dao.insert(it)
+                                }
 
                                 LESSON_STATUSES.forEach {
                                     dao.insert(it)

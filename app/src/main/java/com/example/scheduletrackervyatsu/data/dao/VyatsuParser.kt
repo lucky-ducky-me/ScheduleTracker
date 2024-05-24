@@ -52,6 +52,9 @@ class VyatsuParser(
         )
     }
 
+    /**
+     * Получить список кафедр.
+     */
     fun getDepartments(): List<String> {
         val doc = Jsoup.connect(baseUrl + scheduleUrl).get()
 
@@ -62,24 +65,31 @@ class VyatsuParser(
         }
     }
 
-    fun getTeachers(): List<String> {
+    /**
+     * Получить список преподавателей.
+     */
+    fun getTeachers(): List<Pair<String,String>> {
         val doc = Jsoup.connect(baseUrl + teachersUrl).get()
 
-        var teachersItems = doc.select("div .prepod_item")
+        val teachersItems = doc.select("div .prepod_item")
 
-        var list = mutableListOf<String>()
+        val list = mutableListOf<Pair<String,String>>()
 
         teachersItems.forEach {
-            var first = it.children().find {
+            val fioNode = it.children().find {
                 it.text().contains("ФИО")
             }
 
-            var ffdsfio = first?.text()?.split(" ")
+            var departmentNode = it.children().find {
+                it.text().contains("Кафедра")
+            }
 
-            var fio = ffdsfio?.subList(1, ffdsfio?.size ?: 3)?.joinToString(" ")
+            val fioSplit = fioNode?.text()?.split(" ")
 
-            if (fio != null) {
-                list.add(fio)
+            val fio = fioSplit?.subList(1, fioSplit?.size ?: 3)?.joinToString(" ")
+
+            if (fio != null && departmentNode != null) {
+                list.add(Pair(fio, departmentNode.text().trim()))
             }
         }
 

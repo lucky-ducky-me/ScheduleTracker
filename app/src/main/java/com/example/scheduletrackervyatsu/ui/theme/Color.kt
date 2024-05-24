@@ -3,7 +3,6 @@ import androidx.compose.ui.graphics.Color
 
 val changeDeletedColor = Color(0xFFAC1C2D)
 val changeAddedColor = Color(0xFF1F8114)
-val changeLessonText = Color(0xFF2341B3)
 
 val primaryLight = Color(0xFF4C662B)
 val onPrimaryLight = Color(0xFFFFFFFF)

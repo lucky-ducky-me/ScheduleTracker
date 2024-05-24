@@ -19,5 +19,5 @@ data class TeacherEntity(
     var fio: String = surname + " " + name + if (patronymic != null) " $patronymic" else "",
 
     @ColumnInfo(name = "defaultDepartment")
-    var defaultDepartment: String? = null
+    var defaultDepartment: String? = null,
 )
