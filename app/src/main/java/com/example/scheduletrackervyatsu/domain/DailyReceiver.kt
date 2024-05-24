@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.scheduletrackervyatsu.MainActivity
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
@@ -25,8 +24,6 @@ class DailyReceiver : BroadcastReceiver() {
     private lateinit var repository: ScheduleTrackerRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("my", "Типо зашли ${context.toString()}")
-
         if (context == null) {
             return
         }
@@ -37,7 +34,7 @@ class DailyReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.IO).launch {
             val worker = DailyWorker(repository)
 
-            var res = worker.doDailyWork(isTest = true)
+            val res = worker.doDailyWork(isTest = true)
 
             if (res) {
                 sendNotification(
@@ -49,14 +46,18 @@ class DailyReceiver : BroadcastReceiver() {
         }
     }
 
+
     private fun sendNotification(context: Context?, taskName: String, parsingResult: String) {
         val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val channelId = "parsing_notification_channel"
-        val channel = NotificationChannel(channelId, "Parsing Notifications", NotificationManager.IMPORTANCE_DEFAULT)
+        val channel = NotificationChannel(channelId,
+            "Parsing Notifications",
+            NotificationManager.IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(channel)
 
         val notificationId = taskName.hashCode()
+
         val notificationBuilder = NotificationCompat.Builder(context!!, channelId).apply {
             setSmallIcon(android.R.drawable.ic_dialog_info)
             setContentTitle(taskName)
@@ -64,16 +65,14 @@ class DailyReceiver : BroadcastReceiver() {
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(
                 PendingIntent.getActivity(
-                    context, // Context from onReceive method.
+                    context,
                     0,
-                    Intent(context, MainActivity::class.java), // Activity you want to launch onClick.
+                    Intent(context, MainActivity::class.java),
                         PendingIntent.FLAG_IMMUTABLE
                 )
             )
         }
 
-
-        Log.d("my", "Типо уведомляшку отправили")
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
