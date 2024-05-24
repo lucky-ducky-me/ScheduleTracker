@@ -23,7 +23,6 @@ val LESSON_STATUSES = listOf<LessonStatusEntity>(
 )
 
 val UNIQUE_LESSONS = listOf(
-    "Практическое занятие",
     "Консультация",
     "Экзамен",
     "Зачет",

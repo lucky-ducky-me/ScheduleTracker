@@ -37,7 +37,8 @@ fun TeacherSettingItem(
     }
 
     Column(
-        modifier = modifier.fillMaxWidth().background(MaterialTheme.colorScheme.tertiary)
+        modifier = modifier.fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondaryContainer)
     ) {
 
         Row(modifier = modifier.fillMaxWidth()) {

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Locale
 
 class SectionViewModel(
@@ -288,15 +289,15 @@ class SectionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val worker = DailyWorker(repository = repository)
 
-            worker.doDailyWork(true)
+            worker.doDailyWork(true, LocalDate.parse("2024-05-28"))
         }
     }
 
-    var _watchinLessonId = MutableStateFlow("")
+    private var _watchingLessonId = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    var _watchingLesson = _watchinLessonId.flatMapLatest {
-        repository.getLesson(_watchinLessonId.value)
+    var _watchingLesson = _watchingLessonId.flatMapLatest {
+        repository.getLesson(_watchingLessonId.value)
     }
 
     val watchingLesson
@@ -304,7 +305,7 @@ class SectionViewModel(
 
     fun getLesson(lessonId: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            _watchinLessonId.update {
+            _watchingLessonId.update {
                 lessonId ?: ""
             }
         }

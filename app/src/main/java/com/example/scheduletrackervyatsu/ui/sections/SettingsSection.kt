@@ -1,8 +1,6 @@
-package com.example.scheduletrackervyatsu.ui.components.sections
+package com.example.scheduletrackervyatsu.ui.sections
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -28,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -95,16 +91,16 @@ fun SettingsSection(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
-                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
-                .clip(shape = RoundedCornerShape(5))
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(horizontal = 10.dp, vertical = 20.dp),
+                //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
+                //.clip(shape = RoundedCornerShape(5))
+                //.background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(horizontal = 20.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
@@ -155,9 +151,10 @@ fun SettingsSection(
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        disabledContainerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
+                    border = BorderStroke(1.dp, Color.Black)
                 ) {
                     Text("Проверить изменения")
                 }
@@ -170,9 +167,10 @@ fun SettingsSection(
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        disabledContainerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
+                    border = BorderStroke(1.dp, Color.Black)
                 ) {
                     Text("Обновить расписание")
                 }

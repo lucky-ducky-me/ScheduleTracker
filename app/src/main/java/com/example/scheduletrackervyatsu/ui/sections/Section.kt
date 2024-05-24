@@ -1,4 +1,4 @@
-package com.example.scheduletrackervyatsu.ui.components.sections
+package com.example.scheduletrackervyatsu.ui.sections
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
