@@ -97,9 +97,6 @@ fun SettingsSection(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
-                //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
-                //.clip(shape = RoundedCornerShape(5))
-                //.background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(horizontal = 20.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
