@@ -39,7 +39,6 @@ fun Day(
 
     val header = DateFormatSymbols().weekdays[date.dayOfWeek.value + 1] + " " +
             date.dayOfMonth.toString() + " " +
-            " " + date.dayOfWeek.value.toString() +
     DateFormatSymbols().months[date.month.value - 1] + " "
 
     Column(
