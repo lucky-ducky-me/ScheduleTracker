@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.changeAddedColor
 import com.example.compose.changeDeletedColor
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import java.text.DateFormatSymbols
+import java.time.LocalDate
 
 @Composable
 fun Day(
@@ -33,7 +35,12 @@ fun Day(
     onWatchChangeClick: (String) -> Unit,
     onChangeLessonClick: (String) -> Unit) {
 
-    val header = lessons[0].dayOfWeek + " " + lessons[0].date
+    val date = LocalDate.parse(lessons[0].date)
+
+    val header = DateFormatSymbols().weekdays[date.dayOfWeek.value + 1] + " " +
+            date.dayOfMonth.toString() + " " +
+            " " + date.dayOfWeek.value.toString() +
+    DateFormatSymbols().months[date.month.value - 1] + " "
 
     Column(
         modifier = modifier

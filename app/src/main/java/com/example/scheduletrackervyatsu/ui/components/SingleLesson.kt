@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.changeAddedColor
 import com.example.compose.changeDeletedColor
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import java.text.DateFormatSymbols
+import java.time.LocalDate
 
 @Composable
 fun SingleLesson(
@@ -34,6 +36,12 @@ fun SingleLesson(
     lessonEntity: LessonEntity,
     onWatchChangeClick: (String) -> Unit
 ) {
+    val date = LocalDate.parse(lessonEntity.date)
+
+    val header = DateFormatSymbols().weekdays[date.dayOfWeek.value + 1] + " " +
+            date.dayOfMonth.toString()  + " " +
+            DateFormatSymbols().months[date.month.value - 1] + " "
+
     Column(
         modifier = Modifier.fillMaxWidth()
             .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
@@ -43,7 +51,7 @@ fun SingleLesson(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Дата: " + lessonEntity.date,
+            text = header,
             textAlign = TextAlign.Center,
             modifier =Modifier.padding(5.dp)
         )

@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import java.text.DateFormatSymbols
+import java.time.LocalDate
 
 @Composable
 fun Week(
@@ -46,13 +48,16 @@ fun Week(
         compareBy { it.first }
     )
 
-    val header = lessonsByDays[0].first + "  -  " + lessonsByDays[lessonsByDays.size - 1].first
+    val firstDate = LocalDate.parse(lessonsByDays[0].first)
+    val lastDate = LocalDate.parse(lessonsByDays[lessonsByDays.size - 1].first)
+
+    val header = firstDate.dayOfMonth.toString() + " " +
+            DateFormatSymbols().months[firstDate.month.value - 1] + " - "  +
+            lastDate.dayOfMonth.toString() + " " +
+            DateFormatSymbols().months[lastDate.month.value - 1]
 
     Column(
         modifier = modifier,
-            //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
-            //.clip(shape = RoundedCornerShape(5))
-            //.background(MaterialTheme.colorScheme.secondaryContainer),
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
