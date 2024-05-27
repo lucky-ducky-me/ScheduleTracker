@@ -10,25 +10,22 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
-import com.example.scheduletrackervyatsu.domain.AddingTeacherDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,31 +36,27 @@ fun AddingTeacherDialog(
     dialogTitle: String,
     teachers: List<TeacherEntity>,
     departments: List<DepartmentEntity>,
-    addingTeacherDialogViewModel: AddingTeacherDialogViewModel = viewModel()
 ) {
-    val selectedDepartment = addingTeacherDialogViewModel.department.collectAsState(initial = null).value
-
     val context = LocalContext.current
 
     var teacherFIO by remember {
         mutableStateOf("")
     }
 
-    val scope = rememberCoroutineScope()
-
     val teachersFIOs = teachers.map { it.fio  }
 
-    val myTooltipState = rememberTooltipState(isPersistent = true)
-
-    var expanded by remember { mutableStateOf(false) }
+    var expandedTeacher by remember { mutableStateOf(false) }
 
     var expandedDepartment by remember { mutableStateOf(false) }
 
-    var departmentNames = departments.map { it.name }
+    val departmentNames = departments.map { it.name }
 
     var departmentName by remember {
-        mutableStateOf(selectedDepartment?.name ?: "")
+        mutableStateOf( "")
     }
+
+    var isTeacherInputIncorrect by remember { mutableStateOf(false) }
+    var isDepartmentInputIncorrect by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,21 +74,29 @@ fun AddingTeacherDialog(
                     modifier = Modifier,
                     verticalArrangement = Arrangement.spacedBy(15.dp)
                 ){
-                    ExposedDropdownMenuBox(
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = !expanded
-                        },
+                    if (isTeacherInputIncorrect) {
+                        Text(
+                            text = "Преподаватель введён некорректно:",
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
 
+                    ExposedDropdownMenuBox(
+                        expanded = expandedTeacher,
+                        onExpandedChange = {
+                            expandedTeacher = !expandedTeacher
+                        },
                         ) {
                         TextField(
                             value = teacherFIO,
                             onValueChange = {
                                 teacherFIO = it
+                                isTeacherInputIncorrect = false
                             },
                             label = { Text(text = "Выберите преподавателя: ") },
                             trailingIcon = {
-                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTeacher)
                             },
                             modifier = Modifier.menuAnchor(),
                         )
@@ -105,7 +106,7 @@ fun AddingTeacherDialog(
 
                         if (filteredOptions.isNotEmpty()) {
                             ExposedDropdownMenu(
-                                expanded = expanded,
+                                expanded = expandedTeacher,
                                 onDismissRequest = {},
                                 modifier = Modifier.height(200.dp)
                             ) {
@@ -114,20 +115,33 @@ fun AddingTeacherDialog(
                                         text = { Text(text = item) },
                                         onClick = {
                                             teacherFIO = item
-                                            val teacher =  teachers.find { it.fio == teacherFIO }
-                                            val department = departments.find {it.departmentId == teacher?.defaultDepartment}
+                                            val teacher = teachers.find { it.fio == teacherFIO }
 
-                                            if (department != null) {
-                                                addingTeacherDialogViewModel.onSelectTeacherClick(department)
+                                            if (teacher != null) {
+                                                val department = departments.find {
+                                                    it.departmentId == teacher.defaultDepartment }?.name
+
+                                                if (department != null) {
+                                                    departmentName = department
+                                                }
                                             }
 
-                                            expanded = false
+                                            expandedTeacher = false
                                             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                                         }
                                     )
                                 }
                             }
                         }
+                    }
+
+
+                    if (isDepartmentInputIncorrect) {
+                        Text(
+                            text = "Кафедра введена некорректно:",
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
 
                     ExposedDropdownMenuBox(
@@ -138,9 +152,10 @@ fun AddingTeacherDialog(
 
                         ) {
                         TextField(
-                            value = selectedDepartment?.name ?: "",
+                            value = departmentName,
                             onValueChange = {
                                 departmentName = it
+                                isDepartmentInputIncorrect = false
                             },
                             label = { Text(text = "Выберите кафедру: ") },
                             trailingIcon = {
@@ -164,11 +179,6 @@ fun AddingTeacherDialog(
                                         text = { Text(text = item) },
                                         onClick = {
                                             departmentName = item
-                                            val department = departments.find {it.name == departmentName}
-
-                                            if (department != null) {
-                                                addingTeacherDialogViewModel.onSelectTeacherClick(department)
-                                            }
 
                                             expandedDepartment = false
                                             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
@@ -186,9 +196,20 @@ fun AddingTeacherDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onConfirmation(
-                            teachers.find { it.fio == teacherFIO }?.teacherId ?: "",
-                            selectedDepartment?.departmentId ?: "")
+                        val teacherId = teachers.find { it.fio == teacherFIO }?.teacherId
+                        val departmentId = departments.find { it.name == departmentName }?.departmentId
+
+                        if (teacherId == null) {
+                            isTeacherInputIncorrect = true
+                        }
+                        else if (departmentId == null) {
+                            isDepartmentInputIncorrect = true
+                        }
+                        else {
+                            onConfirmation(
+                                teacherId,
+                                departmentId)
+                        }
                     }
                 ) {
                     Text("Подтвердить")
