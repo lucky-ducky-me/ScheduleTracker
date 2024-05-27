@@ -1,5 +1,8 @@
 package com.example.scheduletrackervyatsu.data.dao
 
+import com.example.scheduletrackervyatsu.SCHEDULE_URL
+import com.example.scheduletrackervyatsu.TEACHER_API_URL
+import com.example.scheduletrackervyatsu.VYATSU_URL
 import com.example.scheduletrackervyatsu.data.parsing_models.LessonParsingModel
 import com.example.scheduletrackervyatsu.data.parsing_models.ScheduleParserData
 import org.apache.poi.ss.usermodel.WorkbookFactory
@@ -12,9 +15,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class VyatsuParser(
-    val baseUrl: String = "https://www.vyatsu.ru/",
-    val scheduleUrl: String = "studentu-1/spravochnaya-informatsiya/teacher.html",
-    val teachersUrl: String = "php/sotr_prepod_list/ajax_prepod.php"
+    val baseUrl: String = VYATSU_URL,
+    val scheduleUrl: String = SCHEDULE_URL,
+    val teachersUrl: String = TEACHER_API_URL
 ) {
     /**
      * Получить актуальное расписание.

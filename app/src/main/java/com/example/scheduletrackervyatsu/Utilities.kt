@@ -31,3 +31,7 @@ val UNIQUE_LESSONS = listOf(
     "Защита ВКР",
     "Защита курсовых работ",
 )
+
+val VYATSU_URL = "https://www.vyatsu.ru/"
+val SCHEDULE_URL = "studentu-1/spravochnaya-informatsiya/teacher.html"
+val TEACHER_API_URL = "php/sotr_prepod_list/ajax_prepod.php"
