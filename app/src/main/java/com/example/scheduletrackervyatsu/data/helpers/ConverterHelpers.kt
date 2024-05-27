@@ -13,7 +13,7 @@ fun getInitials(name: String, surname: String, patronymic: String?): String {
             "${name[0]}."+
             if (patronymic != null)
                 "${patronymic[0]}."
-            else ""
+            else "."
             ).trim()
 }
 
