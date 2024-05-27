@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
@@ -37,7 +39,12 @@ fun TeacherSettingItem(
 
     Column(
         modifier = modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .border(width = 1.dp,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                shape = RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
+
     ) {
 
         Row(modifier = modifier.fillMaxWidth()) {

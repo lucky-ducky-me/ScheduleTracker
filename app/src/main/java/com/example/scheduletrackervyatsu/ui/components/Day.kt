@@ -4,9 +4,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,10 +59,16 @@ fun Day(
             style = MaterialTheme.typography.titleLarge
         )
 
-        lessons.forEachIndexed {index, lesson ->
+        var curIndex = 0
+
+        lessons.forEachIndexed { index, lesson ->
             var rowModifier = Modifier.fillMaxWidth()
 
-            if (index % 2 == 0) {
+            if (index > 0 && lessons[index - 1].time == lessons[index].time) {
+                curIndex--
+            }
+
+            if (curIndex % 2 == 0) {
                 rowModifier = rowModifier.background(MaterialTheme.colorScheme.surface)
             }
 
@@ -82,18 +88,19 @@ fun Day(
                 modifier = rowModifier
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-
+                    modifier = Modifier.padding(5.dp).fillMaxWidth(0.2f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = lesson.time,
-                        modifier = modifier
-                            .fillMaxWidth(0.2f)
-                            .fillMaxHeight(1f),
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    if (index == 0 || lessons[index - 1].time != lessons[index].time) {
+                        Text(
+                            text = lesson.time,
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
 
                     if (!lesson.isStatusWatched) {
                         IconButton(
@@ -112,7 +119,9 @@ fun Day(
 
 
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(5.dp)
                 ) {
                     if (lesson.office != null) {
                         Text(
@@ -127,20 +136,26 @@ fun Day(
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
-                    Text(
-                        text = lesson.data,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = if (lesson.lessonStatusId != 3
-                            && lesson.lessonStatusId != 6
-                            || lesson.isStatusWatched)
-                            MaterialTheme.colorScheme.onSecondaryContainer
-                        else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center)
+                    if (lesson.data.isNotEmpty()) {
+                        Text(
+                            text = lesson.data,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = if (lesson.lessonStatusId != 3
+                                && lesson.lessonStatusId != 6
+                                || lesson.isStatusWatched
+                            )
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            else MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
+
+            curIndex++
         }
     }
 }

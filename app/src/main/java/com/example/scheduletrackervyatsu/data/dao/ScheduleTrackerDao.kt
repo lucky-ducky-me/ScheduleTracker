@@ -109,16 +109,16 @@ interface ScheduleTrackerDao {
     fun getTrackedTeachersDepartmentsNowFlow(): Map<TeacherEntity, List<DepartmentEntity>>
 
     @Query("SELECT * FROM lesson " +
-            "WHERE lesson.departmentId = :departmentId " +
-            "   AND lesson.teacherId = :teacherId " +
+            "WHERE " +
+            " lesson.teacherId = :teacherId " +
             "ORDER BY lesson.date, lesson.time")
-    fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>
+    fun getLessons(teacherId: String): List<LessonEntity>
 
     @Query("SELECT * FROM lesson " +
-            "WHERE lesson.departmentId = :departmentId " +
-            "   AND lesson.teacherId = :teacherId " +
+            "WHERE " +
+            " lesson.teacherId = :teacherId " +
             "ORDER BY lesson.date, lesson.time")
-    fun getLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>
+    fun getLessonsFlow(teacherId: String): Flow<List<LessonEntity>>
 
     @Query("SELECT * FROM lesson WHERE lesson.date = :date")
     fun getLessonsByDay(date:String): List<LessonEntity>
@@ -138,13 +138,13 @@ interface ScheduleTrackerDao {
     @Query("DELETE FROM lesson WHERE date < :date")
     fun deletePreviousSchedule(date: String)
 
-    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId " +
+    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId " +
             "AND lessonStatusId != 1 AND isStatusWatched = 0 ORDER BY modifiedOn")
-    fun getNotWatchLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>
+    fun getNotWatchLessonsFlow(teacherId: String): Flow<List<LessonEntity>>
 
-    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId " +
+    @Query("SELECT * FROM lesson WHERE teacherId = :teacherId " +
             "AND lessonStatusId != 1 AND isStatusWatched = 0 ORDER BY modifiedOn")
-    fun getNotWatchLessons(teacherId: String, departmentId: String): List<LessonEntity>
+    fun getNotWatchLessons(teacherId: String): List<LessonEntity>
 
     @Query("SELECT * FROM teachersDepartmentCrossRef" +
             " WHERE teacherId = :teacherId AND departmentId = :departmentId")

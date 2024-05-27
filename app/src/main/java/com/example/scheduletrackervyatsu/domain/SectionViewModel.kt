@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
-import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import kotlinx.coroutines.Dispatchers
@@ -52,30 +51,6 @@ class SectionViewModel(
         get() = _teacher.asStateFlow()
 
     /**
-     * Департаменты выбранного преподавателя.
-     */
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private var _trackingTeacherDepartments = _teacher.flatMapLatest {
-        repository.getTrackingTeacherDepartments(it?.teacherId ?: "")
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-
-    /**
-     * Департаменты выбранного преподавателя.
-     */
-    val trackingTeacherDepartments = _trackingTeacherDepartments
-
-    /**
-     * Выбранный департамент.
-     */
-    private var _department = MutableStateFlow<DepartmentEntity?>(null)
-
-    /**
-     * Выбранный департамент.
-     */
-    val department
-        get() = _department.asStateFlow()
-
-    /**
      * Занятия.
      */
     private var _lessons = MutableStateFlow<List<LessonEntity>>(emptyList())
@@ -84,8 +59,7 @@ class SectionViewModel(
         get() = _lessons
 
     private var _lessonsFlow = repository.getLessonsFlow(
-        teacher.value?.teacherId ?: "",
-        department.value?.departmentId ?: ""
+        teacher.value?.teacherId ?: ""
     )
 
     /**
@@ -98,8 +72,7 @@ class SectionViewModel(
 
 
     private var _lessonsNotWatchedFlow = repository.getLessonsChangedFlow(
-        teacher.value?.teacherId ?: "",
-        department.value?.departmentId ?: ""
+        teacher.value?.teacherId ?: ""
     )
 
     private var _lessonsNotWatched = MutableStateFlow<List<LessonEntity>>(emptyList())
@@ -123,32 +96,6 @@ class SectionViewModel(
                 }
             }
 
-        }
-
-        viewModelScope.launch (Dispatchers.IO){
-            _trackingTeacherDepartments.collect { departments ->
-                if (departments.isNotEmpty()) {
-                    _department.update {
-                        departments[0]
-                    }
-                }
-                else {
-                    _department.update { null}
-                }
-            }
-        }
-
-        viewModelScope.launch(Dispatchers.IO){
-            department.collect {
-                if (it == null) {
-                    _lessons.update { emptyList() }
-                    _lessonsNotWatched.update { emptyList() }
-                }
-                else {
-                    getLessons()
-                    getNowWatchLessons()
-                }
-            }
         }
 
         viewModelScope.launch(Dispatchers.IO){
@@ -178,16 +125,6 @@ class SectionViewModel(
     }
 
     /**
-     * Изменить выбранный департамент.
-     */
-    fun changeCurrentDepartment(departmentId: String) {
-        _department.update {
-            _trackingTeacherDepartments.value.find { it.departmentId == departmentId }
-                ?: _department.value
-        }
-    }
-
-    /**
      * Изменить выбранного преподавателя.
      */
     fun changeCurrentTeacher(teacherId: String) {
@@ -204,8 +141,7 @@ class SectionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _lessons.update {
                 repository.getLessons(
-                    teacher.value?.teacherId ?: "",
-                    department.value?.departmentId ?: ""
+                    teacher.value?.teacherId ?: ""
                 )
             }
 
@@ -222,8 +158,7 @@ class SectionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _lessonsNotWatched.update {
                 repository.getLessonsChanged(
-                    teacher.value?.teacherId ?: "",
-                    department.value?.departmentId ?: ""
+                    teacher.value?.teacherId ?: ""
                 )
             }
         }
@@ -290,7 +225,7 @@ class SectionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val worker = DailyWorker(repository = repository)
 
-            worker.doDailyWork(true, LocalDate.parse("2024-05-28"))
+            worker.doDailyWork(true)
         }
     }
 

@@ -36,7 +36,6 @@ fun FiltersSection(
     val context = LocalContext.current
 
     var expandedTeacher by remember { mutableStateOf(false) }
-    var expandedDepartment by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.wrapContentHeight(),
@@ -70,7 +69,7 @@ fun FiltersSection(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                filtersSectionData.teachers.forEachIndexed { index, item ->
+                filtersSectionData.trackingTeachers.forEachIndexed { index, item ->
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(),
                         text = {
@@ -83,46 +82,6 @@ fun FiltersSection(
                             expandedTeacher = false
                             Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                             filtersSectionData.onSelectedTeacherChange(item.teacherId)
-                        }
-                    )
-                }
-            }
-        }
-
-        // Выпадающий список с кафедрами преподавателя
-        ExposedDropdownMenuBox(
-            expanded = expandedDepartment,
-            onExpandedChange = { expandedDepartment = !expandedDepartment },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextField(
-                value = filtersSectionData.department?.name ?: "",
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
-                modifier = Modifier.menuAnchor().fillMaxWidth(),
-                textStyle = MaterialTheme.typography.bodyLarge,
-            )
-
-            ExposedDropdownMenu(
-                expanded = expandedDepartment,
-                onDismissRequest = {
-                    expandedDepartment = false
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                filtersSectionData.departments.forEachIndexed { index, item ->
-                    DropdownMenuItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = {
-                            Text(
-                                text = item.name,
-                            )
-                        },
-                        onClick = {
-                            expandedDepartment = false
-                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-                            filtersSectionData.onSelectedDepartmentChange(item.departmentId)
                         }
                     )
                 }

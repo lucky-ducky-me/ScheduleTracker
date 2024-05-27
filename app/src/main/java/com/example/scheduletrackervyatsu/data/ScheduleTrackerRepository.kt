@@ -74,32 +74,21 @@ class ScheduleTrackerRepository(
     }
 
     /**
-     * Получить кафедры у отслеживаемого преподавателя.
+     * Получить занятия.
      * @param teacherId идентификатор преподавателя.
-     * @return поток списка занятий.
+     * @return список занятий.
      */
-    fun getTrackingTeacherDepartments(teacherId: String): Flow<List<DepartmentEntity>> {
-        return scheduleTrackerDao.getTrackingTeacherDepartments(teacherId)
+    fun getLessons(teacherId: String): List<LessonEntity>{
+        return scheduleTrackerDao.getLessons(teacherId)
     }
 
     /**
      * Получить занятия.
      * @param teacherId идентификатор преподавателя.
-     * @param departmentId идентификатор кафедры.
      * @return список занятий.
      */
-    fun getLessons(teacherId: String, departmentId: String): List<LessonEntity>{
-        return scheduleTrackerDao.getLessons(teacherId, departmentId)
-    }
-
-    /**
-     * Получить занятия.
-     * @param teacherId идентификатор преподавателя.
-     * @param departmentId идентификатор кафедры.
-     * @return список занятий.
-     */
-    fun getLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>{
-        return scheduleTrackerDao.getLessonsFlow(teacherId, departmentId)
+    fun getLessonsFlow(teacherId: String): Flow<List<LessonEntity>>{
+        return scheduleTrackerDao.getLessonsFlow(teacherId)
     }
 
     /**
@@ -263,11 +252,11 @@ class ScheduleTrackerRepository(
         return scheduleTrackerDao.getLesson(lessonId)
     }
 
-    fun getLessonsChangedFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>> {
-        return scheduleTrackerDao.getNotWatchLessonsFlow(teacherId, departmentId)
+    fun getLessonsChangedFlow(teacherId: String): Flow<List<LessonEntity>> {
+        return scheduleTrackerDao.getNotWatchLessonsFlow(teacherId)
     }
 
-    fun getLessonsChanged(teacherId: String, departmentId: String): List<LessonEntity> {
-        return scheduleTrackerDao.getNotWatchLessons(teacherId, departmentId)
+    fun getLessonsChanged(teacherId: String): List<LessonEntity> {
+        return scheduleTrackerDao.getNotWatchLessons(teacherId)
     }
 }

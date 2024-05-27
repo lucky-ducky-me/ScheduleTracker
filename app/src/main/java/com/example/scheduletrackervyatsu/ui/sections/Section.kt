@@ -40,29 +40,19 @@ fun Section(
     var currentDestination = currentBackStack?.destination
 
     val trackingTeachers = filtersViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
-    val trackingTeacherDepartments = filtersViewModel.trackingTeacherDepartments.collectAsState(initial = emptyList()).value
     val lessonsByWeeks = filtersViewModel.lessonsByWeeks.collectAsState(initial = emptyList()).value
 
     val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
-    val department = filtersViewModel.department.collectAsState(initial = null).value
 
     var lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
 
     val filtersSectionData = FiltersSectionData(
-        department = department,
         teacher = teacher,
-        onSelectedDepartmentChange = { newValue ->
-            filtersViewModel.changeCurrentDepartment(
-                newValue
-            )
-        },
         onSelectedTeacherChange = { newValue ->
             filtersViewModel.changeCurrentTeacher(
                 newValue
             )
         },
-        departments = trackingTeacherDepartments,
-        teachers = trackingTeachers,
         trackingTeachers = trackingTeachers
     )
 
