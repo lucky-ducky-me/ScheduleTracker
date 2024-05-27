@@ -48,6 +48,7 @@ fun TeacherSettingItem(
                     .fillMaxWidth(),
                 onValueChange = {},
                 readOnly = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 value = setting.first.surname + " " + setting.first.name + " " + setting.first.patronymic,
                 trailingIcon = {
                     Row() {

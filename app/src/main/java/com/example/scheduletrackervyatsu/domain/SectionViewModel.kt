@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.Locale
 
 class SectionViewModel(
     application: Application,
@@ -263,7 +262,9 @@ class SectionViewModel(
         val dayCount = 6
 
         lessonsByDays.forEach {
-            if (it.second[0].dayOfWeek.lowercase(Locale.ROOT) == "воскресенье") {
+            val date = LocalDate.parse(it.second[0].date)
+
+            if (date.dayOfWeek.value == 0) {
                 cntDay--
             }
 

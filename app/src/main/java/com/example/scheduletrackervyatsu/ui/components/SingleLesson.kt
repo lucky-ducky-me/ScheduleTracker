@@ -53,7 +53,8 @@ fun SingleLesson(
         Text(
             text = header,
             textAlign = TextAlign.Center,
-            modifier =Modifier.padding(5.dp)
+            modifier =Modifier.padding(5.dp),
+            style = MaterialTheme.typography.titleLarge
         )
 
         var beforeColumnModifier = Modifier.fillMaxWidth()
@@ -69,12 +70,14 @@ fun SingleLesson(
         Column(
             modifier = beforeColumnModifier,
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+
         ) {
             Text(
                 text = "До: ",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyLarge
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -91,7 +94,8 @@ fun SingleLesson(
                         modifier = modifier
                             .fillMaxWidth(0.2f),
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
 
@@ -108,7 +112,8 @@ fun SingleLesson(
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
                         text = lessonEntity.oldData ?: "",
@@ -121,7 +126,8 @@ fun SingleLesson(
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
@@ -144,7 +150,8 @@ fun SingleLesson(
             Text(
                 text = "Сейчас: ",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyLarge
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -161,7 +168,8 @@ fun SingleLesson(
                         modifier = modifier
                             .fillMaxWidth(0.2f),
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
 
@@ -179,7 +187,8 @@ fun SingleLesson(
                             )
                                 MaterialTheme.colorScheme.onSecondaryContainer
                             else MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
                     Text(
@@ -193,7 +202,8 @@ fun SingleLesson(
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }

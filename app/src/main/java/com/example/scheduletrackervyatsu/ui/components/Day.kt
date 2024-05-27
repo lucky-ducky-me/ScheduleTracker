@@ -54,7 +54,8 @@ fun Day(
                 .padding(8.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            style = MaterialTheme.typography.titleLarge
         )
 
         lessons.forEachIndexed {index, lesson ->
@@ -89,7 +90,8 @@ fun Day(
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight(1f),
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = MaterialTheme.typography.bodyLarge
                     )
 
                     if (!lesson.isStatusWatched) {
@@ -120,7 +122,8 @@ fun Day(
                                 || lesson.isStatusWatched)
                                 MaterialTheme.colorScheme.onSecondaryContainer
                             else MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
                     Text(
@@ -128,6 +131,7 @@ fun Day(
                         modifier = modifier
                             .fillMaxWidth()
                             .padding(8.dp),
+                        style = MaterialTheme.typography.bodyLarge,
                         color = if (lesson.lessonStatusId != 3
                             && lesson.lessonStatusId != 6
                             || lesson.isStatusWatched)

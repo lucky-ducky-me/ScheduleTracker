@@ -103,12 +103,15 @@ fun SettingsSection(
             item {
                 Row(
                     modifier = modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = modifier.weight(0.9f),
                         text = "Список преподавателей",
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                     IconButton(onClick = { openAddingTeacherDialog = !openAddingTeacherDialog }) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -153,7 +156,10 @@ fun SettingsSection(
                     ),
                     border = BorderStroke(1.dp, Color.Black)
                 ) {
-                    Text("Проверить изменения")
+                    Text(
+                        text = "Проверить изменения",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
@@ -169,7 +175,10 @@ fun SettingsSection(
                     ),
                     border = BorderStroke(1.dp, Color.Black)
                 ) {
-                    Text("Обновить расписание")
+                    Text(
+                        text = "Обновить расписание",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
         }

@@ -85,7 +85,7 @@ import com.example.compose.tertiaryContainerDark
 import com.example.compose.tertiaryContainerLight
 import com.example.compose.tertiaryDark
 import com.example.compose.tertiaryLight
-import com.example.ui.theme.AppTypography
+import com.example.ui.theme.typography
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -205,7 +205,7 @@ fun ScheduleTrackerTheme(
     
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography,
+        typography = typography,
         content = content
     )
 }

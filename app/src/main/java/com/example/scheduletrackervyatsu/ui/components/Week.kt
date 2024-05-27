@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowLeft
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,7 +64,8 @@ fun Week(
 
     ) {
         Row(
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             IconButton(
@@ -78,9 +80,13 @@ fun Week(
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            Text(text = header)
+            Text(
+                text = header,
+                style = MaterialTheme.typography.headlineSmall
+            )
 
             Spacer(modifier = Modifier.width(10.dp))
+
             IconButton(
                 onClick = { onForwardArrowClick() },
                 enabled = currentIndex != lastIndex

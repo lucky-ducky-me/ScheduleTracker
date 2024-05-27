@@ -60,7 +60,8 @@ fun FiltersSection(
                 },
                 modifier = Modifier
                     .menuAnchor()
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodyLarge,
             )
 
             ExposedDropdownMenu(
@@ -100,7 +101,8 @@ fun FiltersSection(
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDepartment) },
-                modifier = Modifier.menuAnchor().fillMaxWidth()
+                modifier = Modifier.menuAnchor().fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodyLarge,
             )
 
             ExposedDropdownMenu(
@@ -140,9 +142,13 @@ fun FiltersSection(
             onClick = {
                 onAcceptButtonClick()
             },
-            border = BorderStroke(1.dp, Color.Black)
+            border = BorderStroke(1.dp, Color.Black),
+
         ) {
-            Text("Применить фильтр")
+            Text(
+                text = "Применить фильтр",
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
     }
 }
