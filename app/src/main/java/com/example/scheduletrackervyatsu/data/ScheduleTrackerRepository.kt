@@ -43,9 +43,13 @@ class ScheduleTrackerRepository(
      * @param departmentId идентификатор кафедры.
      */
     fun insertTrackingForTeacher(teacherId: String, departmentId: String) {
-        val teacher: TeacherEntity = scheduleTrackerDao.getTeacher(teacherId)
+        val tracking = scheduleTrackerDao.getTeachersDepartmentCrossRef(
+            teacherId = teacherId,
+            departmentId = departmentId)
 
-        val department: DepartmentEntity = scheduleTrackerDao.getDepartment(departmentId)
+        if (tracking != null) {
+            return
+        }
 
         scheduleTrackerDao.insert(TeachersDepartmentCrossRef(
             teacherId = teacherId,
@@ -106,10 +110,12 @@ class ScheduleTrackerRepository(
         return scheduleTrackerDao.getAllLessons()
     }
 
+    /**
+     * Получить всех преподавателей и их кафедры.
+     */
     fun getTrackedTeachersDepartments(): Map<TeacherEntity, List<DepartmentEntity>> {
         return scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
     }
-
 
     //region Функции для DailyReceiver
 

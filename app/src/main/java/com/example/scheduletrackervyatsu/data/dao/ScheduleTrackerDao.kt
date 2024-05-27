@@ -145,4 +145,8 @@ interface ScheduleTrackerDao {
     @Query("SELECT * FROM lesson WHERE teacherId = :teacherId AND departmentId = :departmentId " +
             "AND lessonStatusId != 1 AND isStatusWatched = 0 ORDER BY modifiedOn")
     fun getNotWatchLessons(teacherId: String, departmentId: String): List<LessonEntity>
+
+    @Query("SELECT * FROM teachersDepartmentCrossRef" +
+            " WHERE teacherId = :teacherId AND departmentId = :departmentId")
+    fun getTeachersDepartmentCrossRef(teacherId: String, departmentId: String): TeachersDepartmentCrossRef
 }
