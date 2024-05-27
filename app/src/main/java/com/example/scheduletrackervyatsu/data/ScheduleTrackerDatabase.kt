@@ -12,6 +12,7 @@ import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonStatusEntity
+import com.example.scheduletrackervyatsu.data.entities.Logs
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
         DepartmentEntity::class,
         LessonEntity::class,
         TeacherEntity::class,
-        TeachersDepartmentCrossRef::class
+        TeachersDepartmentCrossRef::class,
+        Logs::class
     ]
 )
 abstract class ScheduleTrackerDatabase: RoomDatabase() {
