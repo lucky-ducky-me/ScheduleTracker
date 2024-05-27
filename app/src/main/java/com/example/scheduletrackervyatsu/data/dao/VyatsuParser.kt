@@ -1,5 +1,6 @@
 package com.example.scheduletrackervyatsu.data.dao
 
+import com.example.scheduletrackervyatsu.RUSSIAN_ALPHABET
 import com.example.scheduletrackervyatsu.SCHEDULE_URL
 import com.example.scheduletrackervyatsu.TEACHER_API_URL
 import com.example.scheduletrackervyatsu.VYATSU_URL
@@ -72,27 +73,31 @@ class VyatsuParser(
      * Получить список преподавателей.
      */
     fun getTeachers(): List<Pair<String,String>> {
-        val doc = Jsoup.connect(baseUrl + teachersUrl).get()
-
-        val teachersItems = doc.select("div .prepod_item")
-
         val list = mutableListOf<Pair<String,String>>()
 
-        teachersItems.forEach {
-            val fioNode = it.children().find {
-                it.text().contains("ФИО")
-            }
+        for (letter in RUSSIAN_ALPHABET) {
+            val doc = Jsoup.connect(baseUrl + teachersUrl)
+                .data("fio", letter.toString())
+                .post()
 
-            var departmentNode = it.children().find {
-                it.text().contains("Кафедра")
-            }
+            val teachersItems = doc.select("div .prepod_item")
 
-            val fioSplit = fioNode?.text()?.split(" ")
+            teachersItems.forEach {
+                val fioNode = it.children().find {
+                    it.text().contains("ФИО")
+                }
 
-            val fio = fioSplit?.subList(1, fioSplit?.size ?: 3)?.joinToString(" ")
+                var departmentNode = it.children().find {
+                    it.text().contains("Кафедра")
+                }
 
-            if (fio != null && departmentNode != null) {
-                list.add(Pair(fio, departmentNode.text().trim()))
+                val fioSplit = fioNode?.text()?.split(" ")
+
+                val fio = fioSplit?.subList(1, fioSplit?.size ?: 3)?.joinToString(" ")
+
+                if (fio != null && departmentNode != null) {
+                    list.add(Pair(fio, departmentNode.text().trim()))
+                }
             }
         }
 
