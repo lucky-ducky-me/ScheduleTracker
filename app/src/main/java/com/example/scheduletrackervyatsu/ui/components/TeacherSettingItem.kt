@@ -48,7 +48,9 @@ fun TeacherSettingItem(
                 onValueChange = {},
                 readOnly = true,
                 textStyle = MaterialTheme.typography.bodyLarge,
-                value = setting.first.surname + " " + setting.first.name + " " + setting.first.patronymic,
+                value = setting.first.surname + " " +
+                        setting.first.name + " " +
+                        (setting.first.patronymic ?: ""),
                 trailingIcon = {
                     Row() {
                         IconButton(onClick = { expanded = !expanded }) {
