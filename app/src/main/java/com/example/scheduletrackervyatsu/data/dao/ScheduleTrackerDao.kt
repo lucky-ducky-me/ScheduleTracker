@@ -121,7 +121,7 @@ interface ScheduleTrackerDao {
     fun getLessonsFlow(teacherId: String, departmentId: String): Flow<List<LessonEntity>>
 
     @Query("SELECT * FROM lesson WHERE lesson.date = :date")
-    fun getDayWeekAndName(date:String): List<LessonEntity>
+    fun getLessonsByDay(date:String): List<LessonEntity>
 
     @Query("SELECT * FROM lesson WHERE lesson.date = :date " +
             "AND lesson.time = :time " +

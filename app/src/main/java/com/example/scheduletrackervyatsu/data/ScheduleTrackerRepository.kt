@@ -119,19 +119,19 @@ class ScheduleTrackerRepository(
 
     //region Функции для DailyReceiver
 
-    fun getDayWeekAndName(day: LocalDate): Pair<Boolean, String>? {
-        var ans = scheduleTrackerDao.getDayWeekAndName(day.toString())
+    fun getDayWeekAndName(day: LocalDate): Boolean? {
+        var ans = scheduleTrackerDao.getLessonsByDay(day.toString())
 
         if (ans != null && ans.isNotEmpty()) {
-            return Pair(ans[0].week, ans[0].dayOfWeek)
+            return ans[0].week
         }
 
         val prevDay = day.minusDays(14)
 
-        ans = scheduleTrackerDao.getDayWeekAndName(prevDay.toString())
+        ans = scheduleTrackerDao.getLessonsByDay(prevDay.toString())
 
         if (ans != null && ans.isNotEmpty()) {
-            return Pair(ans[0].week, ans[0].dayOfWeek)
+            return ans[0].week
         }
 
         return null

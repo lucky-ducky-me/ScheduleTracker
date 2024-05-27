@@ -48,7 +48,6 @@ fun fromLessonParsingModelsToEntity(
         oldData = null,
         oldOffice = null,
         week = lessonParsingModel.week,
-        dayOfWeek = lessonParsingModel.dayOfWeek,
         isStatusWatched = true,
         modifiedOn = LocalDateTime.now().toString()
     )

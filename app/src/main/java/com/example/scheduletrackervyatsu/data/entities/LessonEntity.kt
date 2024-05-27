@@ -72,9 +72,6 @@ class LessonEntity(
     @ColumnInfo(name = "week")
     val week: Boolean,
 
-    @ColumnInfo(name = "dayOfWeek")
-    val dayOfWeek: String,
-
     @ColumnInfo(name = "isStatusWatched")
     val isStatusWatched: Boolean,
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "354ba92a31bf89a3a6ef2e740c3f1b79",
+    "identityHash": "243e3430419c97a4da72743de2a2c581",
     "entities": [
       {
         "tableName": "lessonStatus",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "lesson",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, `week` INTEGER NOT NULL, `dayOfWeek` TEXT NOT NULL, `isStatusWatched` INTEGER NOT NULL, `modifiedOn` TEXT NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `teacherId` TEXT NOT NULL, `departmentId` TEXT NOT NULL, `data` TEXT NOT NULL, `oldData` TEXT, `office` TEXT, `oldOffice` TEXT, `lessonStatusId` INTEGER NOT NULL, `week` INTEGER NOT NULL, `isStatusWatched` INTEGER NOT NULL, `modifiedOn` TEXT NOT NULL, PRIMARY KEY(`lessonId`), FOREIGN KEY(`teacherId`) REFERENCES `teacher`(`teacherId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`departmentId`) REFERENCES `department`(`departmentId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`lessonStatusId`) REFERENCES `lessonStatus`(`lessonStatusId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "lessonId",
@@ -134,12 +134,6 @@
             "fieldPath": "week",
             "columnName": "week",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dayOfWeek",
-            "columnName": "dayOfWeek",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -310,12 +304,44 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`logId` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY(`logId`))",
+        "fields": [
+          {
+            "fieldPath": "logId",
+            "columnName": "logId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTime",
+            "columnName": "dateTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "logId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '354ba92a31bf89a3a6ef2e740c3f1b79')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '243e3430419c97a4da72743de2a2c581')"
     ]
   }
 }

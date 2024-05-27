@@ -34,14 +34,16 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             data = repository.getDayWeekAndName(dayBefore.toLocalDate())
         }
 
+        val dayOfWeek = currentDateTime.dayOfWeek.value
+
         val isMorning = isFirstDayPart(currentDateTime.hour)
 
         val lessonToUpdate: List<LessonEntity> = if (data == null) {
             Log.d("my", "Пустое расписание")
             return false
-        } else if (isMorning && data.first && data.second == "пятница") {
+        } else if (isMorning && data && dayOfWeek == 5) {
             loadNewAndCheckWithOld(isTest = isTest, testDate = testDate)
-        } else if (!data.first && data.second == "понедельник") {
+        } else if (!data && dayOfWeek == 1) {
             deleteOldSchedule()
             standardCheck(isTest = isTest, testDate = testDate)
         } else {
@@ -68,18 +70,28 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         repository.deleteOldSchedule(currentDateTime)
     }
 
-    private fun loadNewAndCheckWithOld(
+    /**
+     * Загрузить новое расписание и сравнить со старым.
+     */
+    fun loadNewAndCheckWithOld(
         isTest: Boolean = false,
         testDate: LocalDate = LocalDate.now()): List<LessonEntity> {
 
-        val startDate = LocalDate.now().plusDays(17)
-        val endDate = startDate.plusDays(1)
+        val now = LocalDate.now()
+        val dayOfWeek = now.dayOfWeek.value
+
+        val twoWeeksDays = 14
+        val difference = if (dayOfWeek == 0 || dayOfWeek == 5 || dayOfWeek == 6) 3 else 0
+
+
+        val startDate = LocalDate.now().plusDays((twoWeeksDays + difference).toLong())
 
         val (lessonEntities, currentLessons) = getActualAndSavedLessons(
             startDate = startDate,
-            endDate = endDate,
+            endDate = startDate,
             isTest = isTest,
-            testDate = testDate)
+            testDate = testDate
+        )
 
         var resultEntities = lessonEntities.filter {
             !currentLessons.contains(it)
@@ -124,7 +136,10 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
     }
 
 
-    private fun standardCheck(
+    /**
+     * Стандартная проверка.
+     */
+    fun standardCheck(
         isTest: Boolean = false,
         testDate: LocalDate = LocalDate.now()) : List<LessonEntity> {
         val startDate = LocalDate.now()
@@ -272,7 +287,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                     data = "Изменено или добавлено тестовое занятие...",
                     oldOffice = null,
                     office = "13-666",
-                    dayOfWeek = savedLesson.dayOfWeek,
                     lessonStatusId = savedLesson.lessonStatusId,
                     week = savedLesson.week
                 )
@@ -301,7 +315,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                     data = "",
                     oldOffice = savedLesson.office,
                     office = "",
-                    dayOfWeek = savedLesson.dayOfWeek,
                     lessonStatusId = savedLesson.lessonStatusId,
                     week = savedLesson.week
                 )
@@ -330,7 +343,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                     data = "Добавлено тестовое занятие...",
                     oldOffice = savedLesson.office,
                     office = "13-666",
-                    dayOfWeek = savedLesson.dayOfWeek,
                     lessonStatusId = savedLesson.lessonStatusId,
                     week = savedLesson.week
                 )
@@ -419,7 +431,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.oldOffice,
                 office = actualLesson.office,
-                dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 2,
                 week = savedLesson.week
             )
@@ -434,7 +445,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = null,
                 office = actualLesson.office,
-                dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 3,
                 week = savedLesson.week
             )
@@ -449,7 +459,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.office,
                 office = actualLesson.office,
-                dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 4,
                 week = savedLesson.week
             )
@@ -464,7 +473,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = savedLesson.data,
                 oldOffice = savedLesson.office,
                 office = actualLesson.office,
-                dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 5,
                 week = savedLesson.week
             )
@@ -479,7 +487,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.office,
                 office = actualLesson.office,
-                dayOfWeek = savedLesson.dayOfWeek,
                 lessonStatusId = 6,
                 week = savedLesson.week
             )
@@ -507,7 +514,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.oldOffice,
                 office = actualLesson.office,
-                dayOfWeek = actualLesson.dayOfWeek,
                 lessonStatusId = 2,
                 week = actualLesson.week
             )
@@ -522,7 +528,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = null,
                 office = actualLesson.office,
-                dayOfWeek = actualLesson.dayOfWeek,
                 lessonStatusId = 3,
                 week = actualLesson.week
             )
@@ -537,7 +542,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.office,
                 office = actualLesson.office,
-                dayOfWeek = actualLesson.dayOfWeek,
                 lessonStatusId = 4,
                 week = actualLesson.week
             )
@@ -552,7 +556,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.oldOffice,
                 office = actualLesson.office,
-                dayOfWeek = actualLesson.dayOfWeek,
                 lessonStatusId = 5,
                 week = actualLesson.week
             )
@@ -567,7 +570,6 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
                 data = actualLesson.data,
                 oldOffice = savedLesson.oldOffice,
                 office = actualLesson.office,
-                dayOfWeek = actualLesson.dayOfWeek,
                 lessonStatusId = 6,
                 week = actualLesson.week
             )
