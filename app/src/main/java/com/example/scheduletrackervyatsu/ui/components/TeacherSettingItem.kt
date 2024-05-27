@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
@@ -44,7 +43,7 @@ fun TeacherSettingItem(
         Row(modifier = modifier.fillMaxWidth()) {
             TextField(
                 modifier = modifier
-                    .border(width = 1.dp, color = Color.Black)
+                    .border(width = 1.dp, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     .fillMaxWidth(),
                 onValueChange = {},
                 readOnly = true,

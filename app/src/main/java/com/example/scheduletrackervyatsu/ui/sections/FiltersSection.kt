@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
@@ -142,7 +141,7 @@ fun FiltersSection(
             onClick = {
                 onAcceptButtonClick()
             },
-            border = BorderStroke(1.dp, Color.Black),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer),
 
         ) {
             Text(

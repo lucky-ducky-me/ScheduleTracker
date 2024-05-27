@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -154,7 +153,7 @@ fun SettingsSection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    border = BorderStroke(1.dp, Color.Black)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
                 ) {
                     Text(
                         text = "Проверить изменения",
@@ -173,7 +172,7 @@ fun SettingsSection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    border = BorderStroke(1.dp, Color.Black)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
                 ) {
                     Text(
                         text = "Обновить расписание",
