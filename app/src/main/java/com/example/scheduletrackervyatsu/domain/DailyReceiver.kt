@@ -13,6 +13,7 @@ import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 
 class DailyReceiver : BroadcastReceiver() {
@@ -32,16 +33,24 @@ class DailyReceiver : BroadcastReceiver() {
             ScheduleTrackerDatabase.getDatabase(context).getScheduleTrackerDao())
 
         CoroutineScope(Dispatchers.IO).launch {
-            val worker = DailyWorker(repository)
+            try {
+                val worker = DailyWorker(repository)
 
-            val res = worker.doDailyWork(isTest = true)
+                val res = worker.doDailyWork()
 
-            if (res) {
-                sendNotification(
-                    context,
-                    "Изменения в расписании",
-                    "В расписании произошли изменения"
-                )
+                if (res) {
+                    sendNotification(
+                        context,
+                        "Изменения в расписании",
+                        "В расписании произошли изменения"
+                    )
+                }
+            }
+            catch (ex: UnknownHostException) {
+                repository.insertLog("Ошибка подключения к сайту ВятГУ. Подробнее: " + ex.toString())
+            }
+            catch (ex: Exception) {
+                repository.insertLog(ex.toString())
             }
         }
     }

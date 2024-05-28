@@ -50,15 +50,23 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             standardCheck(isTest = isTest, testDate = testDate)
         }
 
-        lessonToUpdate.forEach {
-            repository.insertLesson(it)
-        }
+       saveLessons(lessonToUpdate)
 
         val isNeedNotification = lessonToUpdate.find {
             !it.isStatusWatched
         }
 
         return isNeedNotification != null
+    }
+
+    /**
+     * Сохранить занятия.s
+     * @param lessons Список занятий.
+     */
+    fun saveLessons(lessons: List<LessonEntity>) {
+        lessons.forEach {
+            repository.insertLesson(it)
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import com.example.scheduletrackervyatsu.data.dao.ScheduleTrackerDao
 import com.example.scheduletrackervyatsu.data.dao.VyatsuParser
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
+import com.example.scheduletrackervyatsu.data.entities.Logs
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
 import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntities
@@ -11,6 +12,7 @@ import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToE
 import com.example.scheduletrackervyatsu.data.helpers.getInitials
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class ScheduleTrackerRepository(
     private val scheduleTrackerDao: ScheduleTrackerDao,
@@ -258,5 +260,10 @@ class ScheduleTrackerRepository(
 
     fun getLessonsChanged(teacherId: String): List<LessonEntity> {
         return scheduleTrackerDao.getNotWatchLessons(teacherId)
+    }
+
+    fun insertLog(logValue: String) {
+        scheduleTrackerDao.insert(Logs(
+            text = logValue, dateTime = LocalDateTime.now().toString()))
     }
 }

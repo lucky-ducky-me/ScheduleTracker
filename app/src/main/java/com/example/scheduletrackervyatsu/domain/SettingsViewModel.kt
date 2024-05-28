@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class SettingsViewModel(
     application: Application
@@ -89,9 +90,19 @@ class SettingsViewModel(
      * @param departmentId идентификатор кафедры.
      */
     fun addDepartmentForTeacher(teacherId: String, departmentId: String) {
+
+
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertTrackingForTeacher(teacherId, departmentId)
-            repository.saveSchedule(teacherId, departmentId)
+            try {
+                repository.insertTrackingForTeacher(teacherId, departmentId)
+                repository.saveSchedule(teacherId, departmentId)
+            }
+            catch (ex: UnknownHostException) {
+                repository.insertLog("Ошибка подключения к сайту ВятГУ. Подробнее: " + ex.toString())
+            }
+            catch (ex: Exception) {
+                repository.insertLog(ex.toString())
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.DepartmentWithTeachers
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.LessonStatusEntity
+import com.example.scheduletrackervyatsu.data.entities.Logs
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherWithDepartments
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
@@ -31,6 +32,9 @@ interface ScheduleTrackerDao {
 
     @Insert
     fun insert(entity: LessonStatusEntity)
+
+    @Insert
+    fun insert(entity: Logs)
 
     @Delete
     fun delete(entity: TeacherEntity)
