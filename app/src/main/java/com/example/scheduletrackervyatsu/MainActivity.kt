@@ -9,10 +9,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerTheme
 import com.example.scheduletrackervyatsu.domain.DailyReceiver
 import com.example.scheduletrackervyatsu.ui.components.MyApp
-import java.time.LocalDateTime
+import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerTheme
 import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
@@ -24,8 +23,8 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val hour = LocalDateTime.now().hour
-        val minute = LocalDateTime.now().minute + 1
+        val hour = 6
+        val minute = 0
 
         scheduleParsingTask(hour , minute)
     }
@@ -57,11 +56,12 @@ class MainActivity : ComponentActivity() {
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
+            val halfADayInMilliseconds = 43200000
 
             alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                3000 * 60,
+                halfADayInMilliseconds.toLong(),
                 pendingIntent
             )
         }
