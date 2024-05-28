@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.compose.changeAddedColor
@@ -44,7 +43,8 @@ fun SingleLesson(
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(5))
+            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer),
+                shape = RoundedCornerShape(5))
             .clip(shape = RoundedCornerShape(5))
             .background(MaterialTheme.colorScheme.secondaryContainer),
         verticalArrangement = Arrangement.Center,
