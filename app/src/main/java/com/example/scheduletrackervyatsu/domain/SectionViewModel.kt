@@ -1,6 +1,7 @@
 package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
@@ -80,6 +81,9 @@ class SectionViewModel(
     val lessonsNotWatched
         get() = _lessonsNotWatched
 
+    private var _currentPage = mutableIntStateOf(0)
+
+    val currentPage = _currentPage
 
     /**
      * Блок инициализации.
@@ -122,6 +126,28 @@ class SectionViewModel(
                 getNowWatchLessons()
             }
         }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _lessonsByWeeks.collect {
+                var currentDate = LocalDate.now().toString()
+
+                var currentWeekVal = _lessonsByWeeks.value.find {
+                    if (it.second.isNotEmpty()) {
+                        var firstLesson = it.second[0]
+                        var lastLesson = it.second[it.second.size - 1]
+
+                        firstLesson.date <= currentDate && currentDate <= lastLesson.date
+                    }
+                    else false
+                }?.first
+
+                if (currentWeekVal != null) {
+                    _currentPage.intValue = currentWeekVal
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -244,6 +270,16 @@ class SectionViewModel(
             _watchingLessonId.update {
                 lessonId ?: ""
             }
+        }
+    }
+
+    fun addValueToCurrentPage(value: Int) {
+        val newValue = _currentPage.intValue + value
+
+        if (lessonsByWeeks.value.find {
+                it.first == newValue
+            } != null) {
+            _currentPage.intValue += value
         }
     }
 }

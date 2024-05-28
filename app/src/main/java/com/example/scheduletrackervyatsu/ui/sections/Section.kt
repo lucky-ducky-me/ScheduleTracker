@@ -46,6 +46,8 @@ fun Section(
 
     var lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
 
+    val currentPage = filtersViewModel.currentPage.intValue
+
     val filtersSectionData = FiltersSectionData(
         teacher = teacher,
         onSelectedTeacherChange = { newValue ->
@@ -94,6 +96,13 @@ fun Section(
                     },
                     onTest = {
                         filtersViewModel.testButton()
+                    },
+                    currentPage = currentPage,
+                    onCurrentPageNext = {
+                        filtersViewModel.addValueToCurrentPage(1)
+                    },
+                    onCurrentPagePrevious = {
+                        filtersViewModel.addValueToCurrentPage(-1)
                     }
                 )
             }
