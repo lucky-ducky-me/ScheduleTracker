@@ -126,4 +126,20 @@ class SettingsViewModel(
             repository.deleteTrackingForTeacher(teacherId, departmentId)
         }
     }
+
+    fun checkScheduleOnChanges() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dailyWorker = DailyWorker(repository)
+            val lessons = dailyWorker.standardCheck()
+            dailyWorker.saveLessons(lessons)
+        }
+    }
+
+    fun loadNewSchedule() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dailyWorker = DailyWorker(repository)
+            val lessons = dailyWorker.loadNewAndCheckWithOld()
+            dailyWorker.saveLessons(lessons)
+        }
+    }
 }

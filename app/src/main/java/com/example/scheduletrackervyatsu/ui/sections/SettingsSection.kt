@@ -146,7 +146,9 @@ fun SettingsSection(
             item {
                 Button(
                     modifier = Modifier,
-                    onClick = {},
+                    onClick = {
+                        settingsViewModel.checkScheduleOnChanges()
+                    },
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -165,7 +167,9 @@ fun SettingsSection(
             item {
                 Button(
                     modifier = Modifier,
-                    onClick = {},
+                    onClick = {
+                        settingsViewModel.loadNewSchedule()
+                    },
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
