@@ -36,9 +36,8 @@ fun Day(
     onChangeLessonClick: (String) -> Unit) {
 
     val date = LocalDate.parse(lessons[0].date)
-    val daysInWeek = 7
 
-    val header = DateFormatSymbols().weekdays[(date.dayOfWeek.value + 1) % daysInWeek] + " " +
+    val header = DateFormatSymbols().weekdays[date.dayOfWeek.value + 1] + " " +
             date.dayOfMonth.toString() + " " +
     DateFormatSymbols().months[date.month.value - 1] + " "
 
