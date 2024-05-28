@@ -63,7 +63,7 @@ fun ScheduleSection(
                         onTest()
                     }
                 ) {
-                    Text("Применить")
+                    Text("ТЕСТОВАЯ КНОПКА")
                 }
             }
         }
