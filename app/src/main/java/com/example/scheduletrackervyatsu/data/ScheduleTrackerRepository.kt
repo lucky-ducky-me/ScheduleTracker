@@ -110,7 +110,7 @@ class ScheduleTrackerRepository(
 
     //region Функции для DailyReceiver
 
-    fun getDayWeekAndName(day: LocalDate): Boolean? {
+    fun getWeek(day: LocalDate): Boolean? {
         var ans = scheduleTrackerDao.getLessonsByDay(day.toString())
 
         if (ans != null && ans.isNotEmpty()) {

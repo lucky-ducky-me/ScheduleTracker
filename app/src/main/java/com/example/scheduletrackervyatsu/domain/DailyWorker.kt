@@ -27,12 +27,12 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
 
         val currentDateTime = LocalDateTime.now()
 
-        var data = repository.getDayWeekAndName(LocalDate.from(currentDateTime))
+        var data = repository.getWeek(LocalDate.from(currentDateTime))
 
         if (data == null) {
             val dayBefore = currentDateTime.minusDays(1)
 
-            data = repository.getDayWeekAndName(dayBefore.toLocalDate())
+            data = repository.getWeek(dayBefore.toLocalDate())
         }
 
         val dayOfWeek = currentDateTime.dayOfWeek.value

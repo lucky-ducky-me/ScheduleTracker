@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class SettingsViewModel(
     application: Application
@@ -137,9 +139,20 @@ class SettingsViewModel(
 
     fun loadNewSchedule() {
         viewModelScope.launch(Dispatchers.IO) {
-            val dailyWorker = DailyWorker(repository)
-            val lessons = dailyWorker.loadNewAndCheckWithOld()
-            dailyWorker.saveLessons(lessons)
+            val currentDateTime = LocalDateTime.now()
+            var data = repository.getWeek(LocalDate.now())
+
+            if (data == null) {
+                val nextDay = currentDateTime.plusDays(1)
+
+                data = repository.getWeek(nextDay.toLocalDate())
+            }
+
+            if (data == null) {
+                val dailyWorker = DailyWorker(repository)
+                val lessons = dailyWorker.loadNewAndCheckWithOld()
+                dailyWorker.saveLessons(lessons)
+            }
         }
     }
 }
