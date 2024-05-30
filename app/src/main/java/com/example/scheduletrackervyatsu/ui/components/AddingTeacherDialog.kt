@@ -61,7 +61,6 @@ fun AddingTeacherDialog(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
-
     ) {
         AlertDialog(
             icon = {

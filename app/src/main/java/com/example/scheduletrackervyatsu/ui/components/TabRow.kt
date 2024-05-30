@@ -4,7 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,19 +21,22 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TabRow(
     modifier: Modifier = Modifier,
-    onTabClick: (TabRowDirection) -> Unit
+    onTabClick: (TabRowDirection) -> Unit,
+
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(50.dp)
-            .background(MaterialTheme.colorScheme.primary),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary).padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             "Расписание",
-            modifier = Modifier.weight(1f).clickable {
-                onTabClick(TabRowDirection.Schedule)
-            },
-            maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onTabClick(TabRowDirection.Schedule)
+                },
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -37,10 +44,11 @@ fun TabRow(
         )
         Text(
             "Изменения",
-            modifier = Modifier.weight(1f).clickable {
-                onTabClick(TabRowDirection.Changes)
-            },
-            maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onTabClick(TabRowDirection.Changes)
+                },
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -48,21 +56,32 @@ fun TabRow(
         )
         Text(
             "Настройки",
-            maxLines = 1,
-            modifier = Modifier.weight(1f).clickable {
-                onTabClick(TabRowDirection.Settings)
-            },
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onTabClick(TabRowDirection.Settings)
+                },
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.titleMedium
         )
+        IconButton(onClick = {
+            onTabClick(TabRowDirection.Info)
+        }) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
 enum class TabRowDirection {
     Schedule,
     Changes,
-    Settings
+    Settings,
+    Info
 }
 

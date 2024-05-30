@@ -10,6 +10,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -22,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.scheduletrackervyatsu.domain.SectionViewModel
+import com.example.scheduletrackervyatsu.ui.components.InfoDialog
 import com.example.scheduletrackervyatsu.ui.components.TabRow
 import com.example.scheduletrackervyatsu.ui.components.TabRowDirection
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
@@ -44,7 +48,7 @@ fun Section(
 
     val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
 
-    var lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
+    val lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
 
     val currentPage = filtersViewModel.currentPage.intValue
 
@@ -58,6 +62,17 @@ fun Section(
         trackingTeachers = trackingTeachers
     )
 
+    var openInfoDialog by remember { mutableStateOf(false) }
+
+    if (openInfoDialog) {
+        InfoDialog(
+            onConfirmation = {
+                openInfoDialog = false
+            },
+            dialogTitle = "Инструкция:",
+        )
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
@@ -68,6 +83,7 @@ fun Section(
                         TabRowDirection.Schedule -> navController.navigateSingleTopTo("Schedule")
                         TabRowDirection.Changes -> navController.navigateSingleTopTo("Changes")
                         TabRowDirection.Settings -> navController.navigateSingleTopTo("Settings")
+                        TabRowDirection.Info -> openInfoDialog = true
                     }
                 }
             )
