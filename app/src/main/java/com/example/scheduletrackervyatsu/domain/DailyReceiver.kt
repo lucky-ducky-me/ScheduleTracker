@@ -56,7 +56,7 @@ class DailyReceiver : BroadcastReceiver() {
     }
 
 
-    private fun sendNotification(context: Context?, taskName: String, parsingResult: String) {
+    fun sendNotification(context: Context?, taskName: String, parsingResult: String) {
         val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val channelId = "parsing_notification_channel"

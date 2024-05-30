@@ -253,6 +253,11 @@ class SectionViewModel(
             val worker = DailyWorker(repository = repository)
 
             worker.doDailyWork(true)
+
+            DailyReceiver().sendNotification(
+                getApplication<Application>().applicationContext,
+                "Изменения в расписании",
+                "В расписании произошли изменения")
         }
     }
 
