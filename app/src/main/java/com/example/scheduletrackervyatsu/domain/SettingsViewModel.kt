@@ -129,6 +129,9 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Проверка расписания на изменения.
+     */
     fun checkScheduleOnChanges() {
         viewModelScope.launch(Dispatchers.IO) {
             val dailyWorker = DailyWorker(repository)
@@ -137,6 +140,9 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Загрузить расписание.
+     */
     fun loadNewSchedule() {
         viewModelScope.launch(Dispatchers.IO) {
             val currentDateTime = LocalDateTime.now()

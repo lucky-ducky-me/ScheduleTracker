@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -90,7 +91,7 @@ fun FiltersSection(
 
         Button(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally),
+                .align(Alignment.CenterHorizontally).width(200.dp),
             colors = ButtonColors(
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -104,7 +105,7 @@ fun FiltersSection(
 
         ) {
             Text(
-                text = "Применить фильтр",
+                text = "Применить",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

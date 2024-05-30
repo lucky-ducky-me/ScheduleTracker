@@ -103,6 +103,9 @@ fun Section(
                     },
                     onCurrentPagePrevious = {
                         filtersViewModel.addValueToCurrentPage(-1)
+                    },
+                    onCheckScheduleOnChanges = {
+                        filtersViewModel.loadNewSchedule()
                     }
                 )
             }
