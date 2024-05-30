@@ -1,14 +1,19 @@
 package com.example.scheduletrackervyatsu
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.scheduletrackervyatsu.domain.DailyReceiver
 import com.example.scheduletrackervyatsu.ui.components.MyApp
 import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerTheme
@@ -17,8 +22,18 @@ import java.util.Calendar
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             ScheduleTrackerTheme {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(this,
+                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                            0)
+                    }
+                }
+
                 MyApp(modifier = Modifier.fillMaxSize())
             }
         }
