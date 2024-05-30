@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class SectionViewModel(
     application: Application,
@@ -292,22 +291,11 @@ class SectionViewModel(
     /**
      * Загрузить расписание.
      */
-    fun loadNewSchedule() {
+    fun runStandartCheck() {
         viewModelScope.launch(Dispatchers.IO) {
-            val currentDateTime = LocalDateTime.now()
-            var data = repository.getWeek(LocalDate.now())
-
-            if (data == null) {
-                val nextDay = currentDateTime.plusDays(1)
-
-                data = repository.getWeek(nextDay.toLocalDate())
-            }
-
-            if (data == null) {
-                val dailyWorker = DailyWorker(repository)
-                val lessons = dailyWorker.loadNewAndCheckWithOld()
-                dailyWorker.saveLessons(lessons)
-            }
+            val dailyWorker = DailyWorker(repository)
+            val lessons = dailyWorker.standardCheck()
+            dailyWorker.saveLessons(lessons)
         }
     }
 }

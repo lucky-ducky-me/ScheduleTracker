@@ -121,7 +121,7 @@ fun Section(
                         filtersViewModel.addValueToCurrentPage(-1)
                     },
                     onCheckScheduleOnChanges = {
-                        filtersViewModel.loadNewSchedule()
+                        filtersViewModel.runStandartCheck()
                     }
                 )
             }
