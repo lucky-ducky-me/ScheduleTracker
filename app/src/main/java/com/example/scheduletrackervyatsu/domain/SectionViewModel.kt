@@ -291,7 +291,7 @@ class SectionViewModel(
     /**
      * Загрузить расписание.
      */
-    fun runStandartCheck() {
+    fun runStandardCheck() {
         viewModelScope.launch(Dispatchers.IO) {
             val dailyWorker = DailyWorker(repository)
             val lessons = dailyWorker.standardCheck()
