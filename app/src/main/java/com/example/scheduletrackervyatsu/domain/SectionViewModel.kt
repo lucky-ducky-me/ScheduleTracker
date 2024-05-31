@@ -2,12 +2,14 @@ package com.example.scheduletrackervyatsu.domain
 
 import android.app.Application
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerDatabase
 import com.example.scheduletrackervyatsu.data.ScheduleTrackerRepository
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
+import com.example.scheduletrackervyatsu.ui.components.TabRowDirection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +86,20 @@ class SectionViewModel(
     private var _currentPage = mutableIntStateOf(0)
 
     val currentPage = _currentPage
+
+    private var _watchingLessonId = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    var _watchingLesson = _watchingLessonId.flatMapLatest {
+        repository.getLesson(_watchingLessonId.value)
+    }
+
+    val watchingLesson
+        get() = _watchingLesson
+
+    private var _tabRowDirectionState = mutableStateOf(TabRowDirection.Schedule)
+
+    val tabRowDirectionState = _tabRowDirectionState
 
     /**
      * Блок инициализации.
@@ -247,29 +263,6 @@ class SectionViewModel(
         }
     }
 
-    fun testButton() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val worker = DailyWorker(repository = repository)
-
-            worker.doDailyWork(true)
-
-            DailyReceiver().sendNotification(
-                getApplication<Application>().applicationContext,
-                "Изменения в расписании",
-                "В расписании произошли изменения")
-        }
-    }
-
-    private var _watchingLessonId = MutableStateFlow("")
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    var _watchingLesson = _watchingLessonId.flatMapLatest {
-        repository.getLesson(_watchingLessonId.value)
-    }
-
-    val watchingLesson
-        get() = _watchingLesson
-
     fun getLesson(lessonId: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             _watchingLessonId.update {
@@ -296,6 +289,29 @@ class SectionViewModel(
             val dailyWorker = DailyWorker(repository)
             val lessons = dailyWorker.standardCheck()
             dailyWorker.saveLessons(lessons)
+        }
+    }
+
+    fun changeTabRowDirection(tabRowDirection: TabRowDirection) {
+        if (tabRowDirection == TabRowDirection.Changes ||
+            tabRowDirection == TabRowDirection.Schedule ||
+            tabRowDirection == TabRowDirection.Settings) {
+            _tabRowDirectionState.value = tabRowDirection
+        }
+    }
+
+    //test TODO delete
+
+    fun testButton() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val worker = DailyWorker(repository = repository)
+
+            worker.doDailyWork(true)
+
+            DailyReceiver().sendNotification(
+                getApplication<Application>().applicationContext,
+                "Изменения в расписании",
+                "В расписании произошли изменения")
         }
     }
 }

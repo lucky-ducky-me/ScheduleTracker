@@ -35,7 +35,7 @@ import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 fun Section(
     modifier: Modifier = Modifier,
     title: String,
-    filtersViewModel: SectionViewModel = viewModel()
+    sectionViewModel: SectionViewModel = viewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -43,19 +43,21 @@ fun Section(
     val currentBackStack by navController.currentBackStackEntryAsState()
     var currentDestination = currentBackStack?.destination
 
-    val trackingTeachers = filtersViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
-    val lessonsByWeeks = filtersViewModel.lessonsByWeeks.collectAsState(initial = emptyList()).value
+    val trackingTeachers = sectionViewModel.trackingTeachers.collectAsState(initial = emptyList()).value
+    val lessonsByWeeks = sectionViewModel.lessonsByWeeks.collectAsState(initial = emptyList()).value
 
-    val teacher = filtersViewModel.teacher.collectAsState(initial = null).value
+    val teacher = sectionViewModel.teacher.collectAsState(initial = null).value
 
-    val lessonsNotWatched = filtersViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
+    val lessonsNotWatched = sectionViewModel.lessonsNotWatched.collectAsState(initial = emptyList()).value
 
-    val currentPage = filtersViewModel.currentPage.intValue
+    val currentPage = sectionViewModel.currentPage.intValue
+
+    val currentTab = sectionViewModel.tabRowDirectionState
 
     val filtersSectionData = FiltersSectionData(
         teacher = teacher,
         onSelectedTeacherChange = { newValue ->
-            filtersViewModel.changeCurrentTeacher(
+            sectionViewModel.changeCurrentTeacher(
                 newValue
             )
         },
@@ -79,13 +81,15 @@ fun Section(
         topBar = {
             TabRow(
                 onTabClick = {
+                    sectionViewModel.changeTabRowDirection(it)
                     when (it) {
                         TabRowDirection.Schedule -> navController.navigateSingleTopTo("Schedule")
                         TabRowDirection.Changes -> navController.navigateSingleTopTo("Changes")
                         TabRowDirection.Settings -> navController.navigateSingleTopTo("Settings")
                         TabRowDirection.Info -> openInfoDialog = true
                     }
-                }
+                },
+                tabRowDirection = currentTab.value
             )
         },
     ) { innerPadding ->
@@ -101,27 +105,27 @@ fun Section(
                 ScheduleSection(
                     filtersSectionData = filtersSectionData,
                     onAcceptButtonClick = {
-                        filtersViewModel.getLessons()
+                        sectionViewModel.getLessons()
                     },
                     lessonsByWeeks = lessonsByWeeks,
                     onWatchChangeClick = {
-                        lessonId: String -> filtersViewModel.watchLessonStatus(lessonId)
+                        lessonId: String -> sectionViewModel.watchLessonStatus(lessonId)
                     },
                     onChangeLessonClick = {
                         lessonId -> navController.navigateSingleTopTo("Schedule/$lessonId")
                     },
                     onTest = {
-                        filtersViewModel.testButton()
+                        sectionViewModel.testButton()
                     },
                     currentPage = currentPage,
                     onCurrentPageNext = {
-                        filtersViewModel.addValueToCurrentPage(1)
+                        sectionViewModel.addValueToCurrentPage(1)
                     },
                     onCurrentPagePrevious = {
-                        filtersViewModel.addValueToCurrentPage(-1)
+                        sectionViewModel.addValueToCurrentPage(-1)
                     },
                     onCheckScheduleOnChanges = {
-                        filtersViewModel.runStandardCheck()
+                        sectionViewModel.runStandardCheck()
                     }
                 )
             }
@@ -129,10 +133,10 @@ fun Section(
                 ChangesSection(
                     filtersSectionData = filtersSectionData,
                     onAcceptButtonClick = {
-                        filtersViewModel.getLessons()
+                        sectionViewModel.getLessons()
                     },
                     onWatchChangeClick = {
-                            lessonId: String -> filtersViewModel.watchLessonStatus(lessonId)
+                            lessonId: String -> sectionViewModel.watchLessonStatus(lessonId)
                     },
                     lessonsNotWatched = lessonsNotWatched
                 )
@@ -144,14 +148,14 @@ fun Section(
                 arguments = listOf(navArgument("lessonId") { type = NavType.StringType })) {
                     navBackStackEntry ->
                 val lessonId = navBackStackEntry.arguments?.getString("lessonId")
-                filtersViewModel.getLesson(lessonId)
+                sectionViewModel.getLesson(lessonId)
 
-                SingleLessonSection(lessonEntity = filtersViewModel.watchingLesson.collectAsState(
+                SingleLessonSection(lessonEntity = sectionViewModel.watchingLesson.collectAsState(
                     initial = null
                 ).value, onWatchChangeClick = {
                     lessonId: String ->
                     navController.navigateSingleTopTo("Schedule")
-                    filtersViewModel.watchLessonStatus(lessonId)
+                    sectionViewModel.watchLessonStatus(lessonId)
                 })
             }
         }

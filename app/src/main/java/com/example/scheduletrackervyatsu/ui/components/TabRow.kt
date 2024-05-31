@@ -22,8 +22,9 @@ import androidx.compose.ui.unit.dp
 fun TabRow(
     modifier: Modifier = Modifier,
     onTabClick: (TabRowDirection) -> Unit,
+    tabRowDirection: TabRowDirection,
 
-) {
+    ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -40,7 +41,10 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style = if (tabRowDirection == TabRowDirection.Schedule)
+                    MaterialTheme.typography.titleLarge
+                else
+                    MaterialTheme.typography.titleMedium
         )
         Text(
             "Изменения",
@@ -52,7 +56,10 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style =  if (tabRowDirection == TabRowDirection.Changes)
+                MaterialTheme.typography.titleLarge
+            else
+                MaterialTheme.typography.titleMedium
         )
         Text(
             "Настройки",
@@ -64,7 +71,10 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style =  if (tabRowDirection == TabRowDirection.Settings)
+                MaterialTheme.typography.titleLarge
+            else
+                MaterialTheme.typography.titleMedium
         )
         IconButton(onClick = {
             onTabClick(TabRowDirection.Info)
