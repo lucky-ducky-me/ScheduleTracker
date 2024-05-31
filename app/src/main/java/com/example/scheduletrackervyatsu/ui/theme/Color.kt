@@ -1,7 +1,7 @@
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
-val changeDeletedColor = Color(0xFFAC1C2D)
+val changeDeletedColor = Color(0xFFDA3246)
 val changeAddedColor = Color(0xFF1F8114)
 
 val primaryLight = Color(0xFF4C662B)
