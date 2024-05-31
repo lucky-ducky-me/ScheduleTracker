@@ -27,7 +27,6 @@ import com.example.compose.changeDeletedColor
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import java.text.DateFormatSymbols
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Composable
 fun Day(
@@ -44,7 +43,12 @@ fun Day(
 
     Column(
         modifier = modifier
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer),
+            .border(
+                border =
+                if (date == LocalDate.now())
+                    BorderStroke(5.dp, MaterialTheme.colorScheme.tertiary)
+                else
+                    BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer),
                 shape = RoundedCornerShape(5))
             .clip(shape = RoundedCornerShape(5))
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -82,19 +86,6 @@ fun Day(
                 }
 
                 rowModifier = rowModifier.clickable { onChangeLessonClick(lesson.lessonId) }
-            }
-
-            val lessonDateTime =
-                LocalDateTime.parse(lesson.date + "T" + lesson.time)
-            val currentDateTime = LocalDateTime.now()
-            val lessonDuration = 90
-            val lessonEndDateTime = lessonDateTime.plusMinutes(lessonDuration.toLong())
-
-            if (currentDateTime in lessonDateTime..lessonEndDateTime) {
-                rowModifier = rowModifier.border(
-                    border = BorderStroke(5.dp, MaterialTheme.colorScheme.tertiary),
-                    shape = RoundedCornerShape(5))
-                    .clip(shape = RoundedCornerShape(5))
             }
 
             Row(
