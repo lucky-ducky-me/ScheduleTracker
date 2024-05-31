@@ -266,4 +266,8 @@ class ScheduleTrackerRepository(
         scheduleTrackerDao.insert(Logs(
             text = logValue, dateTime = LocalDateTime.now().toString()))
     }
+
+    fun changeLessonsStatusVisibility(teacherId: String, isWatched: Boolean) {
+        scheduleTrackerDao.changeAllLessonsStatusVisibility(teacherId, isWatched)
+    }
 }

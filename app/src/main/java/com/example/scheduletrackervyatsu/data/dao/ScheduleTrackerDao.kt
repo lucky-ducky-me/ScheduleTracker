@@ -139,6 +139,9 @@ interface ScheduleTrackerDao {
     @Query("UPDATE lesson SET isStatusWatched = :isWatched WHERE lessonId = :lessonId")
     fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean)
 
+    @Query("UPDATE lesson SET isStatusWatched = :isWatched WHERE teacherId = :teacherId")
+    fun changeAllLessonsStatusVisibility(teacherId: String, isWatched: Boolean)
+
     @Query("DELETE FROM lesson WHERE date < :date")
     fun deletePreviousSchedule(date: String)
 

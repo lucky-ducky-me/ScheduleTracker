@@ -138,7 +138,10 @@ fun Section(
                     onWatchChangeClick = {
                             lessonId: String -> sectionViewModel.watchLessonStatus(lessonId)
                     },
-                    lessonsNotWatched = lessonsNotWatched
+                    lessonsNotWatched = lessonsNotWatched,
+                    onWatchAllChangesButtonClick = {
+                        sectionViewModel.watchAllLessonsStatus(it)
+                    }
                 )
             }
             composable(route = "Settings") {
