@@ -1,6 +1,5 @@
 package com.example.scheduletrackervyatsu.ui.sections
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
@@ -34,8 +32,6 @@ fun FiltersSection(
     filtersSectionData: FiltersSectionData,
     onAcceptButtonClick: () -> Unit
 ) {
-    val context = LocalContext.current
-
     var expandedTeacher by remember { mutableStateOf(false) }
 
     Column(
@@ -57,6 +53,7 @@ fun FiltersSection(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTeacher)
                 },
+                label = { Text(text = "Выберите преподавателя из настроек: ") },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -81,7 +78,6 @@ fun FiltersSection(
                         },
                         onClick = {
                             expandedTeacher = false
-                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                             filtersSectionData.onSelectedTeacherChange(item.teacherId)
                         }
                     )

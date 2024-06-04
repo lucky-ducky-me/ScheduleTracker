@@ -108,6 +108,11 @@ fun ScheduleSection(
                     onChangeLessonClick = onChangeLessonClick
                 )
             }
+            else {
+                Text(
+                    text = "Расписание не найдено.",
+                    style = MaterialTheme.typography.titleLarge)
+            }
         }
     }
 }

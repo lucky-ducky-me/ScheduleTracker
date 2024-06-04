@@ -1,5 +1,6 @@
 package com.example.scheduletrackervyatsu.ui.sections
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +43,8 @@ fun SettingsSection(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+
     val settings = settingsViewModel.trackedTeachersDepartments.collectAsState(initial = emptyList()).value
     val departments = settingsViewModel.departments.collectAsState(initial = emptyList()).value
     val teachers = settingsViewModel.teachers.collectAsState(initial = emptyList()).value
@@ -148,6 +152,11 @@ fun SettingsSection(
                     modifier = Modifier,
                     onClick = {
                         settingsViewModel.checkScheduleOnChanges()
+
+                        Toast.makeText(context,
+                            "Проверка у добавленных преподавателей запущена",
+                            Toast.LENGTH_SHORT)
+                            .show()
                     },
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -169,6 +178,11 @@ fun SettingsSection(
                     modifier = Modifier,
                     onClick = {
                         settingsViewModel.loadNewSchedule()
+
+                        Toast.makeText(context,
+                            "Загрузка нового учебного периода у добавленных преподавателей запущена",
+                            Toast.LENGTH_SHORT)
+                            .show()
                     },
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,

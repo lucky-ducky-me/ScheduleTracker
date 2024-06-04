@@ -167,7 +167,7 @@ fun Day(
                             )
                                 MaterialTheme.colorScheme.onSecondaryContainer
                             else MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Left
                         )
                     }
                 }

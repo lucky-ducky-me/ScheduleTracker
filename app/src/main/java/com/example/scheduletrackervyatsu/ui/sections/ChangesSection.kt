@@ -69,6 +69,14 @@ fun ChangesSection(
             }
         }
 
+        if (lessonsNotWatched.isEmpty()) {
+            item {
+                Text(
+                    text = "Изменения не найдены.",
+                    style = MaterialTheme.typography.titleLarge)
+            }
+        }
+
         items(lessonsNotWatched) {
             SingleLessonSection(lessonEntity = it, onWatchChangeClick = onWatchChangeClick)
         }

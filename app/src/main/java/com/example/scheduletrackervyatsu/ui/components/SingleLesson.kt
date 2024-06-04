@@ -126,7 +126,7 @@ fun SingleLesson(
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Left,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -202,7 +202,7 @@ fun SingleLesson(
                         )
                             MaterialTheme.colorScheme.onSecondaryContainer
                         else MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Left,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
