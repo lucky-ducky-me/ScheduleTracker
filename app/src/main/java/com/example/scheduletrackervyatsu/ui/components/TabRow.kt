@@ -32,7 +32,7 @@ fun TabRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            "Расписание",
+            text = "Расписание",
             modifier = Modifier
                 .weight(1f)
                 .clickable {
@@ -41,13 +41,14 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
+            maxLines = 1,
             style = if (tabRowDirection == TabRowDirection.Schedule)
                     MaterialTheme.typography.titleLarge
                 else
                     MaterialTheme.typography.titleMedium
         )
         Text(
-            "Изменения",
+            text = "Изменения",
             modifier = Modifier
                 .weight(1f)
                 .clickable {
@@ -56,13 +57,14 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
+            maxLines = 1,
             style =  if (tabRowDirection == TabRowDirection.Changes)
                 MaterialTheme.typography.titleLarge
             else
                 MaterialTheme.typography.titleMedium
         )
         Text(
-            "Настройки",
+            text = "Настройки",
             modifier = Modifier
                 .weight(1f)
                 .clickable {
@@ -71,6 +73,7 @@ fun TabRow(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
+            maxLines = 1,
             style =  if (tabRowDirection == TabRowDirection.Settings)
                 MaterialTheme.typography.titleLarge
             else
