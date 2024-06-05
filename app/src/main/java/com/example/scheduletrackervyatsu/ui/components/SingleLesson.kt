@@ -29,6 +29,11 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
+/**
+ * Элемент занятия.
+ * @param lessonEntity сущность занятия.
+ * @param onWatchChangeClick обработчик нажатия на изменённое занятие.
+ */
 @Composable
 fun SingleLesson(
     modifier: Modifier = Modifier,

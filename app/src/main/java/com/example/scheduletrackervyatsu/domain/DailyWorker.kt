@@ -14,6 +14,9 @@ import com.example.scheduletrackervyatsu.getDataForTest
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Ежедневная работы.
+ */
 class DailyWorker(private val repository: ScheduleTrackerRepository) {
 
     private val parser = VyatsuParser()
@@ -252,6 +255,9 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         return Pair(lessonEntities, currentLessons)
     }
 
+    /**
+     * Сравнить актуальные и сохранённые занятия.
+     */
     private fun compareActualAndSavedLessons(
         actualLessons: List<LessonEntity>,
         savedLessons: List<LessonEntity>): List<LessonEntity> {
@@ -281,6 +287,9 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         return lessonsToUpdate
     }
 
+    /**
+     * Сравнить актуальное и сохранённое занятия.
+     */
     private fun compareActualAndSavedLesson(
         actualLesson: LessonEntity,
         savedLesson: LessonEntity) : LessonStatusKey {
@@ -308,10 +317,16 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         return LessonStatusKey.NEW
     }
 
+    /**
+     * Первая ли половина дня.
+     */
     private fun isFirstDayPart(hour: Int): Boolean {
         return hour in 1..11
     }
 
+    /**
+     * Получить новое занятие на основе актуального и сохранённого.
+     */
     private fun getNewLesson(
         actualLesson: LessonEntity,
         savedLesson: LessonEntity)
@@ -349,6 +364,9 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         return newLessonEntity
     }
 
+    /**
+     * Создать новое занятие на основе актуального и сохранённого.
+     */
     private fun createNewLesson(
         actualLesson: LessonEntity,
         savedLesson: LessonEntity): LessonEntity {

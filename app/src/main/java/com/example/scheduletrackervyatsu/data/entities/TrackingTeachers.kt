@@ -6,8 +6,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Junction
 import androidx.room.Relation
-import java.util.UUID
 
+/**
+ * Сущность БД для отслеживания преподавателя.
+ */
 @Entity(
     tableName = "teachersDepartmentCrossRef",
     primaryKeys = ["teacherId", "departmentId"],
@@ -28,9 +30,15 @@ import java.util.UUID
         )
     ])
 data class TeachersDepartmentCrossRef(
+    /**
+     * Id преподавателя.
+     */
     @ColumnInfo(name = "teacherId")
     val teacherId: String,
 
+    /**
+     * Id кафедры.
+     */
     @ColumnInfo(name = "departmentId")
     val departmentId: String
 )

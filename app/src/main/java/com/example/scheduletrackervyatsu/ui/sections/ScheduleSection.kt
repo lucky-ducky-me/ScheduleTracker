@@ -19,6 +19,17 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.ui.components.Week
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
+/**
+ * Раздел с расписанием.
+ * @param filtersSectionData данные для секции фильтров.
+ * @param onAcceptButtonClick обработчик кнопки принять.
+ * @param lessonsByWeeks занятия поделённые по неделям.
+ * @param onWatchChangeClick обработчик иконки просмотра изменения.
+ * @param onChangeLessonClick обработчик нажатия на изменённое занятие.
+ * @param onCurrentPagePrevious обработчик нажатия перехода на предыдущую неделю.
+ * @param onCurrentPageNext обработчик нажатия перехода на следующую неделю.
+ * @param onCheckScheduleOnChanges обработчик нажатия кнопки проверки изменений.
+ */
 @Composable
 fun ScheduleSection(
     modifier: Modifier = Modifier,

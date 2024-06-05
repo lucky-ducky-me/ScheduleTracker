@@ -52,6 +52,10 @@ fun fromLessonParsingModelsToEntity(
         modifiedOn = LocalDateTime.now().toString()
     )
 }
+
+/**
+ * Преобразование списка моделей занятия в сущность БД.
+ */
 fun fromLessonParsingModelsToEntities(
     lessons: List<LessonParsingModel>,
     departments: List<DepartmentEntity>,

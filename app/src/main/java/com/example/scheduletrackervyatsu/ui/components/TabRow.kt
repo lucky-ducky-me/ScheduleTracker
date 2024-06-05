@@ -18,12 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
+/**
+ * Навигационная панель.
+ * @param onTabClick обработчик нажатия на элемент в навигационной панели
+ * @param tabRowDirection текущее положение.
+ */
 @Composable
 fun TabRow(
     modifier: Modifier = Modifier,
     onTabClick: (TabRowDirection) -> Unit,
     tabRowDirection: TabRowDirection,
-
     ) {
     Row(
         modifier = modifier

@@ -27,6 +27,14 @@ import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 
+/**
+ * Диалоговое окно добавления преподавателя.
+ * @param onDismissRequest обработчик нажатия кнопки Отклонить.
+ * @param onConfirmation обработчик нажатия кнопки Принять.
+ * @param dialogTitle заголовок окна.
+ * @param teachers список преподавателей.
+ * @param departments список кафедр.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddingTeacherDialog(

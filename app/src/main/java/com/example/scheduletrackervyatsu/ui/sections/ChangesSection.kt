@@ -19,6 +19,14 @@ import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
+/**
+ * Раздел с изменениями.
+ * @param filtersSectionData данные для секции фильтров.
+ * @param onAcceptButtonClick обработчик кнопки принять.
+ * @param onWatchChangeClick обработчик иконки просмотра изменения.
+ * @param lessonsNotWatched занятия с непросмотренными изменениями.
+ * @param onWatchAllChangesButtonClick обработчик кнопки принять все изменения.
+ */
 @Composable
 fun ChangesSection(
     modifier: Modifier = Modifier,

@@ -21,6 +21,18 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
+/**
+ * Неделя.
+ * @param lessons список занятий.
+ * @param startIndex индекс первой недели.
+ * @param currentIndex индекс выбранной недели.
+ * @param lastIndex индекс последней недели.
+ * @param onBackArrowClick обработчик нажатия перехода на предыдущую неделю.
+ * @param onForwardArrowClick обработчик нажатия перехода на следующую неделю.
+ * @param onWatchChangeClick обработчик иконки просмотра изменения.
+ * @param onChangeLessonClick обработчик нажатия на изменённое занятие.
+ * @param currentWeek текущая учебная (1-я или 2-я) неделя.
+ */
 @Composable
 fun Week(
     modifier: Modifier = Modifier,

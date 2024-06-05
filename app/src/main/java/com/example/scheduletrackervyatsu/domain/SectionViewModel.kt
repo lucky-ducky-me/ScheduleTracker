@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+/**
+ * Модель представления для разделов.
+ */
 class SectionViewModel(
     application: Application,
 ): AndroidViewModel(application) {
@@ -70,35 +73,65 @@ class SectionViewModel(
      */
     private var _lessonsByWeeks = MutableStateFlow<List<Pair<Int, List<LessonEntity>>>>(emptyList())
 
+    /**
+     * По неделям.
+     */
     val lessonsByWeeks
         get() = _lessonsByWeeks
 
 
+    /**
+     * Непросмотренные занятия.
+     */
     private var _lessonsNotWatchedFlow = repository.getLessonsChangedFlow(
         teacher.value?.teacherId ?: ""
     )
 
+    /**
+     * Непросмотренные занятия.
+     */
     private var _lessonsNotWatched = MutableStateFlow<List<LessonEntity>>(emptyList())
 
+    /**
+     * Непросмотренные занятия.
+     */
     val lessonsNotWatched
         get() = _lessonsNotWatched
 
+    /**
+     * Текущая страница в расписании.
+     */
     private var _currentPage = mutableIntStateOf(0)
 
+    /**
+     * Текущая страница в расписании.
+     */
     val currentPage = _currentPage
 
+    /**
+     * Просматриваемое занятие.
+     */
     private var _watchingLessonId = MutableStateFlow("")
 
+    /**
+     * Просматриваемое занятие.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
-    var _watchingLesson = _watchingLessonId.flatMapLatest {
+    private var _watchingLesson = _watchingLessonId.flatMapLatest {
         repository.getLesson(_watchingLessonId.value)
     }
 
     val watchingLesson
         get() = _watchingLesson
 
+    /**
+     * Состояние выбора раздела.
+     */
     private var _tabRowDirectionState = mutableStateOf(TabRowDirection.Schedule)
 
+    /**
+     * Состояние выбора раздела.
+     */
     val tabRowDirectionState = _tabRowDirectionState
 
     /**
@@ -206,12 +239,20 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Просмотреть статус занятия.
+     * @param lessonId Id занятия.
+     */
     fun watchLessonStatus(lessonId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.changeLessonStatusVisibility(lessonId, true)
         }
     }
 
+    /**
+     * Просмотреть статус всех занятий у преподавателя.
+     * @param teacherId Id преподавателя.
+     */
     fun watchAllLessonsStatus(teacherId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.changeLessonsStatusVisibility(teacherId, true)
@@ -269,6 +310,9 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Получить занятие по Id.
+     */
     fun getLesson(lessonId: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             _watchingLessonId.update {
@@ -277,6 +321,9 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Добавить значение к текущему номеру страницы в расписании.
+     */
     fun addValueToCurrentPage(value: Int) {
         val newValue = _currentPage.intValue + value
 
@@ -298,6 +345,9 @@ class SectionViewModel(
         }
     }
 
+    /**
+     * Сменить просматриваемый раздел.
+     */
     fun changeTabRowDirection(tabRowDirection: TabRowDirection) {
         if (tabRowDirection == TabRowDirection.Changes ||
             tabRowDirection == TabRowDirection.Schedule ||

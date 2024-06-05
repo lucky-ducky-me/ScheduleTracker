@@ -36,7 +36,6 @@ import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 @Composable
 fun Section(
     modifier: Modifier = Modifier,
-    title: String,
     sectionViewModel: SectionViewModel = viewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

@@ -21,6 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 
+/**
+ * Элемент с кафедрами у преподавателей в настройках.
+ * @param setting список отслеживаемых преподавателей с кафедрами.
+ * @param onAddButtonClick обработчик нажатия кнопки Добавить.
+ * @param onDeleteButtonClick обработчик нажатия кнопки Удалить.
+ */
 @Composable
 fun DepartmentSettingItem(
     modifier: Modifier = Modifier,

@@ -16,6 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * Диалоговое окно с информаций об использовании приложения.
+ * @param onConfirmation обработчик нажатия кнопки Подтвердить.
+ * @param dialogTitle заголовок окна.
+ */
 @Composable
 fun InfoDialog(
     modifier: Modifier = Modifier,

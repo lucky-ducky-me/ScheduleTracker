@@ -29,6 +29,12 @@ import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * День в расписании.
+ * @param lessons список занятий.
+ * @param onWatchChangeClick обработчик иконки просмотра изменения.
+ * @param onChangeLessonClick обработчик нажатия на изменённое занятие.
+ */
 @Composable
 fun Day(
     modifier: Modifier = Modifier,

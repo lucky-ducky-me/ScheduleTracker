@@ -15,6 +15,9 @@ import java.net.UnknownHostException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Модель представления для настроек.
+ */
 class SettingsViewModel(
     application: Application
 ): AndroidViewModel(application) {

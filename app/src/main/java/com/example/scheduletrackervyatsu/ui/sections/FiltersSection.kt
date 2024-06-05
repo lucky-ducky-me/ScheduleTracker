@@ -25,6 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
+/**
+ * Секция с фильтром.
+ * @param filtersSectionData данные для секции фильтров.
+ * @param onAcceptButtonClick обработчик кнопки принять.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersSection(

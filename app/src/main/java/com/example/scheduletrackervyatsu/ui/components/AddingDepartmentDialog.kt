@@ -20,6 +20,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.DepartmentEntity
 
+/**
+ * Диалоговое окно добавление кафедры.
+ * @param onDismissRequest обработчик нажатия кнопки Отклонить.
+ * @param onConfirmation обработчик нажатия кнопки Принять.
+ * @param dialogTitle заголовок окна.
+ * @param departments список кафедр.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddingDepartmentDialog(
@@ -33,16 +40,14 @@ fun AddingDepartmentDialog(
 
     var expanded by remember { mutableStateOf(false) }
 
-    var departmentNames = departments.map { it.name }
+    val departmentNames = departments.map { it.name }
 
     var departmentName by remember {
         mutableStateOf("")
     }
 
     AlertDialog(
-        icon = {
-            //Icon(icon, contentDescription = "Example Icon")
-        },
+        icon = {},
         title = {
             Text(text = dialogTitle)
         },

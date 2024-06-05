@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Репозиторий приложения.
+ */
 class ScheduleTrackerRepository(
     private val scheduleTrackerDao: ScheduleTrackerDao,
     private val parser: VyatsuParser = VyatsuParser())
@@ -110,6 +113,10 @@ class ScheduleTrackerRepository(
 
     //region Функции для DailyReceiver
 
+    /**
+     * Получить учебную неделю по дню.
+     * @param day день недели.
+     */
     fun getWeek(day: LocalDate): Boolean? {
         var ans = scheduleTrackerDao.getLessonsByDay(day.toString())
 
@@ -238,35 +245,59 @@ class ScheduleTrackerRepository(
         scheduleTrackerDao.insert(lessonEntity)
     }
 
-    fun getLessonsByDatetime(teacherId: String, departmentId: String, date: String, time: String): LessonEntity {
+    /**
+     * Получить занятие по дате и времени.
+     */
+    fun getLessonByDatetime(teacherId: String, departmentId: String, date: String, time: String): LessonEntity {
         return scheduleTrackerDao.getLesson(teacherId, departmentId, date, time)
     }
 
+    /**
+     * Изменить статус просмотра занятия.
+     */
     fun changeLessonStatusVisibility(lessonId: String, isWatched: Boolean) {
         scheduleTrackerDao.changeLessonStatusVisibility(lessonId, isWatched)
     }
 
+    /**
+     * Удалить расписание до указанной даты.
+     */
     fun deleteOldSchedule(currentDateTime: LocalDate?) {
         scheduleTrackerDao.deletePreviousSchedule(currentDateTime.toString())
     }
 
+    /**
+     * Получить занятие по Id.
+     */
     fun getLesson(lessonId: String): Flow<LessonEntity> {
         return scheduleTrackerDao.getLesson(lessonId)
     }
 
+    /**
+     * Получить непросмотренные изменённые занятия.
+     */
     fun getLessonsChangedFlow(teacherId: String): Flow<List<LessonEntity>> {
         return scheduleTrackerDao.getNotWatchLessonsFlow(teacherId)
     }
 
+    /**
+     * Получить непросмотренные изменённые занятия.
+     */
     fun getLessonsChanged(teacherId: String): List<LessonEntity> {
         return scheduleTrackerDao.getNotWatchLessons(teacherId)
     }
 
+    /**
+     * Вставить лог.
+     */
     fun insertLog(logValue: String) {
         scheduleTrackerDao.insert(Logs(
             text = logValue, dateTime = LocalDateTime.now().toString()))
     }
 
+    /**
+     * Изменить статус просмотра занятия.
+     */
     fun changeLessonsStatusVisibility(teacherId: String, isWatched: Boolean) {
         scheduleTrackerDao.changeAllLessonsStatusVisibility(teacherId, isWatched)
     }

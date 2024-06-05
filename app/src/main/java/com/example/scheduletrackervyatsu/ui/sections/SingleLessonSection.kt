@@ -10,7 +10,11 @@ import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.ui.components.SingleLesson
 
-
+/**
+ * Секция с элементом более подробного просмотра занятия.
+ * @param lessonEntity сущность занятия.
+ * @param onWatchChangeClick обработчик иконки просмотра изменения.
+ */
 @Composable
 fun SingleLessonSection(
     modifier: Modifier = Modifier,

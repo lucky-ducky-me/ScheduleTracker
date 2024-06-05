@@ -68,7 +68,7 @@ fun getDataForTest(
     val lessonForAdd = changingDayLessons.find { it.data.isEmpty() }
 
     if (lessonForChangeData != null) {
-        val savedLesson = repository.getLessonsByDatetime(
+        val savedLesson = repository.getLessonByDatetime(
             teacherEntity.teacherId,
             trackedDepartment?.departmentId ?: "",
             lessonForChangeData.date,
@@ -96,7 +96,7 @@ fun getDataForTest(
     }
 
     if (lessonForDelete != null) {
-        val savedLesson = repository.getLessonsByDatetime(
+        val savedLesson = repository.getLessonByDatetime(
             teacherEntity.teacherId,
             trackedDepartment?.departmentId ?: "",
             lessonForDelete.date,
@@ -124,7 +124,7 @@ fun getDataForTest(
     }
 
     if (lessonForAdd != null) {
-        val savedLesson = repository.getLessonsByDatetime(
+        val savedLesson = repository.getLessonByDatetime(
             teacherEntity.teacherId,
             trackedDepartment?.departmentId ?: "",
             lessonForAdd.date,

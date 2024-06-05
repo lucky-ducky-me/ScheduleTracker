@@ -19,6 +19,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * База данных.
+ */
 @Database(
     version = 1,
     entities = [
@@ -32,6 +35,9 @@ import kotlinx.coroutines.launch
 )
 abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
+    /**
+     * Получить DAO базы данных.
+     */
     abstract fun getScheduleTrackerDao(): ScheduleTrackerDao
 
     companion object {

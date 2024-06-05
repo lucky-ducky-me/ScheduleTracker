@@ -15,7 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-
+/**
+ * Получатель сигнала по таймеру.
+ */
 class DailyReceiver : BroadcastReceiver() {
 
     /**
@@ -24,6 +26,9 @@ class DailyReceiver : BroadcastReceiver() {
 
     private lateinit var repository: ScheduleTrackerRepository
 
+    /**
+     * Вызывается при получении сигнала.
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) {
             return
@@ -55,7 +60,9 @@ class DailyReceiver : BroadcastReceiver() {
         }
     }
 
-
+    /**
+     * Отправить уведомление.
+     */
     fun sendNotification(context: Context?, taskName: String, parsingResult: String) {
         val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
