@@ -96,7 +96,6 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
                                     dao.insert(it)
                                 }
                             }
-
                         }
                      })
                     .build()

@@ -72,8 +72,8 @@ class VyatsuParser(
     /**
      * Получить список преподавателей.
      */
-    fun getTeachers(): List<Pair<String,String>> {
-        val list = mutableListOf<Pair<String,String>>()
+    fun getTeachers(): List<Pair<String,String?>> {
+        val list = mutableListOf<Pair<String,String?>>()
 
         for (letter in RUSSIAN_ALPHABET) {
             val doc = Jsoup.connect(baseUrl + teachersUrl)
@@ -95,8 +95,8 @@ class VyatsuParser(
 
                 val fio = fioSplit?.subList(1, fioSplit?.size ?: 3)?.joinToString(" ")
 
-                if (fio != null && departmentNode != null) {
-                    list.add(Pair(fio, departmentNode.text().trim()))
+                if (fio != null && list.find { elem -> elem.first == fio } == null) {
+                    list.add(Pair(fio, departmentNode?.text()?.trim()))
                 }
             }
         }
