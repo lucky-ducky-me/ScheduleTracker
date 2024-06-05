@@ -105,7 +105,8 @@ fun ScheduleSection(
                         onCurrentPageNext()
                     },
                     onWatchChangeClick = onWatchChangeClick,
-                    onChangeLessonClick = onChangeLessonClick
+                    onChangeLessonClick = onChangeLessonClick,
+                    currentWeek = currentWeek.first
                 )
             }
             else {

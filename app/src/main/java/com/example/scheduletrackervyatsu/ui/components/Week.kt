@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import java.text.DateFormatSymbols
@@ -30,7 +31,8 @@ fun Week(
     onBackArrowClick: () -> Unit,
     onForwardArrowClick: () -> Unit,
     onWatchChangeClick: (String) -> Unit,
-    onChangeLessonClick: (String) -> Unit
+    onChangeLessonClick: (String) -> Unit,
+    currentWeek: Int
 ) {
     val map = mutableMapOf<String, List<LessonEntity>>()
 
@@ -55,7 +57,9 @@ fun Week(
     val header = firstDate.dayOfMonth.toString() + " " +
             DateFormatSymbols().months[firstDate.month.value - 1] + " - "  +
             lastDate.dayOfMonth.toString() + " " +
-            DateFormatSymbols().months[lastDate.month.value - 1]
+            DateFormatSymbols().months[lastDate.month.value - 1] + "\n" +
+            ((currentWeek) % 2 + 1).toString() + " неделя"
+
 
     Column(
         modifier = modifier,
@@ -82,7 +86,8 @@ fun Week(
 
             Text(
                 text = header,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.width(10.dp))
