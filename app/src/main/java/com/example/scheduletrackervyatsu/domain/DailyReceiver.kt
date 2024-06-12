@@ -87,6 +87,8 @@ class DailyReceiver : BroadcastReceiver() {
                         PendingIntent.FLAG_IMMUTABLE
                 )
             )
+            setAutoCancel(true)
+
         }
 
         notificationManager.notify(notificationId, notificationBuilder.build())

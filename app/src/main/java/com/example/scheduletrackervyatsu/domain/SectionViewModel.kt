@@ -356,13 +356,13 @@ class SectionViewModel(
         }
     }
 
-    //test TODO delete
+    //test
 
     fun testButton() {
         viewModelScope.launch(Dispatchers.IO) {
             val worker = DailyWorker(repository = repository)
 
-            worker.doDailyWork(true)
+            worker.doDailyWork(true, testDate = LocalDate.parse("2024-05-16"))
 
             DailyReceiver().sendNotification(
                 getApplication<Application>().applicationContext,

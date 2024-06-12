@@ -7,7 +7,6 @@ import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import com.example.scheduletrackervyatsu.data.entities.Logs
 import com.example.scheduletrackervyatsu.data.entities.TeacherEntity
 import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRef
-import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntities
 import com.example.scheduletrackervyatsu.data.helpers.fromLessonParsingModelsToEntity
 import com.example.scheduletrackervyatsu.data.helpers.getInitials
 import kotlinx.coroutines.flow.Flow
@@ -140,70 +139,6 @@ class ScheduleTrackerRepository(
 
     /**
      * Получить и сохранить расписание для всех отлеживаемых преподавателей.
-     */
-    fun saveSchedule() {
-        val trackedTeachersDepartmentsNotFlow = scheduleTrackerDao.getTrackedTeachersDepartmentsNowFlow()
-
-        val teachers = trackedTeachersDepartmentsNotFlow.keys
-
-        val departments = mutableSetOf<DepartmentEntity>()
-
-        trackedTeachersDepartmentsNotFlow.values.forEach {
-            departments.addAll(it)
-        }
-
-        val teacherNameForParsing = {
-                teacher: TeacherEntity ->
-            getInitials(teacher.name, teacher.surname, teacher.patronymic)
-        }
-
-        val teacherShortcuts =
-            teachers.associate { Pair(it.fio, teacherNameForParsing(it)) }
-
-        val actualSchedule = parser.getActualSchedule(
-            teachers = teachers.map { teacherNameForParsing(it) },
-            departments = departments.map { it.name },
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusDays(14),
-        )
-
-        val schedule = teachers.map {
-            Pair(it.teacherId,
-                actualSchedule.lessons.getOrDefault(teacherShortcuts[it.fio], emptyList()))
-        }
-
-        val lessonEntities = schedule.map {
-            fromLessonParsingModelsToEntities(it.second, departments.toList(), it.first)
-        }
-            .flatten().filter {
-                val teacher = teachers.find {
-                        teacher -> teacher.teacherId == it.teacherId }
-
-                if (teacher != null) {
-                    val trackingDepartments = trackedTeachersDepartmentsNotFlow[teacher]
-
-                    if (trackingDepartments != null) {
-                        trackingDepartments.find {
-                                department -> it.departmentId == department.departmentId
-                        } != null
-                    }
-                    else {
-                        false
-                    }
-                }
-                else {
-                    false
-                }
-            }
-
-        lessonEntities.forEach {
-           scheduleTrackerDao.insert(it)
-        }
-
-    }
-
-    /**
-     * Получить и сохранить расписание для всех отлеживаемых преподавателей.
      * @param teacherId идентификатор преподавателя.
      * @param departmentId идентификатор кафедры.
      */
@@ -300,5 +235,15 @@ class ScheduleTrackerRepository(
      */
     fun changeLessonsStatusVisibility(teacherId: String, isWatched: Boolean) {
         scheduleTrackerDao.changeAllLessonsStatusVisibility(teacherId, isWatched)
+    }
+
+    /**
+     * Удалить предыдущие логи.
+     * @param currentDateTime дата, до которой удалять логи.
+     */
+    fun deleteLogs(currentDateTime: LocalDate?) {
+        if (currentDateTime != null) {
+            scheduleTrackerDao.deleteLogs(currentDateTime.toString())
+        }
     }
 }

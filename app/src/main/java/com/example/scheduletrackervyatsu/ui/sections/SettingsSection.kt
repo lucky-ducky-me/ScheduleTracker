@@ -41,7 +41,8 @@ import com.example.scheduletrackervyatsu.ui.components.TeacherSettingItem
 @Composable
 fun SettingsSection(
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel = viewModel()
+    settingsViewModel: SettingsViewModel = viewModel(),
+    onTest: (() -> Unit)?,
 ) {
     val context = LocalContext.current
 
@@ -196,6 +197,20 @@ fun SettingsSection(
                         text = "Обновить расписание",
                         style = MaterialTheme.typography.bodyMedium
                     )
+                }
+            }
+
+            if (onTest != null && false) {
+                item {
+                    Button(
+                        modifier = Modifier,
+
+                        onClick = {
+                            onTest()
+                        }
+                    ) {
+                        Text("ТЕСТОВАЯ КНОПКА")
+                    }
                 }
             }
         }

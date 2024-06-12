@@ -28,6 +28,7 @@ import com.example.compose.changeDeletedColor
 import com.example.scheduletrackervyatsu.data.entities.LessonEntity
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Элемент занятия.
@@ -45,6 +46,10 @@ fun SingleLesson(
     val header = DateFormatSymbols().weekdays[date.dayOfWeek.value + 1] + " " +
             date.dayOfMonth.toString()  + " " +
             DateFormatSymbols().months[date.month.value - 1] + " "
+
+    val lessonDuration = 90
+    var lessonEndTime = LocalDateTime.parse(lessonEntity.date +"T" + lessonEntity.time)
+    lessonEndTime = lessonEndTime.plusMinutes(lessonDuration.toLong())
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -95,9 +100,11 @@ fun SingleLesson(
 
                 ) {
                     Text(
-                        text = lessonEntity.time,
+                        text = lessonEntity.time + " - " +
+                                lessonEndTime.hour.toString() + ":" +
+                                lessonEndTime.minute.toString(),
                         modifier = modifier
-                            .fillMaxWidth(0.2f),
+                            .fillMaxWidth(0.3f),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         style = MaterialTheme.typography.bodyLarge
@@ -169,9 +176,11 @@ fun SingleLesson(
 
                 ) {
                     Text(
-                        text = lessonEntity.time,
+                        text = lessonEntity.time + " - " +
+                                lessonEndTime.hour.toString() + ":" +
+                                lessonEndTime.minute.toString(),
                         modifier = modifier
-                            .fillMaxWidth(0.2f),
+                            .fillMaxWidth(0.3f),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         style = MaterialTheme.typography.bodyLarge

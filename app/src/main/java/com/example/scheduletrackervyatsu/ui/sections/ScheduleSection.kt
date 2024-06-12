@@ -88,17 +88,17 @@ fun ScheduleSection(
             it.first == currentPage
         }
 
-        if (onTest != null) {
-            item {
+        if (onTest != null && false) {
+           item {
                 Button(
                     modifier = Modifier,
 
-                    onClick = {
+                  onClick = {
                         onTest()
-                    }
+                   }
                 ) {
                     Text("ТЕСТОВАЯ КНОПКА")
-                }
+              }
             }
         }
 

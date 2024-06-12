@@ -32,6 +32,9 @@ import com.example.scheduletrackervyatsu.ui.components.TabRow
 import com.example.scheduletrackervyatsu.ui.components.TabRowDirection
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
 
+/**
+ * Основная страница.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Section(
@@ -81,7 +84,7 @@ fun Section(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
-        topBar = {
+        bottomBar = {
             TabRow(
                 onTabClick = {
                     sectionViewModel.changeTabRowDirection(it)
@@ -183,7 +186,9 @@ fun Section(
                 )
             }
             composable(route = "Settings") {
-                SettingsSection()
+                SettingsSection(onTest = {
+                    sectionViewModel.testButton()
+                },)
             }
             composable(route = "Schedule/{lessonId}",
                 arguments = listOf(navArgument("lessonId") { type = NavType.StringType })) {

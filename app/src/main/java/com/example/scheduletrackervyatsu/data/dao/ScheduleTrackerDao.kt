@@ -71,9 +71,13 @@ interface ScheduleTrackerDao {
         }
     }
 
-    // Удаление занятия до указанной даты.
+    // Удаление занятий до указанной даты.
     @Query("DELETE FROM lesson WHERE date < :date")
     fun deletePreviousSchedule(date: String)
+
+    // Удаление логов до указанной даты.
+    @Query("DELETE FROM lesson WHERE date < :date")
+    fun deleteLogs(date: String)
 
     // Получение преподавателя.
     @Query("SELECT * FROM teacher WHERE teacher.teacherId = :teacherId")

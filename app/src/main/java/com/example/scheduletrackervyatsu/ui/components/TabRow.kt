@@ -47,9 +47,9 @@ fun TabRow(
             color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 1,
             style = if (tabRowDirection == TabRowDirection.Schedule)
-                    MaterialTheme.typography.titleLarge
+                    MaterialTheme.typography.bodyLarge
                 else
-                    MaterialTheme.typography.titleMedium
+                    MaterialTheme.typography.bodyMedium
         )
         Text(
             text = "Изменения",
@@ -63,9 +63,9 @@ fun TabRow(
             color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 1,
             style =  if (tabRowDirection == TabRowDirection.Changes)
-                MaterialTheme.typography.titleLarge
+                MaterialTheme.typography.bodyLarge
             else
-                MaterialTheme.typography.titleMedium
+                MaterialTheme.typography.bodyMedium
         )
         Text(
             text = "Настройки",
@@ -79,9 +79,9 @@ fun TabRow(
             color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 1,
             style =  if (tabRowDirection == TabRowDirection.Settings)
-                MaterialTheme.typography.titleLarge
+                MaterialTheme.typography.bodyLarge
             else
-                MaterialTheme.typography.titleMedium
+                MaterialTheme.typography.bodyMedium
         )
         IconButton(onClick = {
             onTabClick(TabRowDirection.Info)

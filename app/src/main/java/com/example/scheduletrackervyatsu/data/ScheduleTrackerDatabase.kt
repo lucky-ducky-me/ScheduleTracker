@@ -68,7 +68,9 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
                                 val parser = VyatsuParser()
 
-                                val departments = parser.getDepartments().map {
+                                val departments = parser.getDepartments().sortedBy {
+                                    it
+                                }.map {
                                     DepartmentEntity(name = it)
                                 }
 

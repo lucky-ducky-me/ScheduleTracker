@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.scheduletrackervyatsu.domain.DailyReceiver
-import com.example.scheduletrackervyatsu.ui.components.MyApp
 import com.example.scheduletrackervyatsu.ui.sections.Section
 import com.example.scheduletrackervyatsu.ui.theme.ScheduleTrackerTheme
 import java.util.Calendar

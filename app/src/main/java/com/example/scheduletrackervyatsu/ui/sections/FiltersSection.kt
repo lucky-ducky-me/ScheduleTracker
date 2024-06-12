@@ -1,13 +1,9 @@
 package com.example.scheduletrackervyatsu.ui.sections
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -20,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scheduletrackervyatsu.ui.uiData.FiltersSectionData
@@ -58,7 +53,7 @@ fun FiltersSection(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTeacher)
                 },
-                label = { Text(text = "Выберите преподавателя из настроек: ") },
+                label = { Text(text = "Выберите преподавателя: ") },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -88,27 +83,6 @@ fun FiltersSection(
                     )
                 }
             }
-        }
-
-        Button(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally).width(200.dp),
-            colors = ButtonColors(
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-            onClick = {
-                onAcceptButtonClick()
-            },
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer),
-
-        ) {
-            Text(
-                text = "Применить",
-                style = MaterialTheme.typography.bodyMedium,
-            )
         }
     }
 }

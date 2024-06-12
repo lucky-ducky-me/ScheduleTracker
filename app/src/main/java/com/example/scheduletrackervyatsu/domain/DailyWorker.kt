@@ -49,6 +49,7 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
             loadNewAndCheckWithOld(isTest = isTest, testDate = testDate)
         } else if (!data && dayOfWeek == 1) {
             deleteOldSchedule()
+            deleteOldLogs()
             standardCheck(isTest = isTest, testDate = testDate)
         } else {
             standardCheck(isTest = isTest, testDate = testDate)
@@ -80,6 +81,15 @@ class DailyWorker(private val repository: ScheduleTrackerRepository) {
         val currentDateTime = LocalDate.now()
 
         repository.deleteOldSchedule(currentDateTime)
+    }
+
+    /**
+     * Удаление старых логов.
+     */
+    private fun deleteOldLogs() {
+        val currentDateTime = LocalDate.now()
+
+        repository.deleteLogs(currentDateTime)
     }
 
     /**

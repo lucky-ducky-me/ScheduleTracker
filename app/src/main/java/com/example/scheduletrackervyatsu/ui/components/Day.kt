@@ -112,15 +112,21 @@ fun Day(
                 modifier = rowModifier
             ) {
                 Column(
-                    modifier = Modifier.padding(5.dp).fillMaxWidth(0.2f),
+                    modifier = Modifier.padding(5.dp).fillMaxWidth(0.3f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     if (index == 0 || lessons[index - 1].time != lessons[index].time) {
+                        val lessonDuration = 90
+                        var lessonEndTime = LocalDateTime.parse(lesson.date +"T" + lesson.time)
+                        lessonEndTime = lessonEndTime.plusMinutes(lessonDuration.toLong())
+
                         Text(
-                            text = lesson.time,
-                            modifier = Modifier,
-                            textAlign = TextAlign.Center,
+                            text = lesson.time + " - " +
+                                    lessonEndTime.hour.toString() + ":" +
+                                    lessonEndTime.minute.toString(),
+                            modifier = Modifier.padding(1.dp),
+                            textAlign = TextAlign.Left,
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             style = MaterialTheme.typography.bodyLarge
                         )
