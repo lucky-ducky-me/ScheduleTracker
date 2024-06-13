@@ -55,25 +55,28 @@ fun ChangesSection(
         }
 
         item {
-            Button(
-                modifier = Modifier.width(200.dp),
-                onClick = {
-                    onWatchAllChangesButtonClick(
-                        filtersSectionData.teacher?.teacherId ?: "")
-                },
-                colors = ButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
-            ) {
-                Text(
-                    text = "Просмотреть все изменения",
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
-                )
+            if (lessonsNotWatched.isNotEmpty()) {
+                Button(
+                    modifier = Modifier.width(200.dp),
+                    onClick = {
+                        onWatchAllChangesButtonClick(
+                            filtersSectionData.teacher?.teacherId ?: ""
+                        )
+                    },
+                    colors = ButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
+                ) {
+                    Text(
+                        text = "Просмотреть все изменения",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
 

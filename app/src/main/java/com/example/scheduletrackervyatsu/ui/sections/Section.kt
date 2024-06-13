@@ -140,18 +140,6 @@ fun Section(
                     onCurrentPagePrevious = {
                         sectionViewModel.addValueToCurrentPage(-1)
                     },
-                    onCheckScheduleOnChanges = {
-                        if (filtersSectionData.teacher != null) {
-                            sectionViewModel.runStandardCheck()
-                            Toast.makeText(context, "Проверка запущена", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        else {
-                            Toast.makeText(context, "Выберите преподавателя", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                    }
                 )
             }
             composable(route = "Changes") {

@@ -99,6 +99,10 @@ interface ScheduleTrackerDao {
     @Query("SELECT * FROM lesson")
     fun getAllLessons(): List<LessonEntity>
 
+    // Получение всех логов.
+    @Query("SELECT * FROM log")
+    fun getAllLogs(): List<Logs>
+
     @Transaction
     @Query("SELECT * FROM teacher")
     fun getTeacherWithDepartments(): List<TeacherWithDepartments>

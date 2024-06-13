@@ -95,8 +95,6 @@ class SettingsViewModel(
      * @param departmentId идентификатор кафедры.
      */
     fun addDepartmentForTeacher(teacherId: String, departmentId: String) {
-
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 repository.insertTrackingForTeacher(teacherId, departmentId)
@@ -136,10 +134,18 @@ class SettingsViewModel(
      * Проверка расписания на изменения.
      */
     fun checkScheduleOnChanges() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val dailyWorker = DailyWorker(repository)
-            val lessons = dailyWorker.standardCheck()
-            dailyWorker.saveLessons(lessons)
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val dailyWorker = DailyWorker(repository)
+                    val lessons = dailyWorker.standardCheck()
+                    dailyWorker.saveLessons(lessons)
+                }
+                catch (ex: UnknownHostException) {
+                    repository.insertLog("Ошибка подключения к сайту ВятГУ. Подробнее: " + ex.toString())
+                }
+                catch (ex: Exception) {
+                    repository.insertLog(ex.toString())
+                }
         }
     }
 
@@ -148,19 +154,27 @@ class SettingsViewModel(
      */
     fun loadNewSchedule() {
         viewModelScope.launch(Dispatchers.IO) {
-            val currentDateTime = LocalDateTime.now()
-            var data = repository.getWeek(LocalDate.now())
+            try {
+                val currentDateTime = LocalDateTime.now()
+                var data = repository.getWeek(LocalDate.now())
 
-            if (data == null) {
-                val nextDay = currentDateTime.plusDays(1)
+                if (data == null) {
+                    val nextDay = currentDateTime.plusDays(1)
 
-                data = repository.getWeek(nextDay.toLocalDate())
+                    data = repository.getWeek(nextDay.toLocalDate())
+                }
+
+                if (data == null) {
+                    val dailyWorker = DailyWorker(repository)
+                    val lessons = dailyWorker.loadNewAndCheckWithOld()
+                    dailyWorker.saveLessons(lessons)
+                }
             }
-
-            if (data == null) {
-                val dailyWorker = DailyWorker(repository)
-                val lessons = dailyWorker.loadNewAndCheckWithOld()
-                dailyWorker.saveLessons(lessons)
+            catch (ex: UnknownHostException) {
+                repository.insertLog("Ошибка подключения к сайту ВятГУ. Подробнее: " + ex.toString())
+            }
+            catch (ex: Exception) {
+                repository.insertLog(ex.toString())
             }
         }
     }

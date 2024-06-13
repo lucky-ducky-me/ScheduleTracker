@@ -18,6 +18,8 @@ import com.example.scheduletrackervyatsu.data.entities.TeachersDepartmentCrossRe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
+import java.time.LocalDateTime
 
 /**
  * База данных.
@@ -62,46 +64,57 @@ abstract class ScheduleTrackerDatabase: RoomDatabase() {
 
                             CoroutineScope(Dispatchers.IO).launch {
                                 val dao = _instance!!.getScheduleTrackerDao()
+                                try {
+                                    dao.getAllDepartments()
+                                    dao.getAllTeachers()
+                                    dao.getAllLogs()
 
-                                dao.getAllDepartments()
-                                dao.getAllTeachers()
+                                    val parser = VyatsuParser()
 
-                                val parser = VyatsuParser()
-
-                                val departments = parser.getDepartments().sortedBy {
-                                    it
-                                }.map {
-                                    DepartmentEntity(name = it)
-                                }
-
-                                departments.forEach {
-                                    dao.insert(it)
-                                }
-
-                                val teachers = parser.getTeachers().map {
-                                    val teacherFio = it.first.split(" ")
-                                    val department = departments.find {
-                                        department -> it.second == department.name
+                                    val departments = parser.getDepartments().sortedBy {
+                                        it
+                                    }.map {
+                                        DepartmentEntity(name = it)
                                     }
 
-                                    if (teacherFio.size == 3) {
-                                        TeacherEntity(name = teacherFio[1],
-                                            surname = teacherFio[0], patronymic = teacherFio[2],
-                                            defaultDepartment = department?.departmentId)
+                                    departments.forEach {
+                                        dao.insert(it)
                                     }
-                                    else {
-                                        TeacherEntity(name = teacherFio[1],
-                                            surname = teacherFio[0], patronymic = null,
-                                            defaultDepartment = department?.departmentId)
+
+                                    val teachers = parser.getTeachers().map {
+                                        val teacherFio = it.first.split(" ")
+                                        val department = departments.find {
+                                            department -> it.second == department.name
+                                        }
+
+                                        if (teacherFio.size == 3) {
+                                            TeacherEntity(name = teacherFio[1],
+                                                surname = teacherFio[0], patronymic = teacherFio[2],
+                                                defaultDepartment = department?.departmentId)
+                                        }
+                                        else {
+                                            TeacherEntity(name = teacherFio[1],
+                                                surname = teacherFio[0], patronymic = null,
+                                                defaultDepartment = department?.departmentId)
+                                        }
+                                    }
+
+                                    teachers.forEach {
+                                        dao.insert(it)
+                                    }
+
+                                    LESSON_STATUSES.forEach {
+                                        dao.insert(it)
                                     }
                                 }
-
-                                teachers.forEach {
-                                    dao.insert(it)
+                                catch (ex: UnknownHostException) {
+                                    dao.insert(Logs(text = "Ошибка подключения к сайту ВятГУ. Подробнее: " +
+                                            ex.toString(),
+                                        dateTime = LocalDateTime.now().toString()))
                                 }
-
-                                LESSON_STATUSES.forEach {
-                                    dao.insert(it)
+                                catch (ex: Exception) {
+                                    dao.insert(Logs(text = ex.toString(),
+                                        dateTime = LocalDateTime.now().toString()))
                                 }
                             }
                         }

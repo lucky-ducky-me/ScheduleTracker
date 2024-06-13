@@ -48,7 +48,7 @@ fun SettingsSection(
 
     val settings = settingsViewModel.trackedTeachersDepartments.collectAsState(initial = emptyList()).value
     val departments = settingsViewModel.departments.collectAsState(initial = emptyList()).value
-    val teachers = settingsViewModel.teachers.collectAsState(initial = emptyList()).value
+    val teachers = settingsViewModel.teachers.collectAsState(initial = emptyList()).value.sortedBy { it.fio }
     val openAddingDialogState = settingsViewModel.openAddingDialogState.collectAsState().value
 
     var openAddingTeacherDialog by remember { mutableStateOf(false) }
@@ -180,10 +180,14 @@ fun SettingsSection(
                     onClick = {
                         settingsViewModel.loadNewSchedule()
 
-                        Toast.makeText(context,
+                        Toast.makeText(
+                            context,
                             "Загрузка нового учебного периода у добавленных преподавателей запущена",
-                            Toast.LENGTH_SHORT)
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
+
+                        settingsViewModel.checkScheduleOnChanges()
                     },
                     colors = ButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
